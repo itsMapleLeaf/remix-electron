@@ -1,14 +1,12 @@
-import { createRequestHandler } from "@remix-run/express"
-import compression from "compression"
-import express from "express"
-import morgan from "morgan"
-import { createRequire } from "node:module"
-import { join } from "node:path"
-
-const require = createRequire(import.meta.url)
+const { createRequestHandler } = require("@remix-run/express")
+const compression = require("compression")
+const express = require("express")
+const morgan = require("morgan")
+const { writeFileSync } = require("node:fs")
+const { join } = require("node:path")
 
 const MODE = process.env.NODE_ENV
-const BUILD_DIR = join(process.cwd(), "server/build")
+const BUILD_DIR = join(__dirname, "build")
 
 const app = express()
 app.use(compression())
@@ -31,11 +29,6 @@ app.all(
       },
 )
 
-const port = process.env.PORT || 3000
-app.listen(port, () => {
-  console.log(`Express server listening on port ${port}`)
-})
-
 ////////////////////////////////////////////////////////////////////////////////
 function purgeRequireCache() {
   // purge require cache on requests for "server side HMR" this won't let
@@ -45,7 +38,25 @@ function purgeRequireCache() {
   // for you by default
   for (const key in require.cache) {
     if (key.startsWith(BUILD_DIR)) {
+      console.log(key)
       delete require.cache[key]
     }
   }
+}
+
+/**
+ * @returns {Promise<{url:string}>}
+ */
+exports.startServer = function startServer() {
+  return new Promise((resolve, reject) => {
+    const port = process.env.PORT || 3000
+    const url = `http://localhost:${port}`
+
+    const server = app.listen(port, () => {
+      console.info(`Express server listening on ${url}`)
+      resolve({ url })
+    })
+
+    server.on("error", reject)
+  })
 }
