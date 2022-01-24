@@ -1,35 +1,26 @@
 const { createRequestHandler } = require("@remix-run/express")
-const compression = require("compression")
 const express = require("express")
-const morgan = require("morgan")
-const { writeFileSync } = require("node:fs")
 const { join } = require("node:path")
 
 const MODE = process.env.NODE_ENV
 const BUILD_DIR = join(__dirname, "build")
 
 const app = express()
-app.use(compression())
 
-// You may want to be more aggressive with this caching
-app.use(express.static("public", { maxAge: "1h" }))
+app.use(express.static("public"))
+app.use(express.static("public/build"))
 
-// Remix fingerprints its assets so we can cache forever
-app.use(express.static("public/build", { immutable: true, maxAge: "1y" }))
+if (MODE === "development") {
+  app.use((req, res, next) => {
+    purgeRequireCache()
+    const build = require("./build")
+    const handler = createRequestHandler({ build, mode: MODE })
+    return handler(req, res, next)
+  })
+} else {
+  app.use(createRequestHandler({ build: require("./build") }))
+}
 
-app.use(morgan("tiny"))
-app.all(
-  "*",
-  MODE === "production"
-    ? createRequestHandler({ build: require("./build") })
-    : (req, res, next) => {
-        purgeRequireCache()
-        const build = require("./build")
-        return createRequestHandler({ build, mode: MODE })(req, res, next)
-      },
-)
-
-////////////////////////////////////////////////////////////////////////////////
 function purgeRequireCache() {
   // purge require cache on requests for "server side HMR" this won't let
   // you have in-memory objects between requests in development,
