@@ -12,7 +12,7 @@ An demo of how to use Electron with Remix
 
 ## Using Electron APIs
 
-Importing `"electron"` directly in route files results in Electron trying to get bundled and called in the main process.
+Importing `"electron"` directly in route files results in Electron trying to get bundled and called in the renderer process.
 
 To circumvent this, I created an `electron.server.js` file, which re-exports from `electron`. The `.server.js` suffix tells Remix to only load it in the main process.
 
