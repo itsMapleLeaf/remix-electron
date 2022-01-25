@@ -29,7 +29,6 @@ function purgeRequireCache() {
   // for you by default
   for (const key in require.cache) {
     if (key.startsWith(BUILD_DIR)) {
-      console.log(key)
       delete require.cache[key]
     }
   }
