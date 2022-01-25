@@ -6,9 +6,9 @@ const { startServer } = require("./server")
 let win
 
 async function main() {
-  await app.whenReady()
   const { url } = await startServer()
 
+  await app.whenReady()
   win = new BrowserWindow()
   await win.loadURL(url)
 }
