@@ -2,6 +2,7 @@
 const { app, BrowserWindow, dialog } = require("electron")
 const { startServer } = require("./server")
 
+/** @type {BrowserWindow | undefined} */
 let win
 
 async function main() {
