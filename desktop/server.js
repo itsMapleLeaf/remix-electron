@@ -7,8 +7,10 @@ const BUILD_DIR = join(__dirname, "build")
 
 const app = express()
 
-app.use(express.static("public"))
-app.use(express.static("public/build"))
+// Normally there would be some caching headers here,
+// but that's not necessary, as everything is served from the filesystem.
+// + caching can make debugging harder sometimes
+app.use(express.static(join(__dirname, "../public")))
 
 if (MODE === "development") {
   app.use((req, res, next) => {
