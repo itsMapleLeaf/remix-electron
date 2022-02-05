@@ -2,7 +2,7 @@
 
 An demo of how to use Electron with Remix
 
-[Example with Electron Builder](./tree/with-electron-builder)
+[Example with Electron Builder](https://github.com/itsMapleLeaf/remix-electron/tree/with-electron-builder)
 
 ![demo screenshot](./screenshot.png)
 
