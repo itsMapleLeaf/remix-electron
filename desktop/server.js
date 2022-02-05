@@ -2,21 +2,22 @@ const { createRequestHandler } = require("@remix-run/express")
 const express = require("express")
 const { join } = require("node:path")
 
-const MODE = process.env.NODE_ENV
-const BUILD_DIR = join(__dirname, "build")
+const mode = process.env.NODE_ENV
+const buildFolder = join(__dirname, "build")
+const publicFolder = join(__dirname, "../public")
 
 const app = express()
 
 // Normally there would be some caching headers here,
 // but that's not necessary, as everything is served from the filesystem.
 // + caching can make debugging harder sometimes
-app.use(express.static(join(__dirname, "../public")))
+app.use(express.static(publicFolder))
 
-if (MODE === "development") {
+if (mode === "development") {
   app.use((req, res, next) => {
     purgeRequireCache()
     const build = require("./build")
-    const handler = createRequestHandler({ build, mode: MODE })
+    const handler = createRequestHandler({ build, mode })
     return handler(req, res, next)
   })
 } else {
@@ -30,7 +31,7 @@ function purgeRequireCache() {
   // file changes, we prefer the DX of this though, so we've included it
   // for you by default
   for (const key in require.cache) {
-    if (key.startsWith(BUILD_DIR)) {
+    if (key.startsWith(buildFolder)) {
       delete require.cache[key]
     }
   }
