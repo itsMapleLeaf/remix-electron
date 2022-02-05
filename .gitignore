@@ -3,6 +3,7 @@ node_modules
 /.cache
 /desktop/build
 /public/build
+dist
 .env
 
 # as this is a template,
