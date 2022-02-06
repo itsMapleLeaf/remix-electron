@@ -20,6 +20,8 @@ const mode = app.isPackaged ? "production" : process.env.NODE_ENV
 
 exports.registerRemixProtocolAsPriviledged =
   function registerRemixProtocolAsPriviledged() {
+    // this allows Remix's scripts to use the sessionStorage API,
+    // and must be called *before* app ready
     protocol.registerSchemesAsPrivileged([
       { scheme: "remix", privileges: { secure: true, standard: true } },
     ])
@@ -28,11 +30,12 @@ exports.registerRemixProtocolAsPriviledged =
 exports.registerRemixProtocol = function registerRemixProtocol() {
   protocol.registerStringProtocol("remix", async (request, callback) => {
     try {
+      // purging the require cache is necessary for changes to show with hot reloading
       if (mode === "development") {
         purgeRequireCache()
       }
 
-      const assetResponse = await tryServeFile(request)
+      const assetResponse = await tryServeAsset(request)
       if (assetResponse) {
         callback(assetResponse)
         return
@@ -52,7 +55,7 @@ exports.registerRemixProtocol = function registerRemixProtocol() {
 /**
  * @param {Electron.ProtocolRequest} request
  */
-async function tryServeFile(request) {
+async function tryServeAsset(request) {
   const url = new URL(request.url)
   const filePath = join(publicFolder, url.pathname)
   if (!(await isFile(filePath))) return
@@ -98,7 +101,6 @@ async function serveRemixResponse(request) {
     data: await response.text(),
     headers: Object.fromEntries(response.headers),
     statusCode: response.status,
-    mimeType: response.headers.get("content-type"),
   }
 }
 
