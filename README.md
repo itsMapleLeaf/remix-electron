@@ -8,9 +8,9 @@ An demo of how to use Electron with Remix
 
 ## How
 
-- Create a Node.js server which serves a Remix app
-- Create an Electron window, load the server URL
-- That's it ¯\\\_(ツ)\_/¯
+Uses a [custom Electron protocol](https://www.electronjs.org/docs/latest/api/protocol), which sends request info to Remix as a `Request` object. Remix renders your app, then the protocol sends the response from Remix back to the Electron app.
+
+Thanks @MarshallOfSound for the idea!
 
 ## Using Electron APIs
 
