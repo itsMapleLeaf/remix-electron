@@ -14,60 +14,60 @@ const defaultMode = app.isPackaged
   : "development"
 
 const defaultServerBuildDirectory = "desktop/build"
-const defaultAssetsBuildDirectory = "public/build"
 
 export type InitRemixOptions = {
   mode?: "development" | "production"
+  publicFolder?: string
   remixConfig: AppConfig
 }
 
-export function initRemix({
+export async function initRemix({
   remixConfig,
   mode = defaultMode,
+  publicFolder = "public",
 }: InitRemixOptions) {
-  app.once("ready", () => {
-    protocol.interceptBufferProtocol("http", async (request, callback) => {
-      try {
-        // purging the require cache is necessary for changes to show with hot reloading
-        if (defaultMode === "development") {
-          purgeRequireCache(
-            remixConfig.serverBuildDirectory ?? defaultServerBuildDirectory,
-          )
-        }
+  await app.whenReady()
 
-        const assetResponse = await serveAsset(request, remixConfig)
-        if (assetResponse) {
-          callback(assetResponse)
-          return
-        }
-
-        callback(await serveRemixResponse(request, mode, remixConfig))
-      } catch (error) {
-        callback({
-          statusCode: 500,
-          // @ts-expect-error
-          data: `<pre>${error?.stack || error?.message || String(error)}</pre>`,
-        })
-        console.warn(error)
+  protocol.interceptBufferProtocol("http", async (request, callback) => {
+    try {
+      // purging the require cache is necessary for changes to show with hot reloading
+      if (defaultMode === "development") {
+        purgeRequireCache(
+          remixConfig.serverBuildDirectory ?? defaultServerBuildDirectory,
+        )
       }
-    })
+
+      const assetResponse = await serveAsset(request, publicFolder)
+      if (assetResponse) {
+        callback(assetResponse)
+        return
+      }
+
+      callback(await serveRemixResponse(request, mode, remixConfig))
+    } catch (error) {
+      callback({
+        statusCode: 500,
+        // @ts-expect-error
+        data: `<pre>${error?.stack || error?.message || String(error)}</pre>`,
+      })
+      console.warn(error)
+    }
   })
+
+  return `http://app/`
 }
 
 async function serveAsset(
   request: Electron.ProtocolRequest,
-  remixConfig: AppConfig,
+  publicFolder: string,
 ): Promise<Electron.ProtocolResponse | undefined> {
+  publicFolder = asAbsolutePath(publicFolder)
+
   const url = new URL(request.url)
-
-  const assetsBuildDirectory = asAbsolutePath(
-    remixConfig.assetsBuildDirectory ?? defaultAssetsBuildDirectory,
-  )
-
-  const filePath = path.join(assetsBuildDirectory, url.pathname)
+  const filePath = path.join(publicFolder, url.pathname)
 
   // make sure the request doesn't leave the assets directory
-  if (!filePath.startsWith(assetsBuildDirectory)) {
+  if (!filePath.startsWith(publicFolder)) {
     return
   }
 
@@ -100,7 +100,7 @@ async function serveRemixResponse(
   remixRequest.headers.set("referrer", request.referrer)
 
   const serverBuildFolder = asAbsolutePath(
-    remixConfig.serverBuildDirectory ?? "desktop/build",
+    remixConfig.serverBuildDirectory ?? "build",
   )
 
   const build = require(serverBuildFolder)
