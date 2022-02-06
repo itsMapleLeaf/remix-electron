@@ -1,10 +1,14 @@
 // @ts-check
 const { app, dialog } = require("electron")
-const { registerRemixProtocol } = require("./register-remix-protocol")
+const {
+  registerRemixProtocol,
+  registerRemixProtocolAsPriviledged,
+} = require("./register-remix-protocol")
 const { createWindow } = require("./window")
 
 void (async () => {
   try {
+    registerRemixProtocolAsPriviledged()
     await app.whenReady()
     registerRemixProtocol()
     await createWindow()

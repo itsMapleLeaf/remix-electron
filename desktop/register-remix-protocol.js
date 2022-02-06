@@ -18,6 +18,13 @@ const publicFolder = join(__dirname, "../public")
 const buildFolder = join(publicFolder, "build")
 const mode = app.isPackaged ? "production" : process.env.NODE_ENV
 
+exports.registerRemixProtocolAsPriviledged =
+  function registerRemixProtocolAsPriviledged() {
+    protocol.registerSchemesAsPrivileged([
+      { scheme: "remix", privileges: { secure: true, standard: true } },
+    ])
+  }
+
 exports.registerRemixProtocol = function registerRemixProtocol() {
   protocol.registerStringProtocol("remix", async (request, callback) => {
     try {
@@ -54,6 +61,7 @@ async function tryServeFile(request) {
 
 /**
  * @param {Electron.ProtocolRequest} request
+ * @returns {Promise<Electron.ProtocolResponse>}
  */
 async function serveRemixResponse(request) {
   const remixRequest = new Request(request.url, {
@@ -75,18 +83,20 @@ async function serveRemixResponse(request) {
   // @ts-expect-error
   const response = await handleRequest(remixRequest)
 
+  response.headers.append(
+    "content-security-policy",
+    [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline'",
+      "style-src 'self' 'unsafe-inline'",
+      "connect-src ws:",
+      "base-uri 'self'",
+    ].join("; "),
+  )
+
   return {
     data: await response.text(),
-    headers: {
-      ...Object.fromEntries(response.headers),
-      "content-security-policy": [
-        "default-src 'self'",
-        "script-src 'self' 'unsafe-inline'",
-        "style-src 'self' 'unsafe-inline'",
-        "connect-src ws:",
-        "base-uri 'self'",
-      ].join("; "),
-    },
+    headers: Object.fromEntries(response.headers),
     statusCode: response.status,
     mimeType: response.headers.get("content-type"),
   }
