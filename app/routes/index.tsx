@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 import { useLoaderData } from "remix"
 import { app } from "~/electron.server"
 
@@ -15,6 +16,18 @@ export default function Index() {
       <h1>Welcome to Remix (in Electron)</h1>
       <p>Version: {data.version}</p>
       <p>App data path: {data.appData}</p>
+      <Uptime />
     </div>
   )
+}
+
+function Uptime() {
+  const [seconds, setSeconds] = useState(0)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSeconds(seconds + 1)
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [])
+  return <p>This app has been running for {seconds} seconds.</p>
 }
