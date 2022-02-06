@@ -15,7 +15,7 @@ globalThis.Response = Response
 globalThis.Headers = Headers
 
 const publicFolder = join(__dirname, "../public")
-const buildFolder = join(publicFolder, "build")
+const serverBuildFolder = join(__dirname, "build")
 const mode = app.isPackaged ? "production" : process.env.NODE_ENV
 
 exports.registerRemixProtocolAsPriviledged =
@@ -28,6 +28,10 @@ exports.registerRemixProtocolAsPriviledged =
 exports.registerRemixProtocol = function registerRemixProtocol() {
   protocol.registerStringProtocol("remix", async (request, callback) => {
     try {
+      if (mode === "development") {
+        purgeRequireCache()
+      }
+
       const assetResponse = await tryServeFile(request)
       if (assetResponse) {
         callback(assetResponse)
@@ -73,10 +77,6 @@ async function serveRemixResponse(request) {
 
   // TODO: add uploadData to request as FormData
 
-  if (mode === "development") {
-    purgeRequireCache()
-  }
-
   /** @type {any} */
   const build = require("./build")
   const handleRequest = createRequestHandler(build, {}, mode)
@@ -112,7 +112,7 @@ async function isFile(path) {
 
 function purgeRequireCache() {
   for (const key in require.cache) {
-    if (key.startsWith(buildFolder)) {
+    if (key.startsWith(serverBuildFolder)) {
       delete require.cache[key]
     }
   }
