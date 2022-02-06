@@ -2,7 +2,7 @@
 const { app, protocol } = require("electron")
 const { createRequestHandler } = require("@remix-run/server-runtime")
 const { Request, Response, Headers } = require("@remix-run/node")
-const { relative, join } = require("path")
+const { join } = require("path")
 const { stat, readFile } = require("fs/promises")
 const mime = require("mime")
 
