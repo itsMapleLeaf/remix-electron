@@ -6,7 +6,7 @@ let win
 
 exports.createWindow = async function createWindow() {
   win = new BrowserWindow({ show: false })
-  await win.loadURL("remix://app/")
+  await win.loadURL("http://app/")
   if (process.env.NODE_ENV === "development") {
     win.webContents.openDevTools()
   }

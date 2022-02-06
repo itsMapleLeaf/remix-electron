@@ -1,20 +1,16 @@
-// @ts-check
 const { app, dialog } = require("electron")
-const {
-  registerRemixProtocol,
-  registerRemixProtocolAsPriviledged,
-} = require("./register-remix-protocol")
+const { initRemix } = require("./remix")
 const { createWindow } = require("./window")
 
 void (async () => {
   try {
-    registerRemixProtocolAsPriviledged()
+    initRemix()
     await app.whenReady()
-    registerRemixProtocol()
     await createWindow()
   } catch (error) {
     dialog.showErrorBox(
       "Error",
+      // @ts-expect-error
       error?.stack || error?.message || String(error),
     )
   }

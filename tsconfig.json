@@ -1,5 +1,4 @@
 {
-  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2019"],
     "isolatedModules": true,
@@ -11,6 +10,8 @@
     "strict": true,
     "skipLibCheck": true,
     "baseUrl": ".",
+    "allowJs": true,
+    "checkJs": true,
     "paths": {
       "~/*": ["./app/*"]
     },
