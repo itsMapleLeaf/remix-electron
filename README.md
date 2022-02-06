@@ -10,7 +10,7 @@ An demo of how to use Electron with Remix
 
 Uses a [custom Electron protocol](https://www.electronjs.org/docs/latest/api/protocol), which sends request info to Remix as a `Request` object. Remix renders your app, then the protocol sends the response from Remix back to the Electron app.
 
-Thanks @MarshallOfSound for the idea!
+Thanks [@MarshallOfSound](https://github.com/MarshallOfSound) for the idea!
 
 ## Using Electron APIs
 
