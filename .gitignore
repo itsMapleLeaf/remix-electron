@@ -1,14 +1,7 @@
 node_modules
 
-/.cache
-/desktop/build
-/public/build
+.cache
+build
 dist
 .env
-
-# as this is a template,
-# we want to respect a choice of package manager
-# remove the entry for the one you use
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
+.vscode
