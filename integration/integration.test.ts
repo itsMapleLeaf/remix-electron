@@ -1,14 +1,26 @@
+import { execa } from "execa"
 import { join } from "node:path"
 import type { ElectronApplication, Page } from "playwright"
 import { _electron as electron } from "playwright"
 import { afterAll, beforeAll, expect, test } from "vitest"
 
+const appFolder = join(__dirname, "fixtures/main")
+
 let electronApp: ElectronApplication
 let window: Page
 
 beforeAll(async () => {
+  await execa("pnpm", ["install"], {
+    cwd: appFolder,
+    stdio: "inherit",
+  })
+  await execa("pnpm", ["build"], {
+    cwd: appFolder,
+    stdio: "inherit",
+  })
+
   electronApp = await electron.launch({
-    cwd: join(__dirname, "fixtures/main"),
+    cwd: appFolder,
     args: ["."],
 
     // this fixes a failure to launch on linux
