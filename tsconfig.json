@@ -9,6 +9,7 @@
     "resolveJsonModule": true,
     "target": "ES2019",
     "strict": true,
+    "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["./app/*"]
