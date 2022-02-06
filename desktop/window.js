@@ -6,6 +6,6 @@ let win
 
 exports.createWindow = async function createWindow() {
   win = new BrowserWindow({ show: false })
-  await win.loadURL("remix:///")
+  await win.loadURL("remix://app/")
   win.show()
 }
