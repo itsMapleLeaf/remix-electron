@@ -9,6 +9,7 @@ on:
 
 env:
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+  DEBUG: pw:browser*
 
 jobs:
   test:
@@ -21,4 +22,10 @@ jobs:
           node-version: "lts/*"
       - run: npm i -g pnpm
       - run: pnpm i
+
+      - name: Run XVFB
+        run: |
+          export DISPLAY=':99.0'
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+
       - run: pnpm test
