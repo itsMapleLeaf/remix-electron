@@ -25,7 +25,7 @@ function Uptime() {
   const [seconds, setSeconds] = useState(0)
   useEffect(() => {
     const interval = setInterval(() => {
-      setSeconds(seconds + 1)
+      setSeconds((s) => s + 1)
     }, 1000)
     return () => clearInterval(interval)
   }, [])
