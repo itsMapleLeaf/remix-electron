@@ -5,5 +5,5 @@
     "noUnusedLocals": true,
     "jsx": "react-jsx"
   },
-  "exclude": ["node_modules", "dist", "fixture"]
+  "exclude": ["node_modules", "dist", "integration/fixtures"]
 }
