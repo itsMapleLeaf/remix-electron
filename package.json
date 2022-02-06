@@ -8,7 +8,8 @@
   "scripts": {
     "prepare": "remix setup node",
     "dev": "concurrently 'remix watch' 'cross-env NODE_ENV=development nodemon --watch desktop --ignore desktop/build --exec electron desktop/main.js'",
-    "build": "remix build && electron-builder",
+    "clean": "del-cli desktop/build public/build",
+    "build": "npm run clean && remix build && electron-builder",
     "start": "cross-env NODE_ENV=production electron desktop/main.js"
   },
   "build": {
@@ -33,6 +34,7 @@
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
     "concurrently": "^7.0.0",
+    "del-cli": "^4.0.1",
     "electron": "^16.0.7",
     "electron-builder": "^22.14.5",
     "nodemon": "^2.0.15",
