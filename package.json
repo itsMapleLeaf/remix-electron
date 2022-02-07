@@ -20,7 +20,8 @@
     "typecheck": "tsc --noEmit",
     "test": "run-p --print-label build lint && vitest --no-watch",
     "test-dev": "run-p --print-label --race vitest-ui build-watch",
-    "vitest-ui": "vitest --ui"
+    "vitest-ui": "vitest --ui",
+    "release": "release-it"
   },
   "dependencies": {
     "@types/mime": "^2.0.3",
@@ -62,6 +63,7 @@
     "prettier": "^2.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "release-it": "^14.12.4",
     "tsup": "^5.11.13",
     "typescript": "^4.5.5",
     "vitest": "^0.2.7"
