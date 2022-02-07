@@ -1,21 +1,29 @@
 {
   "name": "remix-electron-template",
+  "description": "",
+  "version": "0.0.0",
   "private": true,
   "main": "desktop/main.js",
   "scripts": {
     "prepare": "remix setup node",
     "dev": "cross-env NODE_ENV=development npm-run-all --parallel --print-label --race build-watch nodemon",
-    "build": "remix build",
+    "build": "remix build && electron-builder",
     "build-watch": "remix watch",
     "start": "cross-env NODE_ENV=production electron .",
     "nodemon": "nodemon --watch desktop --exec electron ."
   },
+  "build": {
+    "files": [
+      "build",
+      "desktop",
+      "public"
+    ]
+  },
   "dependencies": {
     "@remix-run/node": "^1.1.3",
-    "@remix-run/server-runtime": "^1.1.3",
     "@remix-run/react": "^1.1.3",
     "@remix-run/serve": "^1.1.3",
-    "electron": "^16.0.7",
+    "@remix-run/server-runtime": "^1.1.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "remix": "^1.1.3",
@@ -26,6 +34,8 @@
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
     "cross-env": "^7.0.3",
+    "electron": "^16.0.7",
+    "electron-builder": "^22.14.13",
     "nodemon": "^2.0.15",
     "npm-run-all": "^4.1.5",
     "typescript": "^4.1.2"
