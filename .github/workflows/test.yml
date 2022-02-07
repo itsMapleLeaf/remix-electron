@@ -25,4 +25,8 @@ jobs:
 
       - run: pnpx playwright install
 
-      - run: xvfb-run --server-args="-screen 9 1280x2000x24" pnpm test
+      - name: Test
+        run: |
+          export DISPLAY=':99.0'
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          pnpm test
