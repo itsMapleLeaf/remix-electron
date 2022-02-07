@@ -5,7 +5,7 @@
   "description": "Electron integration for Remix",
   "license": "MIT",
   "repository": "https://github.com/itsMapleLeaf/remix-electron",
-  "types": "dist/main.d.ts",
+  "types": "./dist/main.d.ts",
   "main": "./dist/main.js",
   "files": [
     "dist",
