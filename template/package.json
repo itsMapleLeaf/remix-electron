@@ -14,9 +14,9 @@
   },
   "build": {
     "files": [
-      "build",
       "desktop",
-      "public"
+      "public",
+      "remix.config.js"
     ]
   },
   "dependencies": {
