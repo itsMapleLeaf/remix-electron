@@ -16,9 +16,12 @@ void (async () => {
     await win.loadURL(url)
     win.show()
   } catch (error) {
-    dialog.showErrorBox(
-      "Error",
-      error?.stack || error?.message || String(error),
-    )
+    dialog.showErrorBox("Error", getErrorStack(error))
+    console.error(error)
   }
 })()
+
+/** @param {unknown} error */
+function getErrorStack(error) {
+  return error instanceof Error ? error.stack || error.message : String(error)
+}
