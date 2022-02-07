@@ -23,9 +23,9 @@ jobs:
       - run: npm i -g pnpm
       - run: pnpm i
 
-      - name: Run XVFB
-        run: |
-          export DISPLAY=':99.0'
-          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+      - run: pnpx playwright install
 
-      - run: pnpm test
+      - name: Run test
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: pnpm test
