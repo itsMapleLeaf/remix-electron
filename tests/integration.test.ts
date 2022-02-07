@@ -4,7 +4,7 @@ import type { ElectronApplication, Page } from "playwright"
 import { _electron as electron } from "playwright"
 import { afterAll, beforeAll, expect, test } from "vitest"
 
-const appFolder = join(__dirname, "fixtures/main")
+const appFolder = join(__dirname, "../template")
 
 let electronApp: ElectronApplication
 let window: Page

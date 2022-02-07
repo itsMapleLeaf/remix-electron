@@ -3,7 +3,10 @@
   "compilerOptions": {
     "module": "commonjs",
     "noUnusedLocals": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "paths": {
+      "~/*": ["./template/app/*"]
+    }
   },
-  "exclude": ["node_modules", "dist", "integration/fixtures"]
+  "exclude": ["**/node_modules/**", "**/dist/**", "**/build/**", "**/.cache/**"]
 }

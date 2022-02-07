@@ -1,22 +1,20 @@
-# remix-electron-demo
+# remix-electron
 
-An demo of how to use Electron with Remix
+Electron integration for Remix
 
 ![demo screenshot](./screenshot.png)
 
-## How
+## Setup
 
-Uses a [custom Electron protocol](https://www.electronjs.org/docs/latest/api/protocol), which sends request info to Remix as a `Request` object. Remix renders your app, then the protocol sends the response from Remix back to the Electron app.
+Use degit to create a new project:
 
-Thanks [@MarshallOfSound](https://github.com/MarshallOfSound) for the idea!
+```sh
+npx degit itsMapleLeaf/remix-electron/template my-desktop-app
+```
 
-## Using Electron APIs
+## API
 
-Importing `"electron"` directly in route files results in Electron trying to get bundled and called in the renderer process.
-
-To circumvent this, I created an `electron.server.js` file, which re-exports from `electron`. The `.server` suffix tells Remix to only load it in the main process. You should use `.server` for any code that runs in the main process and uses node/electron APIs.
-
-Likewise, for any code running in the renderer process, e.g. using the [clipboard](https://www.electronjs.org/docs/latest/api/clipboard) module, you can use the `.client` suffix. Using electron modules will require enabling `nodeIntegration` on the `BrowserWindow`.
+(todo)
 
 ## Motivation
 
