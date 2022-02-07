@@ -6,20 +6,22 @@ const remixConfig = require("../remix.config")
 /** @type {BrowserWindow | undefined} */
 let win
 
-void (async () => {
+/** @param {string} url */
+async function createWindow(url) {
+  win = new BrowserWindow({ show: false })
+  await win.loadURL(url)
+  win.show()
+}
+
+app.on("ready", async () => {
   try {
     const url = await initRemix({ remixConfig })
-
-    await app.whenReady()
-
-    win = new BrowserWindow({ show: false })
-    await win.loadURL(url)
-    win.show()
+    await createWindow(url)
   } catch (error) {
     dialog.showErrorBox("Error", getErrorStack(error))
     console.error(error)
   }
-})()
+})
 
 /** @param {unknown} error */
 function getErrorStack(error) {
