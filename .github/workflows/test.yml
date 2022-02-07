@@ -9,7 +9,7 @@ on:
 
 env:
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
-  DEBUG: pw:*
+  # DEBUG: pw:*
 
 jobs:
   test:
