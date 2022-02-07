@@ -25,7 +25,4 @@ jobs:
 
       - run: pnpx playwright install
 
-      - name: Run test
-        uses: GabrielBB/xvfb-action@v1
-        with:
-          run: pnpm test
+      - run: xvfb-run --server-args="-screen 9 1280x2000x24" pnpm test
