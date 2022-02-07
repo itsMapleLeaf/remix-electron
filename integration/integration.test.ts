@@ -10,10 +10,6 @@ let electronApp: ElectronApplication
 let window: Page
 
 beforeAll(async () => {
-  await execa("pnpm", ["install"], {
-    cwd: appFolder,
-    stdio: "inherit",
-  })
   await execa("pnpm", ["build"], {
     cwd: appFolder,
     stdio: "inherit",
