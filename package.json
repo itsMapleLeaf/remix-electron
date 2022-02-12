@@ -21,7 +21,7 @@
     "test": "run-p --print-label build lint && vitest --no-watch",
     "test-dev": "run-p --print-label --race vitest-ui build-watch",
     "vitest-ui": "vitest --ui",
-    "release": "release-it"
+    "release": "pnpm test && release-it"
   },
   "dependencies": {
     "@types/mime": "^2.0.3",
