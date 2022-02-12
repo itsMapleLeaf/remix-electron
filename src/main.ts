@@ -19,12 +19,14 @@ export type InitRemixOptions = {
   mode?: "development" | "production"
   publicFolder?: string
   remixConfig: AppConfig
+  getLoadContext?: (request: Electron.ProtocolRequest) => unknown
 }
 
 export async function initRemix({
   remixConfig,
   mode = defaultMode,
   publicFolder = "public",
+  getLoadContext,
 }: InitRemixOptions) {
   await app.whenReady()
 
@@ -43,7 +45,8 @@ export async function initRemix({
         return
       }
 
-      callback(await serveRemixResponse(request, mode, remixConfig))
+      const context = await getLoadContext?.(request)
+      callback(await serveRemixResponse(request, mode, remixConfig, context))
     } catch (error) {
       callback({
         statusCode: 500,
@@ -85,6 +88,7 @@ async function serveRemixResponse(
   request: Electron.ProtocolRequest,
   mode: "development" | "production",
   remixConfig: AppConfig,
+  context?: unknown,
 ): Promise<Electron.ProtocolResponse> {
   const init: RequestInit = {
     method: request.method,
@@ -105,7 +109,7 @@ async function serveRemixResponse(
 
   const build = require(serverBuildFolder)
   const handleRequest = createRequestHandler(build, {}, mode)
-  const response = await handleRequest(remixRequest)
+  const response = await handleRequest(remixRequest, context)
 
   return {
     data: Buffer.from(await response.arrayBuffer()),

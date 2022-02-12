@@ -84,7 +84,7 @@ function createWindow() {
 
 ## API
 
-### `initRemix({ remixConfig[, mode] })`
+### `initRemix({ remixConfig[, mode, getLoadContext] })`
 
 Initializes remix-electron. Returns a promise with a url to load in the browser window.
 
@@ -93,6 +93,52 @@ Options:
 - `remixConfig`: The remix config object. Require it from `remix.config.js`.
 
 - `mode`: The mode the app is running in. Can be `"development"` or `"production"`. Defaults to `"production"` when packaged, otherwise uses `process.env.NODE_ENV`.
+
+- `getLoadContext`: Use this to inject some value into all of your remix loaders, e.g. an API client. The loaders receive it as `context`
+
+<details>
+<summary>Load context TS example</summary>
+
+**app/context.ts**
+
+```ts
+import type * as remix from "@remix-run/server-runtime"
+
+// your context type
+export type LoadContext = {
+  secret: string
+}
+
+// a custom data function args type to use for loaders/actions
+export type DataFunctionArgs = Omit<remix.DataFunctionArgs, "context"> & {
+  context: LoadContext
+}
+```
+
+**desktop/main.js**
+
+```ts
+const url = await initRemix({
+  remixConfig,
+
+  /** @returns {import("~/context").LoadContext} */
+  getLoadContext: () => ({
+    secret: "123",
+  }),
+})
+```
+
+In some route file:
+
+```ts
+import type { LoadContext } from "~/context"
+
+export async function loader({ context }: DataFunctionArgs) {
+  // do something with context
+}
+```
+
+</details>
 
 ## Motivation
 
