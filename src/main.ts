@@ -93,6 +93,7 @@ async function serveRemixResponse(
   const init: RequestInit = {
     method: request.method,
     headers: request.headers,
+    referrer: request.referrer,
   }
 
   if (request.uploadData) {
@@ -101,7 +102,6 @@ async function serveRemixResponse(
   }
 
   const remixRequest = new Request(request.url, init)
-  remixRequest.headers.set("referrer", request.referrer)
 
   const serverBuildFolder = asAbsolutePath(
     remixConfig.serverBuildDirectory ?? "build",
@@ -111,9 +111,15 @@ async function serveRemixResponse(
   const handleRequest = createRequestHandler(build, {}, mode)
   const response = await handleRequest(remixRequest, context)
 
+  const headers: Record<string, string[]> = {}
+  for (const [key, value] of response.headers) {
+    const values = (headers[key] ??= [])
+    values.push(value)
+  }
+
   return {
     data: Buffer.from(await response.arrayBuffer()),
-    headers: Object.fromEntries(response.headers),
+    headers,
     statusCode: response.status,
   }
 }
