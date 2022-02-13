@@ -8,12 +8,12 @@ body:
 
         This issue tracker is for reporting bugs found in `remix-electron` (https://github.com/itsMapleLeaf/remix-electron).
         If you have a question about how to achieve something and are struggling, please post a question
-        inside of `remix-electron` Discussions tab: https://github.com/itsMapleLeaf/remix-electron/discussions
+        in the `#electron` channel on the Remix discord: https://discord.gg/ZKfhzk8dQh
         
         Before submitting a new bug/issue, please check the links below to see if there is a solution or question posted there already:
          - `remix-electron` Issues tab: https://github.com/itsMapleLeaf/remix-electron/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc
          - `remix-electron` closed issues tab: https://github.com/itsMapleLeaf/remix-electron/issues?q=is%3Aissue+sort%3Aupdated-desc+is%3Aclosed
-         - `remix-electron` Discussions tab: https://github.com/itsMapleLeaf/remix-electron/discussions
+         - `#electron` channel on the Remix discord: https://discord.gg/ZKfhzk8dQh
 
         The more information you fill in, the better the community can help you.
   - type: textarea
@@ -26,15 +26,9 @@ body:
   - type: input
     id: link
     attributes:
-      label: Your Example Website or App
-      description: |
-        Which website or app were you using when the bug happened?
-        Note:
-        - Your bug will may get fixed much faster if we can run your code and it doesn't have dependencies other than the Remix Auth npm package.
-        - To create a shareable code example you can use Stackblitz (https://stackblitz.com/). Please no localhost URLs.
-        - Please read these tips for providing a minimal example: https://stackoverflow.com/help/mcve.
-      placeholder: |
-        e.g. https://stackblitz.com/edit/...... OR Github Repo
+      label: Minimal Reproduction
+      description: Provide a **minimal** example to reproduce the bug.
+      placeholder: Github Repo link
     validations:
       required: true
   - type: textarea
