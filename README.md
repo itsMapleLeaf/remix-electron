@@ -131,7 +131,7 @@ const url = await initRemix({
 In some route file:
 
 ```ts
-import type { LoadContext } from "~/context"
+import type { DataFunctionArgs, LoadContext } from "~/context"
 
 export async function loader({ context }: DataFunctionArgs) {
   // do something with context
