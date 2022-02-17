@@ -68,7 +68,9 @@ export async function initRemix({
     }
   })
 
-  return `http://app/`
+  // the remix web socket reads the websocket host from the browser url,
+  // so this _has_ to be localhost
+  return `http://localhost/`
 }
 
 async function handleRequest(
