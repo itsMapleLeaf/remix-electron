@@ -33,7 +33,7 @@ export async function initRemix({
   protocol.interceptBufferProtocol("http", async (request, callback) => {
     try {
       // purging the require cache is necessary for changes to show with hot reloading
-      if (defaultMode === "development") {
+      if (mode === "development") {
         purgeRequireCache(
           remixConfig.serverBuildDirectory ?? defaultServerBuildDirectory,
         )
