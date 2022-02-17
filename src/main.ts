@@ -36,8 +36,11 @@ export async function initRemix({
 
   protocol.interceptBufferProtocol("http", async (request, callback) => {
     try {
-      const serverBuildPath =
-        remixConfig.serverBuildDirectory ?? defaultServerBuildDirectory
+      const serverBuildPath = asAbsolutePath(
+        remixConfig.serverBuildPath ??
+          remixConfig.serverBuildDirectory ??
+          defaultServerBuildDirectory,
+      )
 
       // purging the require cache is necessary for changes to show with hot reloading
       if (mode === "development") {
@@ -46,8 +49,7 @@ export async function initRemix({
 
       const context = await getLoadContext?.(request)
       const assetFiles = await collectAssetFiles(publicFolder)
-      const serverBuildFolder = asAbsolutePath(serverBuildPath)
-      const build = require(serverBuildFolder)
+      const build = require(serverBuildPath)
       const requestHandler = createRequestHandler(build, {}, mode)
 
       callback(
