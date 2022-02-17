@@ -1,6 +1,6 @@
 {
   "name": "remix-electron",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "itsMapleLeaf",
   "description": "Electron integration for Remix",
   "license": "MIT",
