@@ -19,7 +19,7 @@ export async function collectAssetFiles(folder: string): Promise<AssetFile[]> {
   })
 
   return files.map((file) => ({
-    path: "/" + relative(folder, file),
+    path: "/" + relative(folder, file).replace(/\\/g, "/"),
     content: () => readFile(file),
   }))
 }
