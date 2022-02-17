@@ -33,8 +33,8 @@ export async function initRemix({
   getLoadContext,
 }: InitRemixOptions) {
   let [assetFiles] = await Promise.all([
-    await collectAssetFiles(publicFolder),
-    await app.whenReady(),
+    collectAssetFiles(publicFolder),
+    app.whenReady(),
   ])
 
   protocol.interceptBufferProtocol("http", async (request, callback) => {
