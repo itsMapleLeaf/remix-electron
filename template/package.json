@@ -6,11 +6,11 @@
   "main": "desktop/main.js",
   "scripts": {
     "prepare": "remix setup node",
-    "dev": "cross-env NODE_ENV=development npm-run-all --parallel --print-label --race build-watch nodemon",
+    "dev": "cross-env NODE_ENV=development npm-run-all --parallel --print-label --race dev:*",
+    "dev:remix": "remix watch",
+    "dev:nodemon": "nodemon --watch desktop --ignore desktop/build --exec electron .",
     "build": "remix build && electron-builder",
-    "build-watch": "remix watch",
-    "start": "cross-env NODE_ENV=production electron .",
-    "nodemon": "nodemon --watch desktop --exec electron ."
+    "start": "cross-env NODE_ENV=production electron ."
   },
   "build": {
     "files": [
