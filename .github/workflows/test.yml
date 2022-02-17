@@ -7,8 +7,8 @@ on:
     branches: [main]
   workflow_dispatch:
 
-env:
-  # DEBUG: pw:*
+# env:
+# DEBUG: pw:*
 
 jobs:
   test:
