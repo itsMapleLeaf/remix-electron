@@ -12,7 +12,6 @@ let window: Page
 beforeAll(async () => {
   await execa("pnpm", ["build", "--", "--dir"], {
     cwd: appFolder,
-    stdio: "inherit",
   })
 
   electronApp = await electron.launch({
