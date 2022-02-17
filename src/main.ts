@@ -32,7 +32,10 @@ export async function initRemix({
   publicFolder = "public",
   getLoadContext,
 }: InitRemixOptions) {
-  await app.whenReady()
+  let [assetFiles] = await Promise.all([
+    await collectAssetFiles(publicFolder),
+    await app.whenReady(),
+  ])
 
   protocol.interceptBufferProtocol("http", async (request, callback) => {
     try {
@@ -42,13 +45,13 @@ export async function initRemix({
           defaultServerBuildDirectory,
       )
 
-      // purging the require cache is necessary for changes to show with hot reloading
       if (mode === "development") {
+        // purging the require cache is necessary for changes to show with hot reloading
         purgeRequireCache(serverBuildPath)
+        assetFiles = await collectAssetFiles(publicFolder)
       }
 
       const context = await getLoadContext?.(request)
-      const assetFiles = await collectAssetFiles(publicFolder)
       const build = require(serverBuildPath)
       const requestHandler = createRequestHandler(build, {}, mode)
 
