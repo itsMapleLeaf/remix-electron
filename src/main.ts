@@ -1,10 +1,10 @@
 import type { AppConfig } from "@remix-run/dev/config"
+import type { RequestHandler } from "@remix-run/server-runtime"
 import { createRequestHandler } from "@remix-run/server-runtime"
 import { app, protocol } from "electron"
-import mime from "mime"
-import type { PathLike } from "node:fs"
-import { readFile, stat } from "node:fs/promises"
-import path, { isAbsolute, join } from "node:path"
+import { asAbsolutePath } from "./as-absolute-path"
+import type { AssetFile } from "./asset-files"
+import { collectAssetFiles, serveAsset } from "./asset-files"
 import "./browser-globals"
 
 const defaultMode = app.isPackaged
@@ -13,13 +13,17 @@ const defaultMode = app.isPackaged
   ? "production"
   : "development"
 
-const defaultServerBuildDirectory = "desktop/build"
+const defaultServerBuildDirectory = "build"
+
+export type GetLoadContextFunction = (
+  request: Electron.ProtocolRequest,
+) => unknown
 
 export type InitRemixOptions = {
   mode?: "development" | "production"
   publicFolder?: string
   remixConfig: AppConfig
-  getLoadContext?: (request: Electron.ProtocolRequest) => unknown
+  getLoadContext?: GetLoadContextFunction
 }
 
 export async function initRemix({
@@ -32,63 +36,52 @@ export async function initRemix({
 
   protocol.interceptBufferProtocol("http", async (request, callback) => {
     try {
+      const serverBuildPath =
+        remixConfig.serverBuildDirectory ?? defaultServerBuildDirectory
+
       // purging the require cache is necessary for changes to show with hot reloading
       if (mode === "development") {
-        purgeRequireCache(
-          remixConfig.serverBuildDirectory ?? defaultServerBuildDirectory,
-        )
-      }
-
-      const assetResponse = await serveAsset(request, publicFolder)
-      if (assetResponse) {
-        callback(assetResponse)
-        return
+        purgeRequireCache(serverBuildPath)
       }
 
       const context = await getLoadContext?.(request)
-      callback(await serveRemixResponse(request, mode, remixConfig, context))
+      const assetFiles = await collectAssetFiles(publicFolder)
+      const serverBuildFolder = asAbsolutePath(serverBuildPath)
+      const build = require(serverBuildFolder)
+      const requestHandler = createRequestHandler(build, {}, mode)
+
+      callback(
+        await handleRequest(request, assetFiles, requestHandler, context),
+      )
     } catch (error) {
+      console.warn("[remix-electron]", error)
       callback({
         statusCode: 500,
         // @ts-expect-error
         data: `<pre>${error?.stack || error?.message || String(error)}</pre>`,
       })
-      console.warn(error)
     }
   })
 
   return `http://app/`
 }
 
-async function serveAsset(
+async function handleRequest(
   request: Electron.ProtocolRequest,
-  publicFolder: string,
-): Promise<Electron.ProtocolResponse | undefined> {
-  publicFolder = asAbsolutePath(publicFolder)
-
-  const url = new URL(request.url)
-  const filePath = path.join(publicFolder, url.pathname)
-
-  // make sure the request doesn't leave the assets directory
-  if (!filePath.startsWith(publicFolder)) {
-    return
-  }
-
-  if (!(await isFile(filePath))) {
-    return
-  }
-
-  return {
-    data: await readFile(filePath),
-    mimeType: mime.getType(filePath) ?? undefined,
-  }
+  assetFiles: AssetFile[],
+  requestHandler: RequestHandler,
+  context: unknown,
+): Promise<Electron.ProtocolResponse> {
+  return (
+    (await serveAsset(request, assetFiles)) ??
+    (await serveRemixResponse(request, requestHandler, context))
+  )
 }
 
 async function serveRemixResponse(
   request: Electron.ProtocolRequest,
-  mode: "development" | "production",
-  remixConfig: AppConfig,
-  context?: unknown,
+  handleRequest: RequestHandler,
+  context: unknown,
 ): Promise<Electron.ProtocolResponse> {
   const init: RequestInit = {
     method: request.method,
@@ -102,13 +95,6 @@ async function serveRemixResponse(
   }
 
   const remixRequest = new Request(request.url, init)
-
-  const serverBuildFolder = asAbsolutePath(
-    remixConfig.serverBuildDirectory ?? "build",
-  )
-
-  const build = require(serverBuildFolder)
-  const handleRequest = createRequestHandler(build, {}, mode)
   const response = await handleRequest(remixRequest, context)
 
   const headers: Record<string, string[]> = {}
@@ -124,19 +110,10 @@ async function serveRemixResponse(
   }
 }
 
-async function isFile(path: PathLike) {
-  const stats = await stat(path).catch(() => undefined)
-  return stats?.isFile() ?? false
-}
-
 function purgeRequireCache(prefix: string) {
   for (const key in require.cache) {
     if (key.startsWith(asAbsolutePath(prefix))) {
       delete require.cache[key]
     }
   }
-}
-
-function asAbsolutePath(filePath: string): string {
-  return isAbsolute(filePath) ? filePath : join(process.cwd(), filePath)
 }
