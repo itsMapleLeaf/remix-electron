@@ -28,6 +28,7 @@
     "@types/node": "*",
     "@types/react": "*",
     "@types/react-dom": "*",
+    "fast-glob": "^3.2.11",
     "mime": "^3.0.0",
     "zod": "^3.11.6"
   },
