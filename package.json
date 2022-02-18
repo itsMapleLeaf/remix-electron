@@ -89,5 +89,20 @@
       "unicorn/no-process-exit": "off"
     }
   },
-  "prettier": "@itsmapleleaf/configs/prettier"
+  "prettier": "@itsmapleleaf/configs/prettier",
+  "release-it": {
+    "git": {
+      "commitMessage": "v${version}",
+      "commit": true,
+      "tag": true,
+      "push": true
+    },
+    "npm": {
+      "publish": true
+    },
+    "github": {
+      "release": true,
+      "web": true
+    }
+  }
 }
