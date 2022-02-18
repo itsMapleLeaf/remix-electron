@@ -6,28 +6,27 @@ import { afterAll, beforeAll, expect, test } from "vitest"
 import { defineIntegration } from "./define-integration"
 
 defineIntegration(() => {
+  if (process.platform !== "linux") {
+    console.info("Skipping build test on non-linux platform")
+    return
+  }
+
   const appFolder = join(__dirname, "../template")
 
   let electronApp: ElectronApplication
   let window: Page
 
   beforeAll(async () => {
-    await execa("pnpm", ["build", "--", "--dir"], {
+    await execa("pnpm", ["run", "build", "--", "--dir"], {
       cwd: appFolder,
     })
 
     electronApp = await electron.launch({
-      cwd: appFolder,
-      args: ["."],
+      // TODO: figure out what the executablePath is for other platforms
       executablePath: join(
         appFolder,
         "dist/linux-unpacked/remix-electron-template",
       ),
-
-      // this fixes a failure to launch on linux
-      env: {
-        DISPLAY: process.env.DISPLAY!,
-      },
     })
 
     window = await electronApp.firstWindow()

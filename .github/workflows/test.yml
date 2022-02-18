@@ -7,9 +7,6 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# env:
-#   DEBUG: pw:*
-
 jobs:
   test:
     strategy:
@@ -17,22 +14,16 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
-    env:
-      SKIP_INTEGRATION: ${{ matrix.os != 'ubuntu-latest' }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           # https://github.com/actions/setup-node#supported-version-syntax
           node-version: "lts/*"
-      - run: npm i -g pnpm
-      - run: pnpm i
-
-      - name: Run Xvfb
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-        run: |
-          export DISPLAY=':99.0'
-          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+      - run: npm install --global pnpm
+      - run: pnpm install
 
       - name: Test
-        run: pnpm test
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: pnpm test

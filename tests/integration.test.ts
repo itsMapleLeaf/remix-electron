@@ -19,11 +19,6 @@ defineIntegration(() => {
     electronApp = await electron.launch({
       cwd: appFolder,
       args: ["."],
-
-      // this fixes a failure to launch on linux
-      env: {
-        DISPLAY: process.env.DISPLAY!,
-      },
     })
 
     window = await electronApp.firstWindow()
