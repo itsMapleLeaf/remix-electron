@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 # env:
-# DEBUG: pw:*
+#   DEBUG: pw:*
 
 jobs:
   test:
@@ -17,6 +17,8 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
+    env:
+      SKIP_INTEGRATION: ${{ matrix.os != 'ubuntu-latest' }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -26,13 +28,11 @@ jobs:
       - run: npm i -g pnpm
       - run: pnpm i
 
-      - name: Test
+      - name: Run Xvfb
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           export DISPLAY=':99.0'
           Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-          pnpm test
 
-      - name: Unit Test
-        if: ${{ matrix.os != 'ubuntu-latest' }}
-        run: pnpm test-unit
+      - name: Test
+        run: pnpm test

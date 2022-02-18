@@ -3,38 +3,41 @@ import { join } from "node:path"
 import type { ElectronApplication, Page } from "playwright"
 import { _electron as electron } from "playwright"
 import { afterAll, beforeAll, expect, test } from "vitest"
+import { defineIntegration } from "./define-integration"
 
-const appFolder = join(__dirname, "../template")
+defineIntegration(() => {
+  const appFolder = join(__dirname, "../template")
 
-let electronApp: ElectronApplication
-let window: Page
+  let electronApp: ElectronApplication
+  let window: Page
 
-beforeAll(async () => {
-  await execa("pnpm", ["build", "--", "--dir"], {
-    cwd: appFolder,
+  beforeAll(async () => {
+    await execa("pnpm", ["build", "--", "--dir"], {
+      cwd: appFolder,
+    })
+
+    electronApp = await electron.launch({
+      cwd: appFolder,
+      args: ["."],
+      executablePath: join(
+        appFolder,
+        "dist/linux-unpacked/remix-electron-template",
+      ),
+
+      // this fixes a failure to launch on linux
+      env: {
+        DISPLAY: process.env.DISPLAY!,
+      },
+    })
+
+    window = await electronApp.firstWindow()
+  }, 1000 * 60)
+
+  afterAll(async () => {
+    await electronApp.close()
   })
 
-  electronApp = await electron.launch({
-    cwd: appFolder,
-    args: ["."],
-    executablePath: join(
-      appFolder,
-      "dist/linux-unpacked/remix-electron-template",
-    ),
-
-    // this fixes a failure to launch on linux
-    env: {
-      DISPLAY: process.env.DISPLAY!,
-    },
+  test("packaged build", async () => {
+    expect(await window.locator("h1").textContent()).toBe("Welcome to Remix")
   })
-
-  window = await electronApp.firstWindow()
-}, 1000 * 60)
-
-afterAll(async () => {
-  await electronApp.close()
-})
-
-test("packaged build", async () => {
-  expect(await window.locator("h1").textContent()).toBe("Welcome to Remix")
 })
