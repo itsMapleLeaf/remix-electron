@@ -1,8 +1,6 @@
-import type { AppConfig } from "@remix-run/dev/config"
-import type { RequestHandler } from "@remix-run/server-runtime"
+import type { RequestHandler, ServerBuild } from "@remix-run/server-runtime"
 import { createRequestHandler } from "@remix-run/server-runtime"
 import { app, protocol } from "electron"
-import { asAbsolutePath } from "./as-absolute-path"
 import type { AssetFile } from "./asset-files"
 import { collectAssetFiles, serveAsset } from "./asset-files"
 import "./browser-globals"
@@ -13,21 +11,19 @@ const defaultMode = app.isPackaged
   ? "production"
   : "development"
 
-const defaultServerBuildDirectory = "build"
-
 export type GetLoadContextFunction = (
   request: Electron.ProtocolRequest,
 ) => unknown
 
 export type InitRemixOptions = {
+  serverBuild: ServerBuild
   mode?: "development" | "production"
   publicFolder?: string
-  remixConfig: AppConfig
   getLoadContext?: GetLoadContextFunction
 }
 
 export async function initRemix({
-  remixConfig,
+  serverBuild,
   mode = defaultMode,
   publicFolder = "public",
   getLoadContext,
@@ -39,21 +35,12 @@ export async function initRemix({
 
   protocol.interceptBufferProtocol("http", async (request, callback) => {
     try {
-      const serverBuildPath = asAbsolutePath(
-        remixConfig.serverBuildPath ??
-          remixConfig.serverBuildDirectory ??
-          defaultServerBuildDirectory,
-      )
-
       if (mode === "development") {
-        // purging the require cache is necessary for changes to show with hot reloading
-        purgeRequireCache(serverBuildPath)
         assetFiles = await collectAssetFiles(publicFolder)
       }
 
       const context = await getLoadContext?.(request)
-      const build = require(serverBuildPath)
-      const requestHandler = createRequestHandler(build, {}, mode)
+      const requestHandler = createRequestHandler(serverBuild, {}, mode)
 
       callback(
         await handleRequest(request, assetFiles, requestHandler, context),
@@ -114,13 +101,5 @@ async function serveRemixResponse(
     data: Buffer.from(await response.arrayBuffer()),
     headers,
     statusCode: response.status,
-  }
-}
-
-function purgeRequireCache(prefix: string) {
-  for (const key in require.cache) {
-    if (key.startsWith(asAbsolutePath(prefix))) {
-      delete require.cache[key]
-    }
   }
 }
