@@ -3,7 +3,7 @@
   "description": "",
   "version": "0.0.0",
   "private": true,
-  "main": "desktop/main.js",
+  "main": "desktop/build/index.js",
   "scripts": {
     "prepare": "remix setup node",
     "dev": "cross-env NODE_ENV=development npm-run-all --parallel --print-label --race dev:*",
