@@ -1,4 +1,3 @@
-// @ts-check
 import * as serverBuild from "@remix-run/dev/server-build"
 import { app, BrowserWindow, dialog } from "electron"
 import { initRemix } from "remix-electron"
