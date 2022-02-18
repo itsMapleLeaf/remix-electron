@@ -6,10 +6,11 @@
   "main": "desktop/build/index.js",
   "scripts": {
     "prepare": "remix setup node",
-    "dev": "cross-env NODE_ENV=development npm-run-all --parallel --print-label --race dev:*",
+    "clean": "del dist desktop/build public/build .cache",
+    "dev": "npm run clean && cross-env NODE_ENV=development npm-run-all --parallel --print-label --race dev:*",
     "dev:remix": "remix watch",
-    "dev:nodemon": "nodemon --watch desktop --ignore desktop/build --exec electron .",
-    "build": "remix build && electron-builder",
+    "dev:nodemon": "wait-on file:desktop/build/index.js && nodemon --watch desktop --ignore desktop/build --exec electron .",
+    "build": "npm run clean && remix build && electron-builder",
     "start": "cross-env NODE_ENV=production electron ."
   },
   "build": {
@@ -35,11 +36,13 @@
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",
     "cross-env": "^7.0.3",
+    "del-cli": "^4.0.1",
     "electron": "^17.0.1",
     "electron-builder": "^22.14.13",
     "nodemon": "^2.0.15",
     "npm-run-all": "^4.1.5",
-    "typescript": "^4.5.5"
+    "typescript": "^4.5.5",
+    "wait-on": "^6.0.1"
   },
   "engines": {
     "node": ">=14"
