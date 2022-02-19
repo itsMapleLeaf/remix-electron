@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json.schemastore.org/nodemon.json",
+  "exec": "electron",
+  "watch": ["desktop"],
+  "ignore": ["desktop/build"],
+  "ext": "ts,js",
+  "delay": 0.5
+}
