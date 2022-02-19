@@ -1,23 +1,21 @@
 import { execa } from "execa"
-import { join } from "node:path"
 import type { ElectronApplication, Page } from "playwright"
 import { _electron as electron } from "playwright"
 import { afterAll, beforeAll, expect, test } from "vitest"
 import { defineIntegration } from "./define-integration"
+import { templateFolder } from "./paths"
 
 defineIntegration(() => {
-  const appFolder = join(__dirname, "../template")
-
   let electronApp: ElectronApplication
   let window: Page
 
   beforeAll(async () => {
     await execa("pnpx", ["remix", "build"], {
-      cwd: appFolder,
+      cwd: templateFolder,
     })
 
     electronApp = await electron.launch({
-      cwd: appFolder,
+      cwd: templateFolder,
       args: ["."],
     })
 
