@@ -12,40 +12,61 @@ Use degit to create a new project from the template.
 npx degit itsMapleLeaf/remix-electron/template my-desktop-app
 ```
 
-### Adding to an existing project
+### Adding to an existing Remix project
 
-Install dependencies:
+Install remix-electron and peer dependencies:
 
 ```bash
-npm i remix-electron electron @remix-run/dev @remix-run/node @remix-run/server-runtime react react-dom
+npm i remix-electron electron @remix-run/node @remix-run/server-runtime react react-dom
 ```
 
-Add a file at `desktop/main.js` to run the electron app. The `initRemix` function returns a url to load in the browser window.
+Add a file at `desktop/main.ts` to run the electron app. The `initRemix` function returns a url to load in the browser window.
 
-```js
-// desktop/main.js
-const { app, BrowserWindow } = require("electron")
-const { initRemix } = require("remix-electron")
-const remixConfig = require("../remix.config")
+```ts
+// desktop/main.ts
+import * as serverBuild from "@remix-run/dev/server-build"
+import { app, BrowserWindow } from "electron"
+import { initRemix } from "remix-electron"
 
-let win
-async function createWindow(url) {
-  win = new BrowserWindow({ show: false })
-  await win.loadURL(url)
-  win.show()
-}
+let win: BrowserWindow | undefined
 
 app.on("ready", async () => {
   try {
-    const url = await initRemix({ remixConfig })
-    await createWindow(url)
+    const url = await initRemix({ serverBuild })
+
+    win = new BrowserWindow({ show: false })
+    await win.loadURL(url)
+    win.show()
   } catch (error) {
     console.error(error)
   }
 })
 ```
 
-Now run `npx electron desktop/main.js` to start the app! 🚀
+Update your Remix config:
+
+```js
+// remix.config.js
+/**
+ * @type {import('@remix-run/dev/config').AppConfig}
+ */
+module.exports = {
+  // point this to your electron entry file
+  server: "desktop/main.ts",
+
+  // this is the file that will be run by electron
+  serverBuildPath: "desktop/build/index.js",
+
+  // everything else can stay the same
+  appDirectory: "app",
+  assetsBuildDirectory: "public/build",
+  publicPath: "/build/",
+  devServerPort: 8002,
+  ignoredRouteFiles: [".*"],
+}
+```
+
+Build the app with `npm run build`, then run `npx electron desktop/build/index.js` to start the app! 🚀
 
 ## Using Electron APIs
 
@@ -69,8 +90,7 @@ export * from "electron"
 Likewise, for any code running in the renderer process, e.g. using the [clipboard](https://www.electronjs.org/docs/latest/api/clipboard) module, you can use the `.client` suffix. Renderer process modules require `nodeIntegration`.
 
 ```js
-// desktop/main.js
-let win
+// desktop/main.ts
 function createWindow() {
   // ...
   win = new BrowserWindow({
@@ -115,20 +135,20 @@ export type DataFunctionArgs = Omit<remix.DataFunctionArgs, "context"> & {
 }
 ```
 
-**desktop/main.js**
+**desktop/main.ts**
 
 ```ts
+import type { LoadContext } from "~/context"
+
 const url = await initRemix({
   remixConfig,
-
-  /** @returns {import("~/context").LoadContext} */
-  getLoadContext: () => ({
+  getLoadContext: (): LoadContext => ({
     secret: "123",
   }),
 })
 ```
 
-In some route file:
+In a route file:
 
 ```ts
 import type { DataFunctionArgs, LoadContext } from "~/context"
