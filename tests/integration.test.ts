@@ -22,7 +22,7 @@ defineIntegration(() => {
     })
 
     window = await electronApp.firstWindow()
-  })
+  }, 1000 * 20)
 
   afterAll(async () => {
     await electronApp.close()
