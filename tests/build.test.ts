@@ -4,6 +4,7 @@ import type { ElectronApplication, Page } from "playwright"
 import { _electron as electron } from "playwright"
 import { afterAll, beforeAll, expect, test } from "vitest"
 import { defineIntegration } from "./define-integration"
+import { templateFolder } from "./paths"
 
 defineIntegration(() => {
   if (process.platform !== "linux") {
@@ -11,20 +12,18 @@ defineIntegration(() => {
     return
   }
 
-  const appFolder = join(__dirname, "../template")
-
   let electronApp: ElectronApplication
   let window: Page
 
   beforeAll(async () => {
     await execa("pnpm", ["run", "build", "--", "--dir"], {
-      cwd: appFolder,
+      cwd: templateFolder,
     })
 
     electronApp = await electron.launch({
       // TODO: figure out what the executablePath is for other platforms
       executablePath: join(
-        appFolder,
+        templateFolder,
         "dist/linux-unpacked/remix-electron-template",
       ),
     })
