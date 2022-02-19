@@ -1,6 +1,6 @@
+import { app } from "electron"
 import { useState } from "react"
 import { useLoaderData } from "remix"
-import { app } from "~/electron.server"
 
 export function loader() {
   return {

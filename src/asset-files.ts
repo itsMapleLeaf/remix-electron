@@ -6,7 +6,7 @@ import { asAbsolutePath } from "./as-absolute-path"
 
 export type AssetFile = {
   path: string
-  content: () => Promise<string | Buffer>
+  content: () => Promise<Buffer>
 }
 
 export async function collectAssetFiles(folder: string): Promise<AssetFile[]> {
@@ -33,8 +33,17 @@ export async function serveAsset(
   const file = files.find((file) => file.path === url.pathname)
   if (!file) return
 
+  // polyfill globals that are used by electron,
+  // so that electron can be imported in the browser
+  let polyfill = ""
+  if (request.url.endsWith(".js")) {
+    polyfill = `
+var __dirname = ""
+var __filename = ""`
+  }
+
   return {
-    data: await file.content(),
+    data: Buffer.concat([Buffer.from(polyfill), await file.content()]),
     mimeType: mime.getType(file.path) ?? undefined,
   }
 }

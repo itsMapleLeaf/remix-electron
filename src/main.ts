@@ -97,8 +97,20 @@ async function serveRemixResponse(
     values.push(value)
   }
 
+  // polyfill node globals
+  let polyfill = ""
+  if (request.url.endsWith(".js")) {
+    polyfill = `
+      var __dirname = undefined;
+      var __filename = undefined;
+    `
+  }
+
   return {
-    data: Buffer.from(await response.arrayBuffer()),
+    data: Buffer.concat([
+      Buffer.from(polyfill),
+      Buffer.from(await response.arrayBuffer()),
+    ]),
     headers,
     statusCode: response.status,
   }
