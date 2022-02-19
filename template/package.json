@@ -6,7 +6,7 @@
   "main": "desktop/build/index.js",
   "scripts": {
     "prepare": "remix setup node",
-    "clean": "del dist desktop/build public/build .cache",
+    "clean": "del-cli dist desktop/build public/build .cache",
     "dev": "npm run clean && cross-env NODE_ENV=development npm-run-all --parallel --print-label --race dev:*",
     "dev:remix": "remix watch",
     "dev:nodemon": "wait-on file:desktop/build/index.js && nodemon --watch desktop --ignore desktop/build --exec electron .",
