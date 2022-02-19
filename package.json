@@ -33,7 +33,6 @@
     "zod": "^3.11.6"
   },
   "peerDependencies": {
-    "@remix-run/dev": ">=1.2.1",
     "@remix-run/node": ">=1.2.1",
     "@remix-run/server-runtime": ">=1.2.1",
     "electron": ">=16",
