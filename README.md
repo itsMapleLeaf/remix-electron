@@ -20,19 +20,21 @@ Install remix-electron and peer dependencies:
 npm i remix-electron electron @remix-run/node @remix-run/server-runtime react react-dom
 ```
 
-Add a file at `desktop/main.ts` to run the electron app. The `initRemix` function returns a url to load in the browser window.
+Add a file at `desktop/main.js` to run the electron app. The `initRemix` function returns a url to load in the browser window.
 
 ```ts
-// desktop/main.ts
-import * as serverBuild from "@remix-run/dev/server-build"
-import { app, BrowserWindow } from "electron"
-import { initRemix } from "remix-electron"
+// desktop/main.js
+const { initRemix } = require("remix-electron")
+const { app, BrowserWindow } = require("electron")
+const { join } = require("node:path")
 
-let win: BrowserWindow | undefined
+let win
 
 app.on("ready", async () => {
   try {
-    const url = await initRemix({ serverBuild })
+    const url = await initRemix({
+      serverBuild: join(__dirname, "build"),
+    })
 
     win = new BrowserWindow({ show: false })
     await win.loadURL(url)
@@ -43,7 +45,7 @@ app.on("ready", async () => {
 })
 ```
 
-Update your Remix config:
+Update `serverBuildPath` in your Remix config:
 
 ```js
 // remix.config.js
@@ -51,18 +53,8 @@ Update your Remix config:
  * @type {import('@remix-run/dev/config').AppConfig}
  */
 module.exports = {
-  // point this to your electron entry file
-  server: "desktop/main.ts",
-
-  // this is the file that will be run by electron
   serverBuildPath: "desktop/build/index.js",
-
-  // everything else can stay the same
-  appDirectory: "app",
-  assetsBuildDirectory: "public/build",
-  publicPath: "/build/",
-  devServerPort: 8002,
-  ignoredRouteFiles: [".*"],
+  // ...
 }
 ```
 
@@ -104,7 +96,7 @@ function createWindow() {
 
 ## API
 
-### `initRemix({ remixConfig[, mode, getLoadContext] })`
+### `async initRemix({ remixConfig[, publicFolder, mode, getLoadContext] })`
 
 Initializes remix-electron. Returns a promise with a url to load in the browser window.
 
@@ -113,6 +105,8 @@ Options:
 - `remixConfig`: The remix config object. Require it from `remix.config.js`.
 
 - `mode`: The mode the app is running in. Can be `"development"` or `"production"`. Defaults to `"production"` when packaged, otherwise uses `process.env.NODE_ENV`.
+
+- `publicFolder`: The folder where static assets are served from, including your browser build. Defaults to `"public"`.
 
 - `getLoadContext`: Use this to inject some value into all of your remix loaders, e.g. an API client. The loaders receive it as `context`
 
@@ -135,14 +129,14 @@ export type DataFunctionArgs = Omit<remix.DataFunctionArgs, "context"> & {
 }
 ```
 
-**desktop/main.ts**
+**desktop/main.js**
 
 ```ts
-import type { LoadContext } from "~/context"
-
 const url = await initRemix({
-  remixConfig,
-  getLoadContext: (): LoadContext => ({
+  // ...
+
+  /** @type {import("~/context").LoadContext} */
+  getLoadContext: () => ({
     secret: "123",
   }),
 })
