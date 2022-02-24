@@ -6,7 +6,6 @@ import type { AssetFile } from "./asset-files"
 import { collectAssetFiles, serveAsset } from "./asset-files"
 import "./browser-globals"
 import { serveRemixResponse } from "./serve-remix-response"
-import { join } from "node:path"
 import { stat } from "node:fs/promises"
 
 const defaultMode = app.isPackaged ? "production" : process.env.NODE_ENV
@@ -55,22 +54,32 @@ export async function initRemix({
     app.whenReady(),
   ])
 
-  let lastBuildTime: number = 0;
-  let buildPath = typeof serverBuildOption === "string" ? join(serverBuildOption, 'index.js') : join(process.cwd(), 'desktop/build.js')
+  let lastBuildTime = 0
+  const buildPath =
+    typeof serverBuildOption === "string"
+      ? require.resolve(serverBuildOption)
+      : undefined
 
   protocol.interceptBufferProtocol("http", async (request, callback) => {
     try {
-      let buildTime = 0;
       if (mode === "development") {
         assetFiles = await collectAssetFiles(publicFolder)
-        let buildStat = await stat(buildPath)
-        buildTime = buildStat.mtimeMs;
       }
 
-      if (mode === "development" && typeof serverBuildOption === "string" && lastBuildTime !== buildTime) {
+      let buildTime = 0
+      if (mode === "development" && buildPath !== undefined) {
+        const buildStat = await stat(buildPath)
+        buildTime = buildStat.mtimeMs
+      }
+
+      if (
+        mode === "development" &&
+        typeof serverBuildOption === "string" &&
+        lastBuildTime !== buildTime
+      ) {
         purgeRequireCache(asAbsolutePath(serverBuildOption))
         serverBuild = require(serverBuildOption)
-        lastBuildTime = buildTime;
+        lastBuildTime = buildTime
       }
 
       const context = await getLoadContext?.(request)
