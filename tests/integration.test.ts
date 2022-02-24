@@ -1,21 +1,23 @@
 import { execa } from "execa"
+import { join } from "path"
 import type { ElectronApplication, Page } from "playwright"
 import { _electron as electron } from "playwright"
 import { afterAll, beforeAll, expect, test } from "vitest"
 import { defineIntegration } from "./define-integration"
-import { templateFolder } from "./paths"
 
 defineIntegration(() => {
+  const appFolder = join(__dirname, "fixtures/test-app")
+
   let electronApp: ElectronApplication
   let window: Page
 
   beforeAll(async () => {
     await execa("pnpx", ["remix", "build"], {
-      cwd: templateFolder,
+      cwd: appFolder,
     })
 
     electronApp = await electron.launch({
-      cwd: templateFolder,
+      cwd: appFolder,
       args: ["."],
     })
 
@@ -36,7 +38,7 @@ defineIntegration(() => {
     ).toBe(userDataPath)
   })
 
-  test("scripts/interactivity", async () => {
+  test("scripts", async () => {
     const counter = window.locator("[data-testid='counter']")
     expect(await counter.textContent()).toBe("0")
     await counter.click({ clickCount: 2 })

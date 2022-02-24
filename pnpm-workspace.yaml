@@ -1,1 +1,1 @@
-packages: [".", "integration/fixtures/*", "template"]
+packages: [".", "tests/fixtures/*", "template"]

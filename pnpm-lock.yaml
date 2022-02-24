@@ -122,6 +122,51 @@ importers:
       typescript: 4.5.5
       wait-on: 6.0.1
 
+  tests/fixtures/test-app:
+    specifiers:
+      '@remix-run/dev': ^1.2.1
+      '@remix-run/node': ^1.2.1
+      '@remix-run/react': ^1.2.1
+      '@remix-run/serve': ^1.2.1
+      '@remix-run/server-runtime': ^1.2.1
+      '@types/react': ^17.0.39
+      '@types/react-dom': ^17.0.11
+      cross-env: ^7.0.3
+      del-cli: ^4.0.1
+      electron: ^17.0.1
+      electron-builder: ^22.14.13
+      fast-glob: ^3.2.11
+      nodemon: ^2.0.15
+      npm-run-all: ^4.1.5
+      react: ^17.0.2
+      react-dom: ^17.0.2
+      remix: ^1.2.1
+      remix-electron: latest
+      typescript: ^4.5.5
+      wait-on: ^6.0.1
+    dependencies:
+      '@remix-run/node': 1.2.2_react-dom@17.0.2+react@17.0.2
+      '@remix-run/react': 1.2.1_react-dom@17.0.2+react@17.0.2
+      '@remix-run/serve': 1.2.1_react-dom@17.0.2+react@17.0.2
+      '@remix-run/server-runtime': 1.2.2_react-dom@17.0.2+react@17.0.2
+      fast-glob: 3.2.11
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+      remix: 1.2.1
+      remix-electron: link:../../..
+    devDependencies:
+      '@remix-run/dev': 1.2.2_react-dom@17.0.2+react@17.0.2
+      '@types/react': 17.0.39
+      '@types/react-dom': 17.0.11
+      cross-env: 7.0.3
+      del-cli: 4.0.1
+      electron: 17.1.0
+      electron-builder: 22.14.13
+      nodemon: 2.0.15
+      npm-run-all: 4.1.5
+      typescript: 4.5.5
+      wait-on: 6.0.1
+
 packages:
 
   /7zip-bin/5.1.1:
@@ -573,7 +618,6 @@ packages:
       - encoding
       - react
       - react-dom
-    dev: true
 
   /@remix-run/react/1.2.1_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha512-s+3dvT+LaRCj0AR47LxXjbgArbAWcgUCZi4NPA+B2M8bKMoSFkHDBshuDmUm4squLrRk6JSvC6QiKvrxeyuuQg==}
@@ -630,7 +674,6 @@ packages:
       react-router-dom: 6.2.1_react-dom@17.0.2+react@17.0.2
       set-cookie-parser: 2.4.8
       source-map: 0.7.3
-    dev: true
 
   /@rollup/pluginutils/4.1.2:
     resolution: {integrity: sha512-ROn4qvkxP9SyPeHaf7uQC/GPFY6L/OWy9+bd9AwcjOAWQwxRscoEyAUD8qCY5o5iL4jqQwoLk2kaTKJPb/HwzQ==}
@@ -857,7 +900,7 @@ packages:
     resolution: {integrity: sha512-ULqvZNGMv0zRFvqn8/4LSPtnmN4MfhlPNtJCTpKuIIxGVGZ2rYWzFXrvEBoh9CVyqSE7D6YFRJ1hydLHI6kbWw==}
     requiresBuild: true
     dependencies:
-      '@types/node': 17.0.18
+      '@types/node': 17.0.21
       xmlbuilder: 15.1.1
     dev: true
     optional: true
@@ -1589,7 +1632,6 @@ packages:
 
   /buffer-from/1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
-    dev: true
 
   /buffer/5.7.1:
     resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
@@ -2114,7 +2156,6 @@ packages:
   /cookie-signature/1.2.0:
     resolution: {integrity: sha512-R0BOPfLGTitaKhgKROKZQN6iyq2iDQcH1DOF8nJoaWapguX5bC2w+Q/I9NmmM5lfcvEarnLZr+cCvmEYYSXvYA==}
     engines: {node: '>=6.6.0'}
-    dev: true
 
   /cookie/0.4.2:
     resolution: {integrity: sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA==}
@@ -2468,6 +2509,7 @@ packages:
     resolution: {integrity: sha512-SVeeyiOeinV5JCPHXMdKOgK1YVbak/4+8WL2rBnfqRYpA5FaeFaQnQWb25x628am1w70CbipGDv9S51biph63A==}
     engines: {node: '>=8'}
     os: [darwin]
+    deprecated: 'Disk image license agreements are deprecated by Apple and will probably be removed in a future macOS release. Discussion at: https://github.com/argv-minus-one/dmg-license/issues/11'
     hasBin: true
     requiresBuild: true
     dependencies:
@@ -7605,7 +7647,6 @@ packages:
     dependencies:
       buffer-from: 1.1.2
       source-map: 0.6.1
-    dev: true
 
   /source-map-url/0.4.1:
     resolution: {integrity: sha512-cPiFOTLUKvJFIg4SKVScy4ilPPW6rFgMgfuZJPNoDuMs3nC1HbMUycBoJw77xFIp6z1UJQJOfx6C9GMH80DiTw==}
@@ -7620,7 +7661,6 @@ packages:
   /source-map/0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
-    dev: true
 
   /source-map/0.7.3:
     resolution: {integrity: sha512-CkCj6giN3S+n9qrYiBTX5gystlENnRW5jZeNLHpe6aue+SrHcG5VYwujhW9s4dY31mEGsxBDrHR6oI69fTXsaQ==}

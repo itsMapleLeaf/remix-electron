@@ -1,0 +1,39 @@
+{
+  "name": "remix-electron-test-app",
+  "description": "",
+  "version": "0.0.0",
+  "private": true,
+  "main": "desktop/main.js",
+  "scripts": {
+    "prepare": "remix setup node",
+    "build": "remix build"
+  },
+  "dependencies": {
+    "@remix-run/node": "^1.2.1",
+    "@remix-run/react": "^1.2.1",
+    "@remix-run/serve": "^1.2.1",
+    "@remix-run/server-runtime": "^1.2.1",
+    "fast-glob": "^3.2.11",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "remix": "^1.2.1",
+    "remix-electron": "latest"
+  },
+  "devDependencies": {
+    "@remix-run/dev": "^1.2.1",
+    "@types/react": "^17.0.39",
+    "@types/react-dom": "^17.0.11",
+    "cross-env": "^7.0.3",
+    "del-cli": "^4.0.1",
+    "electron": "^17.0.1",
+    "electron-builder": "^22.14.13",
+    "nodemon": "^2.0.15",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^4.5.5",
+    "wait-on": "^6.0.1"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "sideEffects": false
+}
