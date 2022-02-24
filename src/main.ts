@@ -5,6 +5,7 @@ import { asAbsolutePath } from "./as-absolute-path"
 import type { AssetFile } from "./asset-files"
 import { collectAssetFiles, serveAsset } from "./asset-files"
 import "./browser-globals"
+import { serveRemixResponse } from "./serve-remix-response"
 
 const defaultMode = app.isPackaged ? "production" : process.env.NODE_ENV
 
@@ -94,38 +95,6 @@ async function handleRequest(
     (await serveAsset(request, assetFiles)) ??
     (await serveRemixResponse(request, requestHandler, context))
   )
-}
-
-async function serveRemixResponse(
-  request: Electron.ProtocolRequest,
-  handleRequest: RequestHandler,
-  context: unknown,
-): Promise<Electron.ProtocolResponse> {
-  const init: RequestInit = {
-    method: request.method,
-    headers: request.headers,
-    referrer: request.referrer,
-  }
-
-  if (request.uploadData) {
-    // concat might not be correct but 🤷
-    init.body = Buffer.concat(request.uploadData.map((data) => data.bytes))
-  }
-
-  const remixRequest = new Request(request.url, init)
-  const response = await handleRequest(remixRequest, context)
-
-  const headers: Record<string, string[]> = {}
-  for (const [key, value] of response.headers) {
-    const values = (headers[key] ??= [])
-    values.push(value)
-  }
-
-  return {
-    data: Buffer.from(await response.arrayBuffer()),
-    headers,
-    statusCode: response.status,
-  }
 }
 
 function purgeRequireCache(prefix: string) {
