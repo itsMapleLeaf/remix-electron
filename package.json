@@ -55,6 +55,7 @@
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-unicorn": "^41.0.0",
@@ -74,6 +75,9 @@
     "extends": [
       "./node_modules/@itsmapleleaf/configs/eslint"
     ],
+    "plugins": [
+      "prettier"
+    ],
     "ignorePatterns": [
       "**/node_modules/**",
       "**/dist/**",
@@ -83,10 +87,12 @@
       "**/integration/fixtures/**"
     ],
     "rules": {
+      "prettier/prettier": "error",
       "import/no-unused-modules": "off",
       "unicorn/prefer-module": "off",
       "unicorn/prevent-abbreviations": "off",
-      "unicorn/no-process-exit": "off"
+      "unicorn/no-process-exit": "off",
+      "prefer-const": "error"
     }
   },
   "prettier": "@itsmapleleaf/configs/prettier",

@@ -23,6 +23,7 @@ importers:
       eslint-import-resolver-typescript: ^2.5.0
       eslint-plugin-import: ^2.25.4
       eslint-plugin-jsx-a11y: ^6.5.1
+      eslint-plugin-prettier: ^4.0.0
       eslint-plugin-react: ^7.28.0
       eslint-plugin-react-hooks: ^4.3.0
       eslint-plugin-unicorn: ^41.0.0
@@ -64,6 +65,7 @@ importers:
       eslint-import-resolver-typescript: 2.5.0_1326372bbd2fe519ed5ba5fca843a914
       eslint-plugin-import: 2.25.4_eslint@8.9.0
       eslint-plugin-jsx-a11y: 6.5.1_eslint@8.9.0
+      eslint-plugin-prettier: 4.0.0_9f62b85ce3ce02949dbd2ccffcebe95f
       eslint-plugin-react: 7.28.0_eslint@8.9.0
       eslint-plugin-react-hooks: 4.3.0_eslint@8.9.0
       eslint-plugin-unicorn: 41.0.0_eslint@8.9.0
@@ -4121,6 +4123,23 @@ packages:
       minimatch: 3.1.2
     dev: true
 
+  /eslint-plugin-prettier/4.0.0_9f62b85ce3ce02949dbd2ccffcebe95f:
+    resolution: {integrity: sha512-98MqmCJ7vJodoQK359bqQWaxOE0CS8paAz/GgjaZLyex4TTk3g9HugoO89EqWCrFiOqn9EVvcoo7gZzONCWVwQ==}
+    engines: {node: '>=6.0.0'}
+    peerDependencies:
+      eslint: '>=7.28.0'
+      eslint-config-prettier: '*'
+      prettier: '>=2.0.0'
+    peerDependenciesMeta:
+      eslint-config-prettier:
+        optional: true
+    dependencies:
+      eslint: 8.9.0
+      eslint-config-prettier: 8.4.0_eslint@8.9.0
+      prettier: 2.5.1
+      prettier-linter-helpers: 1.0.0
+    dev: true
+
   /eslint-plugin-react-hooks/4.3.0_eslint@8.9.0:
     resolution: {integrity: sha512-XslZy0LnMn+84NEG9jSGR6eGqaZB3133L8xewQo3fQagbQuGt7a63gf+P1NGKZavEYEC3UXaWEAA/AqDkuN6xA==}
     engines: {node: '>=10'}
@@ -4538,6 +4557,10 @@ packages:
   /fast-deep-equal/3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
     requiresBuild: true
+
+  /fast-diff/1.2.0:
+    resolution: {integrity: sha512-xJuoT5+L99XlZ8twedaRf6Ax2TgQVxvgZOYoPKqZufmJib0tL2tegPBOZb1pVNgIhlqDlA0eO0c3wBvQcmzx4w==}
+    dev: true
 
   /fast-glob/2.2.7:
     resolution: {integrity: sha512-g1KuQwHOZAmOZMuBtHdxDtju+T2RT8jgCC9aANsbpdiDDTSnjgfuVsIBNKbUeJI3oKMRExcfNDtJl4OhbffMsw==}
@@ -7634,6 +7657,13 @@ packages:
   /prepend-http/2.0.0:
     resolution: {integrity: sha1-6SQ0v6XqjBn0HN/UAddBo8gZ2Jc=}
     engines: {node: '>=4'}
+    dev: true
+
+  /prettier-linter-helpers/1.0.0:
+    resolution: {integrity: sha512-GbK2cP9nraSSUF9N2XwUwqfzlAFlMNYYl+ShE/V+H8a9uNl/oUqB1w2EL54Jh0OlyRSd8RfWYJ3coVS4TROP2w==}
+    engines: {node: '>=6.0.0'}
+    dependencies:
+      fast-diff: 1.2.0
     dev: true
 
   /prettier/2.5.1:
