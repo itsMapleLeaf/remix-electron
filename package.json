@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@itsmapleleaf/configs": "^1.1.2",
+    "@playwright/test": "^1.19.1",
     "@remix-run/dev": "^1.2.2",
     "@remix-run/node": "^1.2.2",
     "@remix-run/server-runtime": "^1.2.2",

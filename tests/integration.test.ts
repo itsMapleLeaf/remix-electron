@@ -1,8 +1,9 @@
+import { expect } from "@playwright/test"
 import { execa } from "execa"
-import { join } from "path"
+import { join } from "node:path"
 import type { ElectronApplication, Page } from "playwright"
 import { _electron as electron } from "playwright"
-import { afterAll, beforeAll, expect, test } from "vitest"
+import { afterAll, beforeAll, test } from "vitest"
 import { defineIntegration } from "./define-integration"
 
 defineIntegration(() => {
@@ -22,6 +23,7 @@ defineIntegration(() => {
     })
 
     window = await electronApp.firstWindow()
+    await window.waitForEvent("load")
   }, 1000 * 20)
 
   afterAll(async () => {
@@ -43,5 +45,14 @@ defineIntegration(() => {
     expect(await counter.textContent()).toBe("0")
     await counter.click({ clickCount: 2 })
     expect(await counter.textContent()).toBe("2")
+  })
+
+  test("action referrer redirect", async () => {
+    await window.goto("http://localhost/referrer-redirect/form")
+
+    const redirectCount = window.locator("[data-testid=redirects]")
+    await expect(redirectCount).toHaveText("0")
+    await window.click("text=submit")
+    await expect(redirectCount).toHaveText("1")
   })
 })

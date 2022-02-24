@@ -15,6 +15,12 @@ async function createWindow(url) {
 app.on("ready", async () => {
   try {
     const url = await initRemix({ serverBuild: join(__dirname, "build") })
+
+    // if (process.env.TEST_ROUTE) {
+    //   url.pathname = process.env.TEST_ROUTE
+    // }
+
+    // dialog.showMessageBox({ title: "test", message: url.toString() })
     await createWindow(url)
   } catch (error) {
     dialog.showErrorBox("Error", getErrorStack(error))
