@@ -58,7 +58,7 @@ module.exports = {
 }
 ```
 
-Build the app with `npm run build`, then run `npx electron desktop/build/index.js` to start the app! 🚀
+Build the app with `npm run build`, then run `npx electron desktop/main.js` to start the app! 🚀
 
 ## Using Electron APIs
 
@@ -102,7 +102,7 @@ Initializes remix-electron. Returns a promise with a url to load in the browser 
 
 Options:
 
-- `remixConfig`: The remix config object. Require it from `remix.config.js`.
+- `serverBuild`: The path to your server build (e.g. `path.join(__dirname, 'build')`), or the server build itself (e.g. required from `@remix-run/dev/server-build`). Updates on refresh are only supported when passing a path.
 
 - `mode`: The mode the app is running in. Can be `"development"` or `"production"`. Defaults to `"production"` when packaged, otherwise uses `process.env.NODE_ENV`.
 
