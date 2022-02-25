@@ -96,7 +96,7 @@ function createWindow() {
 
 ## API
 
-### `async initRemix({ remixConfig[, publicFolder, mode, getLoadContext] })`
+### `async initRemix({ serverBuild[, publicFolder, mode, getLoadContext] })`
 
 Initializes remix-electron. Returns a promise with a url to load in the browser window.
 
