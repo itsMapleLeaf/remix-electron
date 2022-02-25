@@ -8,3 +8,8 @@ Welcome to your new remix-electron project!
 - `dev`: Starts the app with hot reloading. Uses nodemon to restart the app when main process files change.
 - `build`: Builds the app for production. Uses [Electron Builder](https://www.electron.build/) to create a distributable package.
 - `start`: Starts the app in production mode. Make sure you ran `build` first.
+
+## Additional Info
+
+- [remix-electron docs](https://github.com/itsMapleLeaf/remix-electron)
+- [Remix docs](https://remix.run/docs)
