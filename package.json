@@ -93,6 +93,11 @@
       "unicorn/prevent-abbreviations": "off",
       "unicorn/no-process-exit": "off",
       "prefer-const": "error"
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
     }
   },
   "prettier": "@itsmapleleaf/configs/prettier",
