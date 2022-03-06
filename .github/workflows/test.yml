@@ -15,11 +15,6 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Set git to use LF
-        run: |
-          git config --global core.autocrlf false
-          git config --global core.eol lf
-
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
@@ -32,3 +27,20 @@ jobs:
         uses: GabrielBB/xvfb-action@v1
         with:
           run: pnpm test
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set git to use LF
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          # https://github.com/actions/setup-node#supported-version-syntax
+          node-version: "lts/*"
+      - run: npm install --global pnpm
+      - run: pnpm install
+      - run: pnpm run lint
