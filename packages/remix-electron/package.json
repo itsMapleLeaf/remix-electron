@@ -1,26 +1,41 @@
 {
   "name": "remix-electron",
+  "type": "module",
   "version": "1.2.1",
   "author": "itsMapleLeaf",
   "description": "Electron integration for Remix",
   "license": "MIT",
   "repository": "https://github.com/itsMapleLeaf/remix-electron",
   "types": "./dist/main.d.ts",
-  "main": "./dist/main.js",
+  "exports": "./dist/main.js",
   "sideEffects": false,
   "files": [
     "dist",
-    "src"
+    "src",
+    "bin"
   ],
+  "bin": "./bin/cli.js",
   "scripts": {
-    "build": "tsup-node src/main.ts --target node16 --format cjs --dts --sourcemap",
-    "build-watch": "pnpm build -- --watch",
+    "build": "run-p --print-label build:*",
+    "build:lib": "tsup-node src/main.ts --outDir dist --dts",
+    "build:cli": "tsup-node src/cli.ts --outDir bin",
     "typecheck": "tsc --noEmit",
     "release": "pnpm test && release-it"
   },
-  "dependencies": {},
-  "peerDependencies": {},
+  "tsup": {
+    "target": "node16",
+    "format": [
+      "esm"
+    ],
+    "clean": true,
+    "sourcemap": true
+  },
+  "peerDependencies": {
+    "electron": ">=16"
+  },
   "devDependencies": {
+    "electron": "^17.1.2",
+    "npm-run-all": "^4.1.5",
     "release-it": "^14.12.5",
     "tsup": "^5.12.1",
     "typescript": "^4.6.2"
@@ -39,5 +54,9 @@
       "release": true,
       "web": true
     }
+  },
+  "dependencies": {
+    "@types/node": "^17.0.21",
+    "esbuild": "^0.14.27"
   }
 }

@@ -1,0 +1,11 @@
+{
+  "extends": "@itsmapleleaf/configs/tsconfig.base",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "paths": {
+      "~/*": ["./app/*"],
+      "remix-electron/*": ["../remix-electron/src/*"]
+    }
+  },
+  "include": [".", "../remix-electron"]
+}

@@ -1,5 +1,5 @@
+import { app } from "electron"
 import { useLoaderData } from "remix"
-import { app } from "../electron.server"
 
 export function loader() {
   return {

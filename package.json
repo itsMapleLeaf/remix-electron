@@ -37,6 +37,9 @@
       "**/.cache/**",
       "**/.vscode/**"
     ],
+    "parserOptions": {
+      "project": "./tsconfig.base.json"
+    },
     "rules": {
       "prettier/prettier": "error",
       "import/no-unused-modules": "off",
