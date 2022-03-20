@@ -1,0 +1,43 @@
+{
+  "name": "remix-electron",
+  "version": "1.2.1",
+  "author": "itsMapleLeaf",
+  "description": "Electron integration for Remix",
+  "license": "MIT",
+  "repository": "https://github.com/itsMapleLeaf/remix-electron",
+  "types": "./dist/main.d.ts",
+  "main": "./dist/main.js",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsup-node src/main.ts --target node16 --format cjs --dts --sourcemap",
+    "build-watch": "pnpm build -- --watch",
+    "typecheck": "tsc --noEmit",
+    "release": "pnpm test && release-it"
+  },
+  "dependencies": {},
+  "peerDependencies": {},
+  "devDependencies": {
+    "release-it": "^14.12.5",
+    "tsup": "^5.12.1",
+    "typescript": "^4.6.2"
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "v${version}",
+      "commit": true,
+      "tag": true,
+      "push": true
+    },
+    "npm": {
+      "publish": true
+    },
+    "github": {
+      "release": true,
+      "web": true
+    }
+  }
+}
