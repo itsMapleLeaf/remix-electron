@@ -1,0 +1,18 @@
+{
+  "main": "build/main.cjs",
+  "scripts": {
+    "dev": "run-p --print-label --race dev:*",
+    "dev:electron": "nodemon --exec electron .",
+    "dev:build": "esmo ../src/cli.ts watch",
+    "build": "esmo ../src/cli.ts build",
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "esno": "^0.14.1",
+    "nodemon": "^2.0.15",
+    "npm-run-all": "^4.1.5"
+  },
+  "dependencies": {
+    "electron": "^17.1.2"
+  }
+}

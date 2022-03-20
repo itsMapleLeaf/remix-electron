@@ -1,15 +1,46 @@
 {
-  "private": true,
+  "name": "remix-electron",
+  "type": "module",
+  "version": "1.2.1",
+  "author": "itsMapleLeaf",
+  "description": "Electron integration for Remix",
+  "license": "MIT",
+  "repository": "https://github.com/itsMapleLeaf/remix-electron",
+  "types": "./dist/main.d.ts",
+  "exports": "./dist/main.js",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src",
+    "bin"
+  ],
+  "bin": "./bin/cli.js",
   "scripts": {
-    "lint": "eslint --ext js,ts,tsx .",
-    "lint-fix": "pnpm lint -- --fix",
-    "format": "prettier --write ."
+    "build": "run-p --print-label build:*",
+    "build:lib": "tsup-node src/main.ts --outDir dist --dts",
+    "build:cli": "tsup-node src/cli.ts --outDir bin",
+    "typecheck": "tsc --noEmit",
+    "release": "pnpm test && release-it"
   },
-  "dependencies": {},
+  "tsup": {
+    "target": "node16",
+    "format": [
+      "esm"
+    ],
+    "clean": true,
+    "sourcemap": true
+  },
+  "peerDependencies": {
+    "electron": ">=16"
+  },
   "devDependencies": {
     "@itsmapleleaf/configs": "^1.1.2",
+    "@remix-run/dev": "^1.3.2",
+    "@remix-run/react": "^1.3.2",
+    "@remix-run/server-runtime": "^1.3.2",
     "@typescript-eslint/eslint-plugin": "^5.15.0",
     "@typescript-eslint/parser": "^5.15.0",
+    "electron": "^17.1.2",
     "eslint": "^8.11.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-typescript": "^2.5.0",
@@ -19,40 +50,13 @@
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-unicorn": "^41.0.1",
+    "esno": "^0.14.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.6.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "release-it": "^14.12.5",
+    "tsup": "^5.12.1",
     "typescript": "^4.6.2"
-  },
-  "eslintConfig": {
-    "extends": [
-      "./node_modules/@itsmapleleaf/configs/eslint"
-    ],
-    "plugins": [
-      "prettier"
-    ],
-    "ignorePatterns": [
-      "**/node_modules/**",
-      "**/dist/**",
-      "**/build/**",
-      "**/.cache/**",
-      "**/.vscode/**"
-    ],
-    "parserOptions": {
-      "project": "./tsconfig.base.json"
-    },
-    "rules": {
-      "prettier/prettier": "error",
-      "import/no-unused-modules": "off",
-      "unicorn/prefer-module": "off",
-      "unicorn/prevent-abbreviations": "off",
-      "unicorn/no-process-exit": "off",
-      "prefer-const": "error"
-    },
-    "settings": {
-      "react": {
-        "version": "detect"
-      }
-    }
-  },
-  "prettier": "@itsmapleleaf/configs/prettier"
+  }
 }
