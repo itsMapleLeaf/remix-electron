@@ -1,10 +1,9 @@
 import { app, BrowserWindow } from "electron"
+import { configure, getRouteUrl } from "../../src/main"
 
 app.on("ready", async () => {
-  const win = new BrowserWindow({
-    webPreferences: {
-      nodeIntegration: true,
-    },
-  })
-  await win.loadURL(/* remixElectron.urlForRoute('/') */)
+  await configure()
+
+  const win = new BrowserWindow()
+  await win.loadURL(getRouteUrl("/"))
 })

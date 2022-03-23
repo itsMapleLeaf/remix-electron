@@ -6,7 +6,6 @@ import { getAppDependencies } from "@remix-run/dev/compiler/dependencies"
 import { loaders } from "@remix-run/dev/compiler/loaders"
 import type { AssetsManifestPromiseRef } from "@remix-run/dev/compiler/plugins/serverAssetsManifestPlugin"
 import { serverAssetsManifestPlugin } from "@remix-run/dev/compiler/plugins/serverAssetsManifestPlugin"
-import { serverBareModulesPlugin } from "@remix-run/dev/compiler/plugins/serverBareModulesPlugin"
 import { serverEntryModulePlugin } from "@remix-run/dev/compiler/plugins/serverEntryModulePlugin"
 import { serverRouteModulesPlugin } from "@remix-run/dev/compiler/plugins/serverRouteModulesPlugin"
 import { writeFileSafe } from "@remix-run/dev/compiler/utils/fs"
@@ -65,7 +64,7 @@ export async function createServerBuild(
     },
     outfile: config.serverBuildPath,
     // write: false,
-    platform: "node",
+    // platform: "node",
     format: "cjs",
     treeShaking: true,
     // minify:
@@ -80,10 +79,11 @@ export async function createServerBuild(
     //   config.serverModuleFormat === "esm"
     //     ? ["module", "main"]
     //     : ["main", "module"],
-    target: "node16",
+    // target: "node16",
     // inject: config.serverBuildTarget === "deno" ? [] : [reactShim],
     loader: loaders,
     bundle: true,
+    external: ["electron"],
     logLevel: "info",
     // incremental: options.incremental,
     // sourcemap: options.sourcemap ? "inline" : false,
@@ -103,7 +103,7 @@ export async function createServerBuild(
       // emptyModulesPlugin(config, /\.client(\.[jt]sx?)?$/),
       serverRouteModulesPlugin(config) as esbuild.Plugin,
       serverEntryModulePlugin(config) as esbuild.Plugin,
-      serverBareModulesPlugin(config, dependencies) as esbuild.Plugin,
+      // serverBareModulesPlugin(config, dependencies) as esbuild.Plugin,
       serverAssetsManifestPlugin(assetsManifestPromiseRef) as esbuild.Plugin,
     ],
   })

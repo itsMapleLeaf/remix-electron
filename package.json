@@ -16,16 +16,13 @@
   "bin": "./bin/cli.js",
   "scripts": {
     "build": "run-p --print-label build:*",
-    "build:lib": "tsup-node src/main.ts --outDir dist --dts",
-    "build:cli": "tsup-node src/cli.ts --outDir bin",
+    "build:lib": "tsup-node src/main.ts --outDir dist --format cjs --dts",
+    "build:cli": "tsup-node src/cli.ts --outDir bin --format esm",
     "typecheck": "tsc --noEmit",
     "release": "pnpm test && release-it"
   },
   "tsup": {
     "target": "node16",
-    "format": [
-      "esm"
-    ],
     "clean": true,
     "sourcemap": true
   },

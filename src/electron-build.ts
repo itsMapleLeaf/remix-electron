@@ -14,5 +14,7 @@ export async function createElectronBuild() {
     external: [...nodeBuiltins, "electron", "remix-electron"],
     logLevel: "info",
     plugins: [],
+    treeShaking: true,
+    sourcemap: "external",
   })
 }

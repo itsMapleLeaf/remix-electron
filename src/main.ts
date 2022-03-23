@@ -1,2 +1,3 @@
-import "./request-interceptor"
-export * from "./browser-window"
+import "./browser-globals"
+export * from "./configure"
+export * from "./get-route-url"
