@@ -8,7 +8,6 @@
   "repository": "https://github.com/itsMapleLeaf/remix-electron",
   "types": "./dist/main.d.ts",
   "exports": "./dist/main.js",
-  "sideEffects": false,
   "files": [
     "dist",
     "src",
@@ -58,5 +57,38 @@
     "release-it": "^14.12.5",
     "tsup": "^5.12.1",
     "typescript": "^4.6.2"
-  }
+  },
+  "dependencies": {
+    "@types/node": "^17.0.21",
+    "esbuild": "^0.14.27"
+  },
+  "eslintConfig": {
+    "extends": [
+      "./node_modules/@itsmapleleaf/configs/eslint"
+    ],
+    "plugins": [
+      "prettier"
+    ],
+    "ignorePatterns": [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/build/**",
+      "**/.cache/**",
+      "**/.vscode/**"
+    ],
+    "rules": {
+      "prettier/prettier": "error",
+      "import/no-unused-modules": "off",
+      "unicorn/prefer-module": "off",
+      "unicorn/prevent-abbreviations": "off",
+      "unicorn/no-process-exit": "off",
+      "prefer-const": "error"
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
+  },
+  "prettier": "@itsmapleleaf/configs/prettier"
 }

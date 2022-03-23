@@ -1,5 +1,5 @@
+import { useLoaderData } from "@remix-run/react"
 import { app } from "electron"
-import { useLoaderData } from "remix"
 
 export function loader() {
   return {

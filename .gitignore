@@ -1,6 +1,12 @@
+# generated files
 node_modules
 .cache
 build
 dist
+bin
+
+# env
 .env
+
+# editor folders
 .vscode

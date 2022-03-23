@@ -1,33 +1,71 @@
 #!/bin/env node
-import { build, BuildOptions } from "esbuild"
+import type { AssetsManifestPromiseRef } from "@remix-run/dev/compiler/plugins/serverAssetsManifestPlugin"
+import type { RemixConfig } from "@remix-run/dev/config"
+import type { RouteManifest } from "@remix-run/dev/config/routes"
+import { defineConventionalRoutes } from "@remix-run/dev/config/routesConvention"
+import { ServerMode } from "@remix-run/dev/config/serverModes"
 import { join } from "node:path"
+import { createBrowserBuild } from "./browser-build"
+import { createElectronBuild } from "./electron-build"
+import { createServerBuild, generateAssetsManifest } from "./server-build"
 
-const projectRoot = process.cwd()
+const rootDirectory = process.cwd()
+const appDirectory = join(rootDirectory, "app")
+const rootRouteFile = join(appDirectory, "root.tsx")
+
+const routes: RouteManifest = {
+  root: {
+    path: "",
+    id: "root",
+    file: rootRouteFile,
+  },
+}
+const conventionalRoutes = defineConventionalRoutes(appDirectory, [])
+
+for (const key of Object.keys(conventionalRoutes)) {
+  const route = conventionalRoutes[key]!
+  routes[route.id] = { ...route, parentId: route!.parentId || "root" }
+}
+
+const remixConfig: RemixConfig = {
+  appDirectory,
+  cacheDirectory: join(rootDirectory, ".cache"),
+  devServerBroadcastDelay: 0,
+  devServerPort: 8002,
+  entryClientFile: join(rootDirectory, "app/entry.client.tsx"),
+  entryServerFile: join(rootDirectory, "app/entry.server.tsx"),
+  publicPath: "/",
+  rootDirectory,
+  routes,
+  serverBuildPath: join(rootDirectory, "build/server.cjs"),
+  serverBuildTargetEntryModule: "",
+  serverDependenciesToBundle: [],
+  serverMode: ServerMode.Development,
+  serverModuleFormat: "cjs",
+  serverPlatform: "node",
+  assetsBuildDirectory: "build/assets",
+}
 
 const [command, ...args] = process.argv.slice(2)
 
-const buildOptions: BuildOptions = {
-  entryPoints: [join(projectRoot, "app/entry.electron.tsx")],
-  bundle: true,
-  outfile: join(projectRoot, "build/main.cjs"),
-  format: "cjs",
-  platform: "node",
-  external: ["electron", "remix-electron"],
-  logLevel: "info",
-}
-
 if (command === "build") {
-  await build({
-    ...buildOptions,
-    minify: true,
-  })
+  const browserBuildPromise = createBrowserBuild(remixConfig, {})
+
+  const assetsManifestPromiseRef: AssetsManifestPromiseRef = {
+    current: browserBuildPromise.then((build) => {
+      return generateAssetsManifest(remixConfig, build.metafile!)
+    }),
+  }
+
+  await Promise.all([
+    browserBuildPromise,
+    createServerBuild(remixConfig, {}, assetsManifestPromiseRef),
+    createElectronBuild(),
+  ])
 }
 
 if (command === "watch") {
-  await build({
-    ...buildOptions,
-    watch: true,
-  })
+  // todo
 }
 
 export {}

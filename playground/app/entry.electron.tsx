@@ -1,7 +1,10 @@
-import { app } from "electron"
-import { RemixBrowserWindow } from "../../src/browser-window"
+import { app, BrowserWindow } from "electron"
 
 app.on("ready", async () => {
-  const win = new RemixBrowserWindow()
-  await win.loadRoute("/")
+  const win = new BrowserWindow({
+    webPreferences: {
+      nodeIntegration: true,
+    },
+  })
+  await win.loadURL(/* remixElectron.urlForRoute('/') */)
 })

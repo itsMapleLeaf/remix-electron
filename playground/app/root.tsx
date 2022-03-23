@@ -1,4 +1,3 @@
-import type { MetaFunction } from "remix"
 import {
   Links,
   LiveReload,
@@ -6,7 +5,8 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "remix"
+} from "@remix-run/react"
+import type { MetaFunction } from "@remix-run/server-runtime"
 
 export const meta: MetaFunction = () => {
   return { title: "New Remix App" }
