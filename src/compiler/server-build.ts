@@ -16,7 +16,7 @@ import * as path from "node:path"
 import { join } from "node:path"
 import type { CompilerMode } from "./mode"
 
-export async function createServerBuild(
+export function createServerBuild(
   config: RemixConfig,
   mode: CompilerMode,
   assetsManifestPromiseRef: AssetsManifestPromiseRef,
@@ -46,7 +46,7 @@ export async function createServerBuild(
       "electron",
       "remix-electron",
     ],
-    logLevel: "info",
+    logLevel: "silent",
 
     // The server build needs to know how to generate asset URLs for imports
     // of CSS and other files.

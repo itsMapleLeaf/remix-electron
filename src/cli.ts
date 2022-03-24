@@ -1,6 +1,8 @@
 #!/bin/env node
 import type { AssetsManifestPromiseRef } from "@remix-run/dev/compiler/plugins/serverAssetsManifestPlugin.js"
 import cac from "cac"
+import { oraPromise } from "ora"
+import prettyMilliseconds from "pretty-ms"
 import manifest from "../package.json"
 import { createBrowserBuild } from "./compiler/browser-build"
 import { getRemixConfig } from "./compiler/config"
@@ -27,11 +29,23 @@ cli.command("build", "Build your app for production").action(async () => {
     ),
   }
 
-  await Promise.all([
-    browserBuildPromise,
-    createServerBuild(remixConfig, mode, assetsManifestPromiseRef),
-    createElectronBuild(mode),
-  ])
+  const startTime = Date.now()
+
+  await oraPromise(
+    Promise.all([
+      browserBuildPromise,
+      createServerBuild(remixConfig, mode, assetsManifestPromiseRef),
+      createElectronBuild(mode),
+    ]),
+    {
+      text: "Building...",
+      successText: () => {
+        const totalTime = prettyMilliseconds(Date.now() - startTime)
+        return `Built in ${totalTime}`
+      },
+      failText: "Build failed",
+    },
+  )
 })
 
 cli.version(manifest.version)

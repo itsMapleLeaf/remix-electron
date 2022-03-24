@@ -5,15 +5,15 @@ import type { CompilerMode } from "./mode"
 
 const projectRoot = process.cwd()
 
-export async function createElectronBuild(mode: CompilerMode) {
-  await esbuild.build({
+export function createElectronBuild(mode: CompilerMode) {
+  return esbuild.build({
     entryPoints: [join(projectRoot, "app/entry.electron.tsx")],
     bundle: true,
     outfile: join(projectRoot, "build/main.cjs"),
     format: "cjs",
     platform: "node",
     external: [...nodeBuiltins, "electron", "remix-electron"],
-    logLevel: "info",
+    logLevel: "silent",
     plugins: [],
     treeShaking: true,
     inject: [join(__dirname, "../shims/react-shim.ts")],

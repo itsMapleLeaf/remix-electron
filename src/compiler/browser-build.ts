@@ -56,7 +56,7 @@ export async function createBrowserBuild(config: RemixConfig, mode: Mode) {
     external: [...externals, ...nodeBuiltins],
     loader: loaders,
     bundle: true,
-    logLevel: "info",
+    logLevel: "silent",
     splitting: true,
     metafile: true,
     mainFields: ["browser", "module", "main"],
