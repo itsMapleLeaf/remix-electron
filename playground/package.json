@@ -8,15 +8,15 @@
     "start": "electron ."
   },
   "dependencies": {
-    "@remix-run/react": "^1.3.2",
-    "@remix-run/server-runtime": "^1.3.2",
-    "electron": "^17.1.2",
+    "@remix-run/react": "^1.3.3",
+    "@remix-run/server-runtime": "^1.3.3",
+    "electron": "^17.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "remix-electron": "workspace:*"
   },
   "devDependencies": {
-    "@remix-run/dev": "^1.3.2",
+    "@remix-run/dev": "^1.3.3",
     "@types/react": "^17.0.42",
     "@types/react-dom": "^17.0.14",
     "esno": "^0.14.1",
