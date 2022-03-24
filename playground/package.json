@@ -3,8 +3,8 @@
   "scripts": {
     "dev": "run-p --print-label --race dev:*",
     "dev:electron": "nodemon --exec electron .",
-    "dev:build": "esmo ../src/cli.ts watch",
-    "build": "esmo ../src/cli.ts build",
+    "dev:build": "remix-electron watch",
+    "build": "remix-electron build",
     "start": "electron ."
   },
   "dependencies": {
@@ -12,10 +12,13 @@
     "@remix-run/server-runtime": "^1.3.2",
     "electron": "^17.1.2",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "remix-electron": "workspace:*"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.3.2",
+    "@types/react": "^17.0.42",
+    "@types/react-dom": "^17.0.14",
     "esno": "^0.14.1",
     "nodemon": "^2.0.15",
     "npm-run-all": "^4.1.5"

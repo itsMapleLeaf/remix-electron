@@ -1,17 +1,21 @@
 import { getAppDependencies } from "@remix-run/dev/compiler/dependencies.js"
 import { loaders } from "@remix-run/dev/compiler/loaders.js"
 import { browserRouteModulesPlugin } from "@remix-run/dev/compiler/plugins/browserRouteModulesPlugin.js"
+import { emptyModulesPlugin } from "@remix-run/dev/compiler/plugins/emptyModulesPlugin.js"
 // import {} from "@remix-run/dev/compiler/plugins/emptyModulesPlugin.js"
 // import { NodeModulesPolyfillPlugin } from "@esbuild-plugins/node-modules-polyfill"
-import type { RemixConfig } from "@remix-run/dev/config"
+import type { RemixConfig } from "@remix-run/dev/config.js"
 import * as esbuild from "esbuild"
 import { builtinModules as nodeBuiltins } from "node:module"
 import * as path from "node:path"
+import { join } from "node:path"
 
 export async function createBrowserBuild(
   config: RemixConfig,
   options: esbuild.BuildOptions & { incremental?: boolean },
 ): Promise<esbuild.BuildResult> {
+  const mode = process.env.NODE_ENV || "development"
+
   // For the browser build, exclude node built-ins that don't have a
   // browser-safe alternative installed in node_modules. Nothing should
   // *actually* be external in the browser build (we want to bundle all deps) so
@@ -43,7 +47,8 @@ export async function createBrowserBuild(
   const plugins = [
     // mdxPlugin(config),
     browserRouteModulesPlugin(config, /\?browser$/) as esbuild.Plugin,
-    // emptyModulesPlugin(config, /\.server(\.[jt]sx?)?$/),
+    emptyModulesPlugin(config, /\.server(\.[jt]sx?)?$/) as esbuild.Plugin,
+    emptyModulesPlugin(config, /^electron$/) as esbuild.Plugin,
     // NodeModulesPolyfillPlugin(),
   ]
 
@@ -52,23 +57,24 @@ export async function createBrowserBuild(
     outdir: config.assetsBuildDirectory,
     platform: "browser",
     format: "esm",
-    external: [...nodeBuiltins, "electron"],
+    inject: [join(__dirname, "../shims/react-shim.ts")],
+    external: [...nodeBuiltins],
     loader: loaders,
     bundle: true,
     logLevel: "info",
-    // splitting: true,
+    splitting: true,
     sourcemap: options.sourcemap,
     metafile: true,
     incremental: options.incremental,
     mainFields: ["browser", "module", "main"],
     treeShaking: true,
-    minify: process.env.NODE_ENV === "production",
+    minify: mode === "production",
     entryNames: "[dir]/[name]-[hash]",
     chunkNames: "_shared/[name]-[hash]",
     assetNames: "_assets/[name]-[hash]",
     publicPath: config.publicPath,
     define: {
-      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+      "process.env.NODE_ENV": JSON.stringify(mode),
       "process.env.REMIX_DEV_SERVER_WS_PORT": JSON.stringify(
         config.devServerPort,
       ),

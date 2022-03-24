@@ -43,7 +43,7 @@ export async function configure(options: ConfigureOptions = {}) {
       }
 
       const context = await options.getLoadContext?.(request)
-      const requestHandler = createRequestHandler(serverBuild, {}, mode)
+      const requestHandler = createRequestHandler(serverBuild, mode)
 
       const response =
         (await serveAsset(request, assetFiles)) ??

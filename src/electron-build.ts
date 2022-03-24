@@ -16,5 +16,6 @@ export async function createElectronBuild() {
     plugins: [],
     treeShaking: true,
     sourcemap: "external",
+    inject: [join(__dirname, "../shims/react-shim.ts")],
   })
 }

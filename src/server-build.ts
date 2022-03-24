@@ -1,18 +1,20 @@
-import type { BuildTarget } from "@remix-run/dev/build"
-import { BuildMode } from "@remix-run/dev/build"
-import type { AssetsManifest } from "@remix-run/dev/compiler/assets"
-import { createAssetsManifest } from "@remix-run/dev/compiler/assets"
-import { getAppDependencies } from "@remix-run/dev/compiler/dependencies"
-import { loaders } from "@remix-run/dev/compiler/loaders"
-import type { AssetsManifestPromiseRef } from "@remix-run/dev/compiler/plugins/serverAssetsManifestPlugin"
-import { serverAssetsManifestPlugin } from "@remix-run/dev/compiler/plugins/serverAssetsManifestPlugin"
-import { serverEntryModulePlugin } from "@remix-run/dev/compiler/plugins/serverEntryModulePlugin"
-import { serverRouteModulesPlugin } from "@remix-run/dev/compiler/plugins/serverRouteModulesPlugin"
-import { writeFileSafe } from "@remix-run/dev/compiler/utils/fs"
-import { serverBuildVirtualModule } from "@remix-run/dev/compiler/virtualModules"
-import type { RemixConfig } from "@remix-run/dev/config"
+import type { BuildTarget } from "@remix-run/dev/build.js"
+import { BuildMode } from "@remix-run/dev/build.js"
+import type { AssetsManifest } from "@remix-run/dev/compiler/assets.js"
+import { createAssetsManifest } from "@remix-run/dev/compiler/assets.js"
+import { getAppDependencies } from "@remix-run/dev/compiler/dependencies.js"
+import { loaders } from "@remix-run/dev/compiler/loaders.js"
+import type { AssetsManifestPromiseRef } from "@remix-run/dev/compiler/plugins/serverAssetsManifestPlugin.js"
+import { serverAssetsManifestPlugin } from "@remix-run/dev/compiler/plugins/serverAssetsManifestPlugin.js"
+import { serverEntryModulePlugin } from "@remix-run/dev/compiler/plugins/serverEntryModulePlugin.js"
+import { serverRouteModulesPlugin } from "@remix-run/dev/compiler/plugins/serverRouteModulesPlugin.js"
+import { writeFileSafe } from "@remix-run/dev/compiler/utils/fs.js"
+import { serverBuildVirtualModule } from "@remix-run/dev/compiler/virtualModules.js"
+import type { RemixConfig } from "@remix-run/dev/config.js"
 import * as esbuild from "esbuild"
+import { builtinModules } from "node:module"
 import * as path from "node:path"
+import { join } from "node:path"
 
 type BuildConfig = {
   mode: BuildMode
@@ -64,9 +66,11 @@ export async function createServerBuild(
     },
     outfile: config.serverBuildPath,
     // write: false,
-    // platform: "node",
+    platform: "node",
+    target: "node16",
     format: "cjs",
     treeShaking: true,
+    inject: [join(__dirname, "../shims/react-shim.ts")],
     // minify:
     //   options.mode === BuildMode.Production &&
     //   !!config.serverBuildTarget &&
@@ -74,16 +78,20 @@ export async function createServerBuild(
     //     config.serverBuildTarget,
     //   ),
     minify: options.mode === BuildMode.Production,
-    mainFields: ["module", "main"],
+    // mainFields: ["main", "module"],
     // mainFields:
     //   config.serverModuleFormat === "esm"
     //     ? ["module", "main"]
     //     : ["main", "module"],
-    // target: "node16",
     // inject: config.serverBuildTarget === "deno" ? [] : [reactShim],
     loader: loaders,
     bundle: true,
-    external: ["electron"],
+    external: [
+      ...Object.keys(dependencies),
+      ...builtinModules,
+      "electron",
+      "remix-electron",
+    ],
     logLevel: "info",
     // incremental: options.incremental,
     // sourcemap: options.sourcemap ? "inline" : false,

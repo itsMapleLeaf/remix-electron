@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from "electron"
-import { configure, getRouteUrl } from "../../src/main"
+import { configure, getRouteUrl } from "remix-electron"
 
 app.on("ready", async () => {
   await configure()

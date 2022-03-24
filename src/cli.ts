@@ -1,9 +1,9 @@
 #!/bin/env node
-import type { AssetsManifestPromiseRef } from "@remix-run/dev/compiler/plugins/serverAssetsManifestPlugin"
-import type { RemixConfig } from "@remix-run/dev/config"
-import type { RouteManifest } from "@remix-run/dev/config/routes"
-import { defineConventionalRoutes } from "@remix-run/dev/config/routesConvention"
-import { ServerMode } from "@remix-run/dev/config/serverModes"
+import type { AssetsManifestPromiseRef } from "@remix-run/dev/compiler/plugins/serverAssetsManifestPlugin.js"
+import type { RemixConfig } from "@remix-run/dev/config.js"
+import type { RouteManifest } from "@remix-run/dev/config/routes.js"
+import { defineConventionalRoutes } from "@remix-run/dev/config/routesConvention.js"
+import { ServerMode } from "@remix-run/dev/config/serverModes.js"
 import { join } from "node:path"
 import { createBrowserBuild } from "./browser-build"
 import { createElectronBuild } from "./electron-build"
@@ -34,7 +34,7 @@ const remixConfig: RemixConfig = {
   devServerPort: 8002,
   entryClientFile: join(rootDirectory, "app/entry.client.tsx"),
   entryServerFile: join(rootDirectory, "app/entry.server.tsx"),
-  publicPath: "/",
+  publicPath: "/build/assets/",
   rootDirectory,
   routes,
   serverBuildPath: join(rootDirectory, "build/server.cjs"),
@@ -43,7 +43,7 @@ const remixConfig: RemixConfig = {
   serverMode: ServerMode.Development,
   serverModuleFormat: "cjs",
   serverPlatform: "node",
-  assetsBuildDirectory: "build/assets",
+  assetsBuildDirectory: join(rootDirectory, "public/build/assets"),
 }
 
 const [command, ...args] = process.argv.slice(2)
