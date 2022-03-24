@@ -4,7 +4,7 @@ import { collectAssetFiles } from "./asset-files"
 
 test("collectAssetFiles", async () => {
   expect(
-    await collectAssetFiles(join(__dirname, "../tests/fixtures/asset-files")),
+    await collectAssetFiles(join(__dirname, "../../test/fixtures/asset-files")),
   ).toMatchInlineSnapshot(`
     [
       {

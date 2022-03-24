@@ -5,9 +5,12 @@ import type { RouteManifest } from "@remix-run/dev/config/routes.js"
 import { defineConventionalRoutes } from "@remix-run/dev/config/routesConvention.js"
 import { ServerMode } from "@remix-run/dev/config/serverModes.js"
 import { join } from "node:path"
-import { createBrowserBuild } from "./browser-build"
-import { createElectronBuild } from "./electron-build"
-import { createServerBuild, generateAssetsManifest } from "./server-build"
+import { createBrowserBuild } from "./compiler/browser-build"
+import { createElectronBuild } from "./compiler/electron-build"
+import {
+  createServerBuild,
+  generateAssetsManifest,
+} from "./compiler/server-build"
 
 const rootDirectory = process.cwd()
 const appDirectory = join(rootDirectory, "app")

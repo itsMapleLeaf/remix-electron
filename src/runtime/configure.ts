@@ -2,8 +2,8 @@ import { createRequestHandler } from "@remix-run/server-runtime"
 import { app, protocol } from "electron"
 import { stat } from "node:fs/promises"
 import { join } from "node:path"
-import { asAbsolutePath } from "./as-absolute-path"
-import { collectAssetFiles, serveAsset } from "./asset-files"
+import { asAbsolutePath } from "../helpers/as-absolute-path"
+import { collectAssetFiles, serveAsset } from "../helpers/asset-files"
 import { serveRemixResponse } from "./serve-remix-response"
 
 export type ConfigureOptions = {

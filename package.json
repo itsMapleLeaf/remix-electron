@@ -17,6 +17,7 @@
     "build:lib": "tsup-node src/main.ts --format cjs --dts",
     "build:cli": "tsup-node src/cli.ts --format esm",
     "typecheck": "tsc --noEmit",
+    "test": "vitest",
     "release": "pnpm test && release-it"
   },
   "tsup": {
@@ -24,6 +25,7 @@
     "sourcemap": true
   },
   "dependencies": {
+    "@types/mime": "^2.0.3",
     "@types/node": "*",
     "esbuild": "^0.14.27",
     "fast-glob": "^3.2.11",
@@ -63,7 +65,8 @@
     "react-dom": "^17.0.2",
     "release-it": "^14.12.5",
     "tsup": "^5.12.1",
-    "typescript": "^4.6.2"
+    "typescript": "^4.6.2",
+    "vitest": "^0.7.10"
   },
   "eslintConfig": {
     "extends": [

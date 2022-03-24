@@ -1,3 +1,3 @@
-import "./browser-globals"
-export * from "./configure"
-export * from "./get-route-url"
+import "./runtime/browser-globals"
+export * from "./runtime/configure"
+export * from "./runtime/get-route-url"

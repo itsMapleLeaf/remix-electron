@@ -1,5 +1,4 @@
 import type { RequestHandler } from "@remix-run/server-runtime"
-import "./browser-globals"
 
 export async function serveRemixResponse(
   request: Electron.ProtocolRequest,
