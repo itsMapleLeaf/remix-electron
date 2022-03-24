@@ -25,8 +25,10 @@
     "sourcemap": true
   },
   "dependencies": {
+    "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
     "@types/mime": "^2.0.3",
     "@types/node": "*",
+    "cac": "^6.7.12",
     "esbuild": "^0.14.27",
     "fast-glob": "^3.2.11",
     "mime": "^3.0.0"

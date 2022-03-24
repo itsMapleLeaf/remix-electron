@@ -1,10 +1,11 @@
 import * as esbuild from "esbuild"
 import { builtinModules as nodeBuiltins } from "node:module"
 import { join } from "node:path"
+import type { CompilerMode } from "./mode"
 
 const projectRoot = process.cwd()
 
-export async function createElectronBuild() {
+export async function createElectronBuild(mode: CompilerMode) {
   await esbuild.build({
     entryPoints: [join(projectRoot, "app/entry.electron.tsx")],
     bundle: true,
@@ -15,7 +16,8 @@ export async function createElectronBuild() {
     logLevel: "info",
     plugins: [],
     treeShaking: true,
-    sourcemap: "external",
     inject: [join(__dirname, "../shims/react-shim.ts")],
+    minify: mode === "production",
+    sourcemap: mode === "development" ? "external" : false,
   })
 }

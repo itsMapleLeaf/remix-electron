@@ -1,74 +1,45 @@
 #!/bin/env node
 import type { AssetsManifestPromiseRef } from "@remix-run/dev/compiler/plugins/serverAssetsManifestPlugin.js"
-import type { RemixConfig } from "@remix-run/dev/config.js"
-import type { RouteManifest } from "@remix-run/dev/config/routes.js"
-import { defineConventionalRoutes } from "@remix-run/dev/config/routesConvention.js"
-import { ServerMode } from "@remix-run/dev/config/serverModes.js"
-import { join } from "node:path"
+import cac from "cac"
+import manifest from "../package.json"
 import { createBrowserBuild } from "./compiler/browser-build"
+import { getRemixConfig } from "./compiler/config"
 import { createElectronBuild } from "./compiler/electron-build"
+import type { CompilerMode } from "./compiler/mode"
+import { maybeCompilerMode } from "./compiler/mode"
 import {
   createServerBuild,
   generateAssetsManifest,
 } from "./compiler/server-build"
 
-const rootDirectory = process.cwd()
-const appDirectory = join(rootDirectory, "app")
-const rootRouteFile = join(appDirectory, "root.tsx")
+const mode: CompilerMode =
+  maybeCompilerMode(process.env.NODE_ENV) || "production"
 
-const routes: RouteManifest = {
-  root: {
-    path: "",
-    id: "root",
-    file: rootRouteFile,
-  },
-}
-const conventionalRoutes = defineConventionalRoutes(appDirectory, [])
+const cli = cac(manifest.name)
 
-for (const key of Object.keys(conventionalRoutes)) {
-  const route = conventionalRoutes[key]!
-  routes[route.id] = { ...route, parentId: route!.parentId || "root" }
-}
-
-const remixConfig: RemixConfig = {
-  appDirectory,
-  cacheDirectory: join(rootDirectory, ".cache"),
-  devServerBroadcastDelay: 0,
-  devServerPort: 8002,
-  entryClientFile: join(rootDirectory, "app/entry.client.tsx"),
-  entryServerFile: join(rootDirectory, "app/entry.server.tsx"),
-  publicPath: "/build/assets/",
-  rootDirectory,
-  routes,
-  serverBuildPath: join(rootDirectory, "build/server.cjs"),
-  serverBuildTargetEntryModule: "",
-  serverDependenciesToBundle: [],
-  serverMode: ServerMode.Development,
-  serverModuleFormat: "cjs",
-  serverPlatform: "node",
-  assetsBuildDirectory: join(rootDirectory, "public/build/assets"),
-}
-
-const [command, ...args] = process.argv.slice(2)
-
-if (command === "build") {
-  const browserBuildPromise = createBrowserBuild(remixConfig, {})
+cli.command("build", "Build your app for production").action(async () => {
+  const remixConfig = getRemixConfig(mode)
+  const browserBuildPromise = createBrowserBuild(remixConfig, mode)
 
   const assetsManifestPromiseRef: AssetsManifestPromiseRef = {
-    current: browserBuildPromise.then((build) => {
-      return generateAssetsManifest(remixConfig, build.metafile!)
-    }),
+    current: browserBuildPromise.then((build) =>
+      generateAssetsManifest(remixConfig, build.metafile!),
+    ),
   }
 
   await Promise.all([
     browserBuildPromise,
-    createServerBuild(remixConfig, {}, assetsManifestPromiseRef),
-    createElectronBuild(),
+    createServerBuild(remixConfig, mode, assetsManifestPromiseRef),
+    createElectronBuild(mode),
   ])
-}
+})
 
-if (command === "watch") {
-  // todo
-}
+cli.version(manifest.version)
+cli.help()
+cli.parse(process.argv, { run: false })
 
-export {}
+if (cli.matchedCommand) {
+  await cli.runMatchedCommand()
+} else {
+  cli.outputHelp()
+}

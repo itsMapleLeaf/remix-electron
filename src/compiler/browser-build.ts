@@ -1,27 +1,22 @@
+import { NodeModulesPolyfillPlugin } from "@esbuild-plugins/node-modules-polyfill"
 import { getAppDependencies } from "@remix-run/dev/compiler/dependencies.js"
 import { loaders } from "@remix-run/dev/compiler/loaders.js"
 import { browserRouteModulesPlugin } from "@remix-run/dev/compiler/plugins/browserRouteModulesPlugin.js"
 import { emptyModulesPlugin } from "@remix-run/dev/compiler/plugins/emptyModulesPlugin.js"
-// import {} from "@remix-run/dev/compiler/plugins/emptyModulesPlugin.js"
-// import { NodeModulesPolyfillPlugin } from "@esbuild-plugins/node-modules-polyfill"
 import type { RemixConfig } from "@remix-run/dev/config.js"
 import * as esbuild from "esbuild"
+import type { Mode } from "node:fs"
 import { builtinModules as nodeBuiltins } from "node:module"
 import * as path from "node:path"
 import { join } from "node:path"
 
-export async function createBrowserBuild(
-  config: RemixConfig,
-  options: esbuild.BuildOptions & { incremental?: boolean },
-): Promise<esbuild.BuildResult> {
-  const mode = process.env.NODE_ENV || "development"
-
+export async function createBrowserBuild(config: RemixConfig, mode: Mode) {
   // For the browser build, exclude node built-ins that don't have a
   // browser-safe alternative installed in node_modules. Nothing should
   // *actually* be external in the browser build (we want to bundle all deps) so
   // this is really just making sure we don't accidentally have any dependencies
   // on node built-ins in browser bundles.
-  const dependencies = Object.keys(await getAppDependencies(config))
+  const dependencies = Object.keys(getAppDependencies(config))
   const externals = nodeBuiltins.filter((mod) => !dependencies.includes(mod))
   const fakeBuiltins = nodeBuiltins.filter((mod) => dependencies.includes(mod))
 
@@ -49,26 +44,25 @@ export async function createBrowserBuild(
     browserRouteModulesPlugin(config, /\?browser$/) as esbuild.Plugin,
     emptyModulesPlugin(config, /\.server(\.[jt]sx?)?$/) as esbuild.Plugin,
     emptyModulesPlugin(config, /^electron$/) as esbuild.Plugin,
-    // NodeModulesPolyfillPlugin(),
+    NodeModulesPolyfillPlugin(),
   ]
 
-  return esbuild.build({
+  return await esbuild.build({
     entryPoints,
     outdir: config.assetsBuildDirectory,
     platform: "browser",
     format: "esm",
     inject: [join(__dirname, "../shims/react-shim.ts")],
-    external: [...nodeBuiltins],
+    external: [...externals, ...nodeBuiltins],
     loader: loaders,
     bundle: true,
     logLevel: "info",
     splitting: true,
-    sourcemap: options.sourcemap,
     metafile: true,
-    incremental: options.incremental,
     mainFields: ["browser", "module", "main"],
     treeShaking: true,
     minify: mode === "production",
+    sourcemap: mode === "development" ? "external" : false,
     entryNames: "[dir]/[name]-[hash]",
     chunkNames: "_shared/[name]-[hash]",
     assetNames: "_assets/[name]-[hash]",

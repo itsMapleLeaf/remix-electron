@@ -1,9 +1,7 @@
 {
   "main": "build/main.cjs",
   "scripts": {
-    "dev": "run-p --print-label --race dev:*",
-    "dev:electron": "nodemon --exec electron .",
-    "dev:build": "remix-electron watch",
+    "dev": "remix-electron dev",
     "build": "remix-electron build",
     "start": "electron ."
   },
