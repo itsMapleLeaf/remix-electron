@@ -7,10 +7,7 @@ import { getRemixElectronConfig } from "../compiler/config"
 export async function createRemixBrowserWindow(
   options?: BrowserWindowConstructorOptions,
 ) {
-  const window = new BrowserWindow({
-    show: false,
-    ...options,
-  })
+  const window = new BrowserWindow(options)
 
   const config = getRemixElectronConfig(
     maybeCompilerMode(process.env.NODE_ENV) || app.isPackaged
@@ -19,14 +16,8 @@ export async function createRemixBrowserWindow(
   )
 
   if (config.compilerMode === "development") {
-    window.webContents.openDevTools()
-
     const watcher = await createWatcher(config)
     watcher.on("change", () => window.reload())
-  }
-
-  if (!window.isVisible()) {
-    window.once("ready-to-show", () => window.show())
   }
 
   return window
