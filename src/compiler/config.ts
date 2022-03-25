@@ -3,9 +3,10 @@ import type { RouteManifest } from "@remix-run/dev/config/routes.js"
 import { defineConventionalRoutes } from "@remix-run/dev/config/routesConvention.js"
 import type { ServerMode } from "@remix-run/dev/config/serverModes.js"
 import { join } from "node:path"
-import type { CompilerMode } from "./mode"
+import type { CompilerMode } from "./compiler-mode"
 
 export type RemixElectronConfig = RemixConfig & {
+  compilerMode: CompilerMode
   electronEntryFile: string
   electronBuildFile: string
 }
@@ -48,6 +49,8 @@ export function getRemixElectronConfig(
     serverModuleFormat: "cjs",
     serverPlatform: "node",
     assetsBuildDirectory: join(rootDirectory, "public/build/assets"),
+
+    compilerMode: mode,
     electronEntryFile: join(rootDirectory, "app/entry.electron.tsx"),
     electronBuildFile: join(rootDirectory, "build/main.cjs"),
   }

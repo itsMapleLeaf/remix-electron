@@ -1,7 +1,6 @@
 #!/bin/env node
 import type { AssetsManifestPromiseRef } from "@remix-run/dev/compiler/plugins/serverAssetsManifestPlugin.js"
 import cac from "cac"
-import chokidar from "chokidar"
 import electronPath from "electron"
 import * as esbuild from "esbuild"
 import type { ExecaChildProcess } from "execa"
@@ -11,10 +10,10 @@ import prettyMilliseconds from "pretty-ms"
 import manifest from "../package.json"
 import { generateAssetsManifest } from "./compiler/assets-manifest"
 import { getBrowserBuildOptions } from "./compiler/browser-build"
+import type { CompilerMode } from "./compiler/compiler-mode"
+import { maybeCompilerMode } from "./compiler/compiler-mode"
 import { getRemixElectronConfig } from "./compiler/config"
 import { getElectronBuildOptions } from "./compiler/electron-build"
-import type { CompilerMode } from "./compiler/mode"
-import { maybeCompilerMode } from "./compiler/mode"
 import { getServerBuildOptions } from "./compiler/server-build"
 
 const cli = cac(manifest.name)
@@ -29,6 +28,14 @@ cli
 
     const assetsManifestPromiseRef: AssetsManifestPromiseRef = {}
 
+    const serverBuildPromise = esbuild.build({
+      ...getServerBuildOptions(
+        remixElectronConfig,
+        mode,
+        assetsManifestPromiseRef,
+      ),
+    })
+
     const browserWatchPromise = esbuild.build({
       ...getBrowserBuildOptions(remixElectronConfig, mode),
       watch: {
@@ -38,6 +45,16 @@ cli
               remixElectronConfig,
               result.metafile!,
             )
+
+            esbuild
+              .build(
+                getServerBuildOptions(
+                  remixElectronConfig,
+                  mode,
+                  assetsManifestPromiseRef,
+                ),
+              )
+              .catch(console.error)
           }
           if (error) {
             console.error(error)
@@ -50,28 +67,8 @@ cli
       generateAssetsManifest(remixElectronConfig, result.metafile!),
     )
 
-    const serverWatchPromise = esbuild.build({
-      ...getServerBuildOptions(
-        remixElectronConfig,
-        mode,
-        assetsManifestPromiseRef,
-      ),
-      watch: true,
-    })
-
-    const electronWatchPromise = esbuild.build({
-      ...getElectronBuildOptions(remixElectronConfig, mode),
-      watch: true,
-    })
-
-    await Promise.all([
-      browserWatchPromise,
-      serverWatchPromise,
-      electronWatchPromise,
-    ])
-
     let electronProcess: ExecaChildProcess | undefined
-    function createElectronProcess() {
+    function runElectron() {
       if (electronProcess) {
         console.info("Restarting electron")
         electronProcess.cancel()
@@ -84,14 +81,26 @@ cli
       })
     }
 
-    createElectronProcess()
+    const electronWatchPromise = esbuild.build({
+      ...getElectronBuildOptions(remixElectronConfig, mode),
+      watch: {
+        onRebuild: (error) => {
+          if (error) {
+            console.error(error)
+          } else {
+            runElectron()
+          }
+        },
+      },
+    })
 
-    chokidar
-      .watch([
-        remixElectronConfig.serverBuildPath,
-        remixElectronConfig.electronBuildFile,
-      ])
-      .on("change", createElectronProcess)
+    await Promise.all([
+      browserWatchPromise,
+      serverBuildPromise,
+      electronWatchPromise,
+    ])
+
+    runElectron()
   })
 
 cli.command("build", "Build your app for production").action(async () => {

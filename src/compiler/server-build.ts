@@ -10,7 +10,7 @@ import type { RemixConfig } from "@remix-run/dev/config.js"
 import type * as esbuild from "esbuild"
 import { builtinModules } from "node:module"
 import { join } from "node:path"
-import type { CompilerMode } from "./mode"
+import type { CompilerMode } from "./compiler-mode"
 
 export function getServerBuildOptions(
   config: RemixConfig,
