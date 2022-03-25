@@ -1,0 +1,3 @@
+# this file allows installing directly in this folder for tests,
+# instead of installing from the project root
+packages: ["."]
