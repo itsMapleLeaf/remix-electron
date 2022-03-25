@@ -2,7 +2,21 @@
 
 Electron integration for Remix
 
-> v2 docs work in progress
+v2 work in progress
+
+## TODO
+
+- cli
+  - [x] dev
+  - [x] build
+  - [ ] cleaning
+- [x] `entry.electron.tsx`
+- [ ] `entry.preload.tsx`
+- [ ] project template/generator (?)
+- config options
+  - ???
+- [ ] website (???)
+- [ ] mdx support
 
 ## Motivation
 
