@@ -10,6 +10,7 @@ v2 work in progress
   - [x] dev
   - [x] build
   - [ ] cleaning
+- [ ] load context
 - [x] `entry.electron.tsx`
 - [ ] `entry.preload.tsx`
 - [ ] project template/generator (?)
