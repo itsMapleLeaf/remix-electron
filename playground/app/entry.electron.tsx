@@ -1,9 +1,13 @@
 import { app } from "electron"
-import { configure, getRouteUrl, RemixBrowserWindow } from "remix-electron"
+import {
+  configure,
+  createRemixBrowserWindow,
+  getRouteUrl,
+} from "remix-electron"
 
 app.on("ready", async () => {
   await configure()
 
-  const win = await RemixBrowserWindow.create()
+  const win = await createRemixBrowserWindow()
   await win.loadURL(getRouteUrl("/"))
 })

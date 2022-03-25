@@ -4,35 +4,35 @@ import { maybeCompilerMode } from "../compiler/compiler-mode"
 import type { RemixElectronConfig } from "../compiler/config"
 import { getRemixElectronConfig } from "../compiler/config"
 
-export class RemixBrowserWindow extends BrowserWindow {
-  static async create(options?: BrowserWindowConstructorOptions) {
-    const window = new RemixBrowserWindow({
-      show: false,
-      ...options,
-    })
+export async function createRemixBrowserWindow(
+  options?: BrowserWindowConstructorOptions,
+) {
+  const window = new BrowserWindow({
+    show: false,
+    ...options,
+  })
 
-    const config = getRemixElectronConfig(
-      maybeCompilerMode(process.env.NODE_ENV) || app.isPackaged
-        ? "production"
-        : "development",
-    )
+  const config = getRemixElectronConfig(
+    maybeCompilerMode(process.env.NODE_ENV) || app.isPackaged
+      ? "production"
+      : "development",
+  )
 
-    if (config.compilerMode === "development") {
-      window.webContents.openDevTools()
+  if (config.compilerMode === "development") {
+    window.webContents.openDevTools()
 
-      const watcher = await RemixBrowserWindow.createWatcher(config)
-      watcher.on("change", () => window.reload())
-    }
-
-    if (!window.isVisible()) {
-      window.once("ready-to-show", () => window.show())
-    }
-
-    return window
+    const watcher = await createWatcher(config)
+    watcher.on("change", () => window.reload())
   }
 
-  private static async createWatcher(config: RemixElectronConfig) {
-    const chokidar = await import("chokidar")
-    return chokidar.watch(config.serverBuildPath)
+  if (!window.isVisible()) {
+    window.once("ready-to-show", () => window.show())
   }
+
+  return window
+}
+
+async function createWatcher(config: RemixElectronConfig) {
+  const chokidar = await import("chokidar")
+  return chokidar.watch(config.serverBuildPath)
 }
