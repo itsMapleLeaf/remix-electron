@@ -10,7 +10,14 @@ import { builtinModules as nodeBuiltins } from "node:module"
 import * as path from "node:path"
 import { join } from "node:path"
 
-export async function createBrowserBuild(config: RemixConfig, mode: Mode) {
+export function createBrowserBuild(remixConfig: RemixConfig, mode: Mode) {
+  return esbuild.build(getBrowserBuildOptions(remixConfig, mode))
+}
+
+export function getBrowserBuildOptions(
+  config: RemixConfig,
+  mode: Mode,
+): esbuild.BuildOptions {
   // For the browser build, exclude node built-ins that don't have a
   // browser-safe alternative installed in node_modules. Nothing should
   // *actually* be external in the browser build (we want to bundle all deps) so
@@ -47,7 +54,7 @@ export async function createBrowserBuild(config: RemixConfig, mode: Mode) {
     NodeModulesPolyfillPlugin(),
   ]
 
-  return await esbuild.build({
+  return {
     entryPoints,
     outdir: config.assetsBuildDirectory,
     platform: "browser",
@@ -74,5 +81,5 @@ export async function createBrowserBuild(config: RemixConfig, mode: Mode) {
       ),
     },
     plugins,
-  })
+  }
 }

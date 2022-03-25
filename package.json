@@ -1,35 +1,33 @@
 {
   "name": "remix-electron",
+  "type": "module",
   "version": "1.2.1",
   "author": "itsMapleLeaf",
   "description": "Electron integration for Remix",
   "license": "MIT",
   "repository": "https://github.com/itsMapleLeaf/remix-electron",
   "types": "./dist/main.d.ts",
-  "exports": "./dist/main.js",
-  "bin": "./dist/cli.mjs",
+  "exports": "./dist/main.cjs",
+  "bin": "./dist/cli.js",
   "files": [
     "dist",
     "shims"
   ],
   "scripts": {
-    "build": "run-p --print-label build:*",
-    "build:lib": "tsup-node src/main.ts --format cjs --dts",
-    "build:cli": "tsup-node src/cli.ts --format esm",
+    "build": "esmo scripts/build.ts",
+    "watch": "esmo scripts/build.ts --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
     "release": "pnpm test && release-it"
-  },
-  "tsup": {
-    "target": "node16",
-    "sourcemap": true
   },
   "dependencies": {
     "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
     "@types/mime": "^2.0.3",
     "@types/node": "*",
     "cac": "^6.7.12",
+    "chokidar": "^3.5.3",
     "esbuild": "^0.14.27",
+    "execa": "^6.1.0",
     "fast-glob": "^3.2.11",
     "mime": "^3.0.0",
     "ora": "^6.1.0",

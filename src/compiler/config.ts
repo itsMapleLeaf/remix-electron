@@ -5,7 +5,14 @@ import type { ServerMode } from "@remix-run/dev/config/serverModes.js"
 import { join } from "node:path"
 import type { CompilerMode } from "./mode"
 
-export function getRemixConfig(mode: CompilerMode): RemixConfig {
+export type RemixElectronConfig = RemixConfig & {
+  electronEntryFile: string
+  electronBuildFile: string
+}
+
+export function getRemixElectronConfig(
+  mode: CompilerMode,
+): RemixElectronConfig {
   const rootDirectory = process.cwd()
   const appDirectory = join(rootDirectory, "app")
   const rootRouteFile = join(appDirectory, "root.tsx")
@@ -41,5 +48,7 @@ export function getRemixConfig(mode: CompilerMode): RemixConfig {
     serverModuleFormat: "cjs",
     serverPlatform: "node",
     assetsBuildDirectory: join(rootDirectory, "public/build/assets"),
+    electronEntryFile: join(rootDirectory, "app/entry.electron.tsx"),
+    electronBuildFile: join(rootDirectory, "build/main.cjs"),
   }
 }

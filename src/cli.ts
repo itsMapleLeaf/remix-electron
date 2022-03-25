@@ -1,31 +1,112 @@
 #!/bin/env node
 import type { AssetsManifestPromiseRef } from "@remix-run/dev/compiler/plugins/serverAssetsManifestPlugin.js"
 import cac from "cac"
+import chokidar from "chokidar"
+import electronPath from "electron"
+import * as esbuild from "esbuild"
+import type { ExecaChildProcess } from "execa"
+import { execa } from "execa"
 import { oraPromise } from "ora"
 import prettyMilliseconds from "pretty-ms"
 import manifest from "../package.json"
-import { createBrowserBuild } from "./compiler/browser-build"
-import { getRemixConfig } from "./compiler/config"
-import { createElectronBuild } from "./compiler/electron-build"
+import { generateAssetsManifest } from "./compiler/assets-manifest"
+import { getBrowserBuildOptions } from "./compiler/browser-build"
+import { getRemixElectronConfig } from "./compiler/config"
+import { getElectronBuildOptions } from "./compiler/electron-build"
 import type { CompilerMode } from "./compiler/mode"
 import { maybeCompilerMode } from "./compiler/mode"
-import {
-  createServerBuild,
-  generateAssetsManifest,
-} from "./compiler/server-build"
-
-const mode: CompilerMode =
-  maybeCompilerMode(process.env.NODE_ENV) || "production"
+import { getServerBuildOptions } from "./compiler/server-build"
 
 const cli = cac(manifest.name)
 
+cli
+  .command("dev", "Develop your app with reloading on changes")
+  .action(async () => {
+    const mode: CompilerMode =
+      maybeCompilerMode(process.env.NODE_ENV) || "development"
+
+    const remixElectronConfig = getRemixElectronConfig(mode)
+
+    const assetsManifestPromiseRef: AssetsManifestPromiseRef = {}
+
+    const browserWatchPromise = esbuild.build({
+      ...getBrowserBuildOptions(remixElectronConfig, mode),
+      watch: {
+        onRebuild: (error, result) => {
+          if (result) {
+            assetsManifestPromiseRef.current = generateAssetsManifest(
+              remixElectronConfig,
+              result.metafile!,
+            )
+          }
+          if (error) {
+            console.error(error)
+          }
+        },
+      },
+    })
+
+    assetsManifestPromiseRef.current = browserWatchPromise.then((result) =>
+      generateAssetsManifest(remixElectronConfig, result.metafile!),
+    )
+
+    const serverWatchPromise = esbuild.build({
+      ...getServerBuildOptions(
+        remixElectronConfig,
+        mode,
+        assetsManifestPromiseRef,
+      ),
+      watch: true,
+    })
+
+    const electronWatchPromise = esbuild.build({
+      ...getElectronBuildOptions(remixElectronConfig, mode),
+      watch: true,
+    })
+
+    await Promise.all([
+      browserWatchPromise,
+      serverWatchPromise,
+      electronWatchPromise,
+    ])
+
+    let electronProcess: ExecaChildProcess | undefined
+    function createElectronProcess() {
+      if (electronProcess) {
+        console.info("Restarting electron")
+        electronProcess.cancel()
+      } else {
+        console.info("Starting electron")
+      }
+
+      electronProcess = execa(electronPath as unknown as string, ["."], {
+        stdio: "inherit",
+      })
+    }
+
+    createElectronProcess()
+
+    chokidar
+      .watch([
+        remixElectronConfig.serverBuildPath,
+        remixElectronConfig.electronBuildFile,
+      ])
+      .on("change", createElectronProcess)
+  })
+
 cli.command("build", "Build your app for production").action(async () => {
-  const remixConfig = getRemixConfig(mode)
-  const browserBuildPromise = createBrowserBuild(remixConfig, mode)
+  const mode: CompilerMode =
+    maybeCompilerMode(process.env.NODE_ENV) || "production"
+
+  const remixElectronConfig = getRemixElectronConfig(mode)
+
+  const browserBuildPromise = esbuild.build(
+    getBrowserBuildOptions(remixElectronConfig, mode),
+  )
 
   const assetsManifestPromiseRef: AssetsManifestPromiseRef = {
     current: browserBuildPromise.then((build) =>
-      generateAssetsManifest(remixConfig, build.metafile!),
+      generateAssetsManifest(remixElectronConfig, build.metafile!),
     ),
   }
 
@@ -34,8 +115,14 @@ cli.command("build", "Build your app for production").action(async () => {
   await oraPromise(
     Promise.all([
       browserBuildPromise,
-      createServerBuild(remixConfig, mode, assetsManifestPromiseRef),
-      createElectronBuild(mode),
+      esbuild.build(
+        getServerBuildOptions(
+          remixElectronConfig,
+          mode,
+          assetsManifestPromiseRef,
+        ),
+      ),
+      esbuild.build(getElectronBuildOptions(remixElectronConfig, mode)),
     ]),
     {
       text: "Building...",
