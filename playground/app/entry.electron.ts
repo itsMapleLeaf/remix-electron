@@ -1,8 +1,11 @@
 import { app } from "electron"
 import { configure, createRemixBrowserWindow } from "remix-electron"
+import type { LoadContext } from "./context"
 
 app.on("ready", async () => {
-  await configure()
+  await configure({
+    getLoadContext: (): LoadContext => ({ secret: "43" }),
+  })
 
   const win = await createRemixBrowserWindow({
     initialRoute: "/",
