@@ -51,7 +51,7 @@ export function getRemixElectronConfig(
     assetsBuildDirectory: join(rootDirectory, "public/build/assets"),
 
     compilerMode: mode,
-    electronEntryFile: join(rootDirectory, "app/entry.electron.tsx"),
+    electronEntryFile: join(rootDirectory, "app/entry.electron.ts"),
     electronBuildFile: join(rootDirectory, "build/main.cjs"),
   }
 }

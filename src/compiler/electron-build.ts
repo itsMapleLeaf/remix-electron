@@ -1,6 +1,5 @@
 import type * as esbuild from "esbuild"
 import { builtinModules as nodeBuiltins } from "node:module"
-import { join } from "node:path"
 import type { CompilerMode } from "./compiler-mode"
 import type { RemixElectronConfig } from "./config"
 
@@ -18,7 +17,6 @@ export function getElectronBuildOptions(
     logLevel: "silent",
     plugins: [],
     treeShaking: true,
-    inject: [join(__dirname, "../shims/react-shim.ts")],
     minify: mode === "production",
     sourcemap: mode === "development" ? "external" : false,
   }
