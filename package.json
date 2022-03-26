@@ -17,7 +17,7 @@
     "build": "esmo scripts/build.ts",
     "watch": "esmo scripts/build.ts --watch",
     "typecheck": "tsc --noEmit",
-    "test": "vitest",
+    "test": "vitest --run --coverage",
     "release": "pnpm test && release-it"
   },
   "dependencies": {
@@ -51,6 +51,7 @@
     "@remix-run/server-runtime": "^1.3.3",
     "@typescript-eslint/eslint-plugin": "^5.16.0",
     "@typescript-eslint/parser": "^5.16.0",
+    "c8": "^7.11.0",
     "electron": "^17.1.2",
     "eslint": "^8.11.0",
     "eslint-config-prettier": "^8.5.0",
