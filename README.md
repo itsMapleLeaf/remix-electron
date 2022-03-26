@@ -10,6 +10,7 @@ v2 work in progress
   - [x] dev
   - [x] build
   - [ ] cleaning
+- [x] `initialRoute` option for RemixBrowserWindow
 - [ ] load context
 - [x] `entry.electron.tsx`
 - [ ] `entry.preload.tsx`
