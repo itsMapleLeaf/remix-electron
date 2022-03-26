@@ -14,7 +14,8 @@ v2 work in progress
 - [x] load context
 - [x] `entry.electron.ts`
 - [x] `entry.preload.ts`
-- [ ] project template/generator (?)
+- [x] project template
+- [ ] remix stack
 - config options
   - ???
 - [ ] website (???)
