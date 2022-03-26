@@ -1,7 +1,7 @@
 import { useLoaderData } from "@remix-run/react"
 import { json } from "@remix-run/server-runtime"
 import { app } from "electron"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import type { CustomDataFunctionArgs } from "../context"
 
 type LoaderData = {
@@ -18,6 +18,11 @@ export function loader({ context }: CustomDataFunctionArgs) {
 
 export default function Index() {
   const data = useLoaderData<LoaderData>()
+
+  useEffect(() => {
+    window.electronApi.ping()
+  }, [])
+
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
       <h1>Welcome to Remix</h1>

@@ -9,6 +9,8 @@ export type RemixElectronConfig = RemixConfig & {
   compilerMode: CompilerMode
   electronEntryFile: string
   electronBuildFile: string
+  preloadEntryFile: string
+  preloadBuildFile: string
 }
 
 export function getRemixElectronConfig(
@@ -53,5 +55,7 @@ export function getRemixElectronConfig(
     compilerMode: mode,
     electronEntryFile: join(rootDirectory, "app/entry.electron.ts"),
     electronBuildFile: join(rootDirectory, "build/main.cjs"),
+    preloadEntryFile: join(rootDirectory, "app/entry.preload.ts"),
+    preloadBuildFile: join(rootDirectory, "build/preload.cjs"),
   }
 }

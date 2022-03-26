@@ -1,147 +1,25 @@
 #!/bin/env node
-import type { AssetsManifestPromiseRef } from "@remix-run/dev/compiler/plugins/serverAssetsManifestPlugin.js"
 import cac from "cac"
-import electronPath from "electron"
-import * as esbuild from "esbuild"
-import type { ExecaChildProcess } from "execa"
-import { execa } from "execa"
 import { oraPromise } from "ora"
 import prettyMilliseconds from "pretty-ms"
 import manifest from "../package.json"
-import { generateAssetsManifest } from "./compiler/assets-manifest"
-import { getBrowserBuildOptions } from "./compiler/browser-build"
-import type { CompilerMode } from "./compiler/compiler-mode"
-import { maybeCompilerMode } from "./compiler/compiler-mode"
-import { getRemixElectronConfig } from "./compiler/config"
-import { getElectronBuildOptions } from "./compiler/electron-build"
-import { getServerBuildOptions } from "./compiler/server-build"
+import { build } from "./compiler/build"
+import { develop } from "./compiler/develop"
 
 const cli = cac(manifest.name)
 
-cli
-  .command("dev", "Develop your app with reloading on changes")
-  .action(async () => {
-    const mode: CompilerMode =
-      maybeCompilerMode(process.env.NODE_ENV) || "development"
-
-    const remixElectronConfig = getRemixElectronConfig(mode)
-
-    const assetsManifestPromiseRef: AssetsManifestPromiseRef = {}
-
-    const serverBuildPromise = esbuild.build({
-      ...getServerBuildOptions(
-        remixElectronConfig,
-        mode,
-        assetsManifestPromiseRef,
-      ),
-    })
-
-    const browserWatchPromise = esbuild.build({
-      ...getBrowserBuildOptions(remixElectronConfig, mode),
-      watch: {
-        onRebuild: (error, result) => {
-          if (result) {
-            assetsManifestPromiseRef.current = generateAssetsManifest(
-              remixElectronConfig,
-              result.metafile!,
-            )
-
-            esbuild
-              .build(
-                getServerBuildOptions(
-                  remixElectronConfig,
-                  mode,
-                  assetsManifestPromiseRef,
-                ),
-              )
-              .catch(console.error)
-          }
-          if (error) {
-            console.error(error)
-          }
-        },
-      },
-    })
-
-    assetsManifestPromiseRef.current = browserWatchPromise.then((result) =>
-      generateAssetsManifest(remixElectronConfig, result.metafile!),
-    )
-
-    let electronProcess: ExecaChildProcess | undefined
-    function runElectron() {
-      if (electronProcess) {
-        console.info("Restarting electron")
-        electronProcess.cancel()
-      } else {
-        console.info("Starting electron")
-      }
-
-      electronProcess = execa(electronPath as unknown as string, ["."], {
-        stdio: "inherit",
-      })
-    }
-
-    const electronWatchPromise = esbuild.build({
-      ...getElectronBuildOptions(remixElectronConfig, mode),
-      watch: {
-        onRebuild: (error) => {
-          if (error) {
-            console.error(error)
-          } else {
-            runElectron()
-          }
-        },
-      },
-    })
-
-    await Promise.all([
-      browserWatchPromise,
-      serverBuildPromise,
-      electronWatchPromise,
-    ])
-
-    runElectron()
-  })
+cli.command("dev", "Develop your app with reloading on changes").action(develop)
 
 cli.command("build", "Build your app for production").action(async () => {
-  const mode: CompilerMode =
-    maybeCompilerMode(process.env.NODE_ENV) || "production"
-
-  const remixElectronConfig = getRemixElectronConfig(mode)
-
-  const browserBuildPromise = esbuild.build(
-    getBrowserBuildOptions(remixElectronConfig, mode),
-  )
-
-  const assetsManifestPromiseRef: AssetsManifestPromiseRef = {
-    current: browserBuildPromise.then((build) =>
-      generateAssetsManifest(remixElectronConfig, build.metafile!),
-    ),
-  }
-
   const startTime = Date.now()
-
-  await oraPromise(
-    Promise.all([
-      browserBuildPromise,
-      esbuild.build(
-        getServerBuildOptions(
-          remixElectronConfig,
-          mode,
-          assetsManifestPromiseRef,
-        ),
-      ),
-      esbuild.build(getElectronBuildOptions(remixElectronConfig, mode)),
-    ]),
-    {
-      text: "Building...",
-      successText: () => {
-        const totalTime = prettyMilliseconds(Date.now() - startTime)
-        return `Built in ${totalTime}`
-      },
-      failText: "Build failed",
+  await oraPromise(build(), {
+    text: "Building...",
+    successText: () => {
+      const totalTime = prettyMilliseconds(Date.now() - startTime)
+      return `Built in ${totalTime}`
     },
-  )
+    failText: "Build failed",
+  })
 })
 
 cli.version(manifest.version)
