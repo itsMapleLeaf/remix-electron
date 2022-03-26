@@ -18,7 +18,7 @@
     "watch": "esmo scripts/build.ts --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest --run --coverage",
-    "release": "pnpm test && release-it"
+    "release": "pnpm run build && pnpm test && release-it"
   },
   "dependencies": {
     "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
