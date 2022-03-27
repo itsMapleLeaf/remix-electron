@@ -1,1 +1,1 @@
-packages: [".", "playground"]
+packages: [".", "playground", "website"]
