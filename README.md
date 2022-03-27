@@ -17,7 +17,7 @@ v2 work in progress
 - [x] project template
 - [ ] remix stack
 - config options
-  - ???
+  - [ ] serverDependenciesToBundle
 - [ ] website (???)
 - [ ] mdx support
 
