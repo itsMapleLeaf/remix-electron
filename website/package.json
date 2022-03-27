@@ -2,9 +2,13 @@
   "private": true,
   "sideEffects": false,
   "scripts": {
-    "dev": "remix dev",
-    "build": "remix build",
-    "start": "remix-serve build"
+    "clean": "del-cli build public/build",
+    "dev": "pnpm run clean && run-p --print-label --race dev:*",
+    "dev:remix": "remix dev",
+    "dev:tailwind": "pnpm run tailwind -- --watch",
+    "build": "pnpm run clean && pnpm run tailwind -- --minify && remix build",
+    "start": "remix-serve build",
+    "tailwind": "tailwindcss -o app/tailwind.css"
   },
   "dependencies": {
     "@remix-run/react": "^1.3.3",
@@ -17,6 +21,11 @@
     "@remix-run/dev": "^1.3.3",
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
+    "autoprefixer": "^10.4.4",
+    "del-cli": "^4.0.1",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.12",
+    "tailwindcss": "^3.0.23",
     "typescript": "^4.5.5"
   },
   "engines": {
