@@ -26,7 +26,7 @@
     "@types/node": "*",
     "cac": "^6.7.12",
     "chokidar": "^3.5.3",
-    "esbuild": "^0.14.27",
+    "esbuild": "^0.14.28",
     "execa": "^6.1.0",
     "fast-glob": "^3.2.11",
     "mime": "^3.0.0",
@@ -52,8 +52,8 @@
     "@typescript-eslint/eslint-plugin": "^5.16.0",
     "@typescript-eslint/parser": "^5.16.0",
     "c8": "^7.11.0",
-    "electron": "^17.1.2",
-    "eslint": "^8.11.0",
+    "electron": "^17.2.0",
+    "eslint": "^8.12.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-typescript": "^2.7.0",
     "eslint-plugin-import": "^2.25.4",
@@ -64,13 +64,13 @@
     "eslint-plugin-unicorn": "^41.0.1",
     "esno": "^0.14.1",
     "playwright": "^1.20.1",
-    "prettier": "^2.6.0",
+    "prettier": "^2.6.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "release-it": "^14.13.1",
     "tsup": "^5.12.1",
-    "typescript": "^4.6.2",
-    "vitest": "^0.7.10"
+    "typescript": "^4.6.3",
+    "vitest": "^0.7.12"
   },
   "eslintConfig": {
     "extends": [
