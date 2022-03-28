@@ -1,4 +1,3 @@
-import { getAppDependencies } from "@remix-run/dev/compiler/dependencies.js"
 import { loaders } from "@remix-run/dev/compiler/loaders.js"
 import { emptyModulesPlugin } from "@remix-run/dev/compiler/plugins/emptyModulesPlugin.js"
 import type { AssetsManifestPromiseRef } from "@remix-run/dev/compiler/plugins/serverAssetsManifestPlugin.js"
@@ -8,17 +7,15 @@ import { serverRouteModulesPlugin } from "@remix-run/dev/compiler/plugins/server
 import { serverBuildVirtualModule } from "@remix-run/dev/compiler/virtualModules.js"
 import type { RemixConfig } from "@remix-run/dev/config.js"
 import type * as esbuild from "esbuild"
-import { builtinModules } from "node:module"
 import { join } from "node:path"
 import type { CompilerMode } from "./compiler-mode"
+import { getNodeExternals } from "./externals"
 
-export function getServerBuildOptions(
+export async function getServerBuildOptions(
   config: RemixConfig,
   mode: CompilerMode,
   assetsManifestPromiseRef: AssetsManifestPromiseRef,
-): esbuild.BuildOptions {
-  const dependencies = getAppDependencies(config)
-
+): Promise<esbuild.BuildOptions> {
   return {
     absWorkingDir: config.rootDirectory,
     stdin: {
@@ -36,12 +33,7 @@ export function getServerBuildOptions(
     sourcemap: mode === "development" ? "external" : false,
     loader: loaders,
     bundle: true,
-    external: [
-      ...Object.keys(dependencies),
-      ...builtinModules,
-      "electron",
-      "remix-electron",
-    ],
+    external: await getNodeExternals(config.rootDirectory),
     logLevel: "silent",
 
     // The server build needs to know how to generate asset URLs for imports

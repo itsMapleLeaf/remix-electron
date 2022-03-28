@@ -32,6 +32,7 @@ importers:
       esno: ^0.14.1
       execa: ^6.1.0
       fast-glob: ^3.2.11
+      local-pkg: ^0.4.1
       mime: ^3.0.0
       ora: ^6.1.0
       playwright: ^1.20.1
@@ -52,6 +53,7 @@ importers:
       esbuild: 0.14.28
       execa: 6.1.0
       fast-glob: 3.2.11
+      local-pkg: 0.4.1
       mime: 3.0.0
       ora: 6.1.0
       pretty-ms: 7.0.1
@@ -5445,7 +5447,6 @@ packages:
   /local-pkg/0.4.1:
     resolution: {integrity: sha512-lL87ytIGP2FU5PWwNDo0w3WhIo2gopIAxPg9RxDYF7m4rr5ahuZxP22xnJHIvaLTe4Z9P6uKKY2UHiwyB4pcrw==}
     engines: {node: '>=14'}
-    dev: true
 
   /locate-path/2.0.0:
     resolution: {integrity: sha1-K1aLJl7slExtnA3pw9u7ygNUzY4=}

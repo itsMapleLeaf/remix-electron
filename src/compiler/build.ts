@@ -31,14 +31,14 @@ export async function build() {
   return Promise.all([
     browserBuildPromise,
     esbuild.build(
-      getServerBuildOptions(
+      await getServerBuildOptions(
         remixElectronConfig,
         mode,
         assetsManifestPromiseRef,
       ),
     ),
-    esbuild.build(getElectronBuildOptions(remixElectronConfig, mode)),
+    esbuild.build(await getElectronBuildOptions(remixElectronConfig, mode)),
     (await isFile(remixElectronConfig.preloadEntryFile)) &&
-      esbuild.build(getPreloadBuildOptions(remixElectronConfig, mode)),
+      esbuild.build(await getPreloadBuildOptions(remixElectronConfig, mode)),
   ])
 }

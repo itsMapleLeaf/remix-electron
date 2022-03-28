@@ -25,22 +25,24 @@ export async function develop() {
   const browserWatchPromise = esbuild.build({
     ...getBrowserBuildOptions(remixElectronConfig, mode),
     watch: {
-      onRebuild: (error, result) => {
+      onRebuild: async (error, result) => {
         if (result) {
           assetsManifestPromiseRef.current = generateAssetsManifest(
             remixElectronConfig,
             result.metafile!,
           )
 
-          esbuild
-            .build(
-              getServerBuildOptions(
+          try {
+            await esbuild.build(
+              await getServerBuildOptions(
                 remixElectronConfig,
                 mode,
                 assetsManifestPromiseRef,
               ),
             )
-            .catch(console.error)
+          } catch (error) {
+            console.error(error)
+          }
         }
         if (error) {
           console.error(error)
@@ -70,14 +72,14 @@ export async function develop() {
   await Promise.all([
     browserWatchPromise,
     esbuild.build(
-      getServerBuildOptions(
+      await getServerBuildOptions(
         remixElectronConfig,
         mode,
         assetsManifestPromiseRef,
       ),
     ),
     esbuild.build({
-      ...getElectronBuildOptions(remixElectronConfig, mode),
+      ...(await getElectronBuildOptions(remixElectronConfig, mode)),
       watch: {
         onRebuild: (error) => {
           if (error) {
@@ -90,7 +92,7 @@ export async function develop() {
     }),
     (await isFile(remixElectronConfig.preloadEntryFile)) &&
       esbuild.build({
-        ...getPreloadBuildOptions(remixElectronConfig, mode),
+        ...(await getPreloadBuildOptions(remixElectronConfig, mode)),
         watch: {
           onRebuild: (error) => {
             if (error) {

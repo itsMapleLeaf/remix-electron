@@ -6,9 +6,9 @@ import { emptyModulesPlugin } from "@remix-run/dev/compiler/plugins/emptyModules
 import type { RemixConfig } from "@remix-run/dev/config.js"
 import * as esbuild from "esbuild"
 import type { Mode } from "node:fs"
-import { builtinModules as nodeBuiltins } from "node:module"
 import * as path from "node:path"
 import { join } from "node:path"
+import { nodeBuiltins } from "../helpers/node-builtins"
 
 export function createBrowserBuild(remixConfig: RemixConfig, mode: Mode) {
   return esbuild.build(getBrowserBuildOptions(remixConfig, mode))
