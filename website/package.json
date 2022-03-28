@@ -3,10 +3,10 @@
   "sideEffects": false,
   "scripts": {
     "clean": "del-cli build public/build",
-    "dev": "pnpm run clean && run-p --print-label --race dev:*",
+    "dev": "npm run clean && run-p --print-label --race dev:*",
     "dev:remix": "remix dev",
-    "dev:tailwind": "pnpm run tailwind -- --watch",
-    "build": "pnpm run clean && pnpm run tailwind -- --minify && remix build",
+    "dev:tailwind": "npm run tailwind -- --watch",
+    "build": "npm run clean && npm run tailwind -- --minify && remix build",
     "start": "remix-serve build",
     "tailwind": "tailwindcss -o app/tailwind.css"
   },
