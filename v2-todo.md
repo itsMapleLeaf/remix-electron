@@ -62,3 +62,4 @@
   - a lot of people are used to using cookies with Remix to do this, but cookies broke (for now?)
 - [ ] guide: creating a new window via an action
   - example: settings menu, make a route at /settings and open a new window there via `getRouteUrl('/settings')`
+- [ ] guide: testing???
