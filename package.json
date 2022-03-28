@@ -18,6 +18,8 @@
     "watch": "esmo scripts/build.ts --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest --run --coverage",
+    "lint": "eslint --ext js,ts,tsx .",
+    "format": "prettier --write .",
     "release": "pnpm run build && pnpm test && release-it"
   },
   "dependencies": {
@@ -83,6 +85,7 @@
       "**/node_modules/**",
       "**/dist/**",
       "**/build/**",
+      "**/coverage/**",
       "**/.cache/**",
       "**/.vscode/**"
     ],
