@@ -4,23 +4,6 @@ Electron integration for Remix
 
 v2 work in progress
 
-## TODO
-
-- cli
-  - [x] dev
-  - [x] build
-  - [ ] cleaning
-- [x] `initialRoute` option for RemixBrowserWindow
-- [x] load context
-- [x] `entry.electron.ts`
-- [x] `entry.preload.ts`
-- [x] project template
-- [ ] remix stack
-- config options
-  - [ ] serverDependenciesToBundle
-- [ ] website (???)
-- [ ] mdx support
-
 ## Motivation
 
 Electron has [a comprehensive list of security recommendations](https://www.electronjs.org/docs/latest/tutorial/security) to follow when building an app, especially if that app interacts with the web. Which includes, but is not limited to:
