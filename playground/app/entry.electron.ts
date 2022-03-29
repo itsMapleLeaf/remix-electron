@@ -8,8 +8,12 @@ app.on("ready", async () => {
   })
 
   const win = await createRemixBrowserWindow({
-    initialRoute: "/",
+    initialRoute: "/live-data",
     show: false,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
   })
 
   if (!win.isVisible()) {

@@ -1,5 +1,8 @@
+import type { ServerBuild } from "@remix-run/server-runtime"
 import { createRequestHandler } from "@remix-run/server-runtime"
-import { app, protocol } from "electron"
+import { matchServerRoutes } from "@remix-run/server-runtime/routeMatching"
+import { createRoutes } from "@remix-run/server-runtime/routes"
+import { app, BrowserWindow, protocol } from "electron"
 import { stat } from "node:fs/promises"
 import { join } from "node:path"
 import { asAbsolutePath } from "../helpers/as-absolute-path"
@@ -21,7 +24,7 @@ export async function initRemix(options: ConfigureOptions = {}) {
     app.whenReady(),
   ])
 
-  let serverBuild = require(serverBuildFile)
+  let serverBuild: ServerBuild = require(serverBuildFile)
   let lastBuildTime = 0
 
   protocol.interceptBufferProtocol("http", async (request, callback) => {
@@ -50,6 +53,34 @@ export async function initRemix(options: ConfigureOptions = {}) {
         (await serveRemixResponse(request, requestHandler, context))
 
       callback(response)
+
+      // run matching live data functions
+      const matches = matchServerRoutes(
+        createRoutes(serverBuild.routes),
+        new URL(request.url).pathname,
+      )
+      if (!matches?.length) return
+
+      for (const match of matches) {
+        // @ts-expect-error: need to type liveData
+        const liveDataFunction = match.route.module.liveData
+        if (typeof liveDataFunction !== "function") continue
+
+        const generator: AsyncGenerator = liveDataFunction()
+
+        void (async function () {
+          try {
+            for await (const data of generator) {
+              const windows = BrowserWindow.getAllWindows()
+              for (const win of windows) {
+                win.webContents.send(`remix-live-data:${match.pathname}`, data)
+              }
+            }
+          } catch (error) {
+            console.error("Live data error:", error)
+          }
+        })()
+      }
     } catch (error) {
       console.warn("[remix-electron]", error)
 
