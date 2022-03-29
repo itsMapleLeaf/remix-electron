@@ -1,9 +1,9 @@
 import { app, ipcMain } from "electron"
-import { configure, createRemixBrowserWindow } from "remix-electron"
+import { createRemixBrowserWindow, initRemix } from "remix-electron"
 import type { LoadContext } from "./context"
 
 app.on("ready", async () => {
-  await configure({
+  await initRemix({
     getLoadContext: (): LoadContext => ({ secret: "43" }),
   })
 

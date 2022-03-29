@@ -1,12 +1,12 @@
 import { app } from "electron"
 import {
-  configure,
   createRemixBrowserWindow,
   getRouteUrl,
+  initRemix,
 } from "remix-electron"
 
 app.on("ready", async () => {
-  await configure()
+  await initRemix()
 
   const win = await createRemixBrowserWindow({
     show: false,

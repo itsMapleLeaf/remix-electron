@@ -10,7 +10,7 @@ export type ConfigureOptions = {
   getLoadContext?: (request: Electron.ProtocolRequest) => unknown
 }
 
-export async function configure(options: ConfigureOptions = {}) {
+export async function initRemix(options: ConfigureOptions = {}) {
   const projectRoot = process.cwd()
   const serverBuildFile = join(projectRoot, "build/server.cjs")
   const publicFolder = join(projectRoot, "public")
