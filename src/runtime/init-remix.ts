@@ -5,20 +5,12 @@ import { stat } from "node:fs/promises"
 import { join } from "node:path"
 import { asAbsolutePath } from "../helpers/as-absolute-path"
 import { collectAssetFiles, serveAsset } from "../helpers/asset-files"
-import type { LiveDataCleanupFunction } from "./live-data"
-import { serveLiveData } from "./live-data"
+import { serveLiveData } from "./live-data.main"
 import { serveRemixResponse } from "./serve-remix-response"
 
 export type ConfigureOptions = {
   getLoadContext?: (request: Electron.ProtocolRequest) => unknown
 }
-
-type LiveDataEffect = {
-  running: boolean
-  cleanup?: LiveDataCleanupFunction | undefined | void
-}
-
-const liveDataEffects: LiveDataEffect[] = []
 
 export async function initRemix(options: ConfigureOptions = {}) {
   const projectRoot = process.cwd()
