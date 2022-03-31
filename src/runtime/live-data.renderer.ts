@@ -13,29 +13,36 @@ export type LiveDataFunction<PublishData> = (
 
 export type LiveDataCleanupFunction = () => void
 
-export function useLiveData<T>(): T | undefined {
+export type UseLiveDataOptions = {
+  source?: string
+}
+
+export function useLiveData<T>({
+  source: sourceOption,
+}: UseLiveDataOptions = {}) {
   const [data, setData] = useState<T>()
   const location = useLocation()
+  const source = sourceOption ?? location.pathname
 
   useEffect(() => {
-    fetch(`${location.pathname}?_liveData=true`, { method: "POST" }).catch(
-      (error) => {
-        console.warn("[remix-electron]", error)
-      },
-    )
-  }, [location.pathname])
+    const url = new URL(source, "http://localhost/")
+    url.searchParams.append("_liveData", "")
+    fetch(url.toString(), { method: "POST" }).catch((error) => {
+      console.warn("[remix-electron]", error)
+    })
+  }, [source])
 
   useEffect(() => {
     const { ipcRenderer } = window.require("electron")
 
-    const channel = `remix-live-data:${location.pathname}`
+    const channel = `remix-live-data:${source}`
     const handler = (_event: IpcRendererEvent, data: T) => setData(data)
 
     ipcRenderer.on(channel, handler)
     return () => {
       ipcRenderer.off(channel, handler)
     }
-  }, [location.pathname])
+  }, [source])
 
   return data
 }
