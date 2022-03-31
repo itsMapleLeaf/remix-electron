@@ -14,9 +14,8 @@ export async function createRemixBrowserWindow(
   options?: RemixBrowserWindowOptions,
 ) {
   const config = getRemixElectronConfig(
-    maybeCompilerMode(process.env.NODE_ENV) || app.isPackaged
-      ? "production"
-      : "development",
+    maybeCompilerMode(process.env.NODE_ENV) ||
+      (app.isPackaged ? "production" : "development"),
   )
 
   const window = new BrowserWindow({
