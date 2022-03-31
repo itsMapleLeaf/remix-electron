@@ -1,4 +1,6 @@
-import { copyFile, rm, stat, watch } from "node:fs/promises"
+import chokidar from "chokidar"
+import { on } from "node:events"
+import { copyFile, rm, stat } from "node:fs/promises"
 import { dirname, join } from "node:path"
 import { setTimeout } from "node:timers/promises"
 import { fileURLToPath } from "node:url"
@@ -55,10 +57,13 @@ async function build() {
 await build()
 
 if (process.argv.includes("--watch")) {
-  const watcher = watch(join(__dirname, "../src"), { recursive: true })
-  for await (const info of watcher) {
-    if (info.filename.endsWith(".ts")) {
-      await build()
-    }
+  console.info("Starting watch mode")
+
+  const watcher = chokidar.watch(["./src/**/*.{ts,tsx}", "package.json"], {
+    ignoreInitial: true,
+  })
+
+  for await (const _ of on(watcher, "change")) {
+    await build()
   }
 }
