@@ -16,6 +16,9 @@
     "dist",
     "shims"
   ],
+  "sideEffects": [
+    "src/runtime/browser-globals.ts"
+  ],
   "scripts": {
     "build": "esmo scripts/build.ts",
     "watch": "esmo scripts/build.ts --watch",
