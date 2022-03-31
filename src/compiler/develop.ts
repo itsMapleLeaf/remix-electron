@@ -66,6 +66,7 @@ export async function develop() {
 
     electronProcess = execa(electronPath as unknown as string, ["."], {
       stdio: "inherit",
+      env: { ...process.env, NODE_ENV: mode },
     })
   }
 

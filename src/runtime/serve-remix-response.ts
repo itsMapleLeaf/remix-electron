@@ -5,20 +5,7 @@ export async function serveRemixResponse(
   handleRequest: RequestHandler,
   context: unknown,
 ): Promise<Electron.ProtocolResponse> {
-  const body = request.uploadData
-    ? Buffer.concat(request.uploadData.map((data) => data.bytes))
-    : undefined
-
-  const remixHeaders = new Headers(request.headers)
-  remixHeaders.append("Referer", request.referrer)
-
-  const remixRequest = new Request(request.url, {
-    method: request.method,
-    headers: remixHeaders,
-    body,
-  })
-
-  const response = await handleRequest(remixRequest, context)
+  const response = await handleRequest(createRemixRequest(request), context)
 
   const headers: Record<string, string[]> = {}
   for (const [key, value] of response.headers) {
@@ -31,4 +18,20 @@ export async function serveRemixResponse(
     headers,
     statusCode: response.status,
   }
+}
+
+export function createRemixRequest(request: Electron.ProtocolRequest) {
+  const body = request.uploadData
+    ? Buffer.concat(request.uploadData.map((data) => data.bytes))
+    : undefined
+
+  const remixHeaders = new Headers(request.headers)
+  remixHeaders.append("Referer", request.referrer)
+
+  const remixRequest = new Request(request.url, {
+    method: request.method,
+    headers: remixHeaders,
+    body,
+  })
+  return remixRequest
 }

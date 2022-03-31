@@ -3,5 +3,11 @@
   "compilerOptions": {
     "jsx": "react-jsx"
   },
-  "exclude": ["**/node_modules/**", "**/dist/**", "**/build/**", "**/.cache/**"]
+  "exclude": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/coverage/**",
+    "**/.cache/**"
+  ]
 }

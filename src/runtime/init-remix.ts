@@ -7,11 +7,22 @@ import { stat } from "node:fs/promises"
 import { join } from "node:path"
 import { asAbsolutePath } from "../helpers/as-absolute-path"
 import { collectAssetFiles, serveAsset } from "../helpers/asset-files"
-import { serveRemixResponse } from "./serve-remix-response"
+import type {
+  LiveDataCleanupFunction,
+  LiveDataFunction,
+} from "../renderer/live-data"
+import { createRemixRequest, serveRemixResponse } from "./serve-remix-response"
 
 export type ConfigureOptions = {
   getLoadContext?: (request: Electron.ProtocolRequest) => unknown
 }
+
+type LiveDataEffect = {
+  running: boolean
+  cleanup?: LiveDataCleanupFunction | undefined | void
+}
+
+let liveDataEffects: LiveDataEffect[] = []
 
 export async function initRemix(options: ConfigureOptions = {}) {
   const projectRoot = process.cwd()
@@ -59,27 +70,41 @@ export async function initRemix(options: ConfigureOptions = {}) {
         createRoutes(serverBuild.routes),
         new URL(request.url).pathname,
       )
-      if (!matches?.length) return
 
-      for (const match of matches) {
-        // @ts-expect-error: need to type liveData
-        const liveDataFunction = match.route.module.liveData
+      console.log(request.url)
+
+      for (const effect of liveDataEffects) {
+        effect.running = false
+        effect.cleanup?.()
+      }
+
+      liveDataEffects = []
+
+      for (const match of matches ?? []) {
+        const liveDataFunction: LiveDataFunction<unknown> | undefined = (
+          match.route.module as any
+        ).liveData
+
         if (typeof liveDataFunction !== "function") continue
 
-        const generator: AsyncGenerator = liveDataFunction()
-
-        void (async function () {
-          try {
-            for await (const data of generator) {
-              const windows = BrowserWindow.getAllWindows()
-              for (const win of windows) {
-                win.webContents.send(`remix-live-data:${match.pathname}`, data)
-              }
+        const cleanup = liveDataFunction({
+          request: createRemixRequest(request),
+          params: match.params,
+          context,
+          publish: (data) => {
+            if (!effect.running) return
+            for (const window of BrowserWindow.getAllWindows()) {
+              window.webContents.send(`remix-live-data:${match.pathname}`, data)
             }
-          } catch (error) {
-            console.error("Live data error:", error)
-          }
-        })()
+          },
+        })
+
+        const effect: LiveDataEffect = {
+          running: true,
+          cleanup,
+        }
+
+        liveDataEffects.push(effect)
       }
     } catch (error) {
       console.warn("[remix-electron]", error)

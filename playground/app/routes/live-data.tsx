@@ -1,38 +1,26 @@
-import { useEffect, useState } from "react"
-import { useLocation } from "react-router-dom"
-import { counter } from "../counter.server"
+import { Link } from "@remix-run/react"
+import type { LiveDataFunction } from "remix-electron/renderer"
+import { useLiveData } from "remix-electron/renderer"
 
 type LiveData = {
   count: number
 }
 
-export async function* liveData(): AsyncGenerator<LiveData> {
-  for await (const count of counter()) {
-    yield { count }
-  }
+export const liveData: LiveDataFunction<LiveData> = ({ publish }) => {
+  let count = 0
+  const id = setInterval(() => {
+    count += 1
+    publish({ count })
+  }, 1000)
+  return () => clearInterval(id)
 }
 
 export default function LiveDataPage() {
   const { count = 0 } = useLiveData<LiveData>() ?? {}
-  return <p>this page has been running for {count} seconds</p>
-}
-
-function useLiveData<T>(): T | undefined {
-  const [data, setData] = useState<T>()
-  const location = useLocation()
-
-  useEffect(() => {
-    const { ipcRenderer } = window.require("electron")
-
-    const channel = `remix-live-data:${location.pathname}`
-    const handler = (_event: Electron.IpcRendererEvent, data: T) =>
-      setData(data)
-
-    ipcRenderer.on(channel, handler)
-    return () => {
-      ipcRenderer.off(channel, handler)
-    }
-  }, [location.pathname])
-
-  return data
+  return (
+    <main>
+      <p>this page has been running for {count} seconds</p>
+      <Link to="/">go back</Link>
+    </main>
+  )
 }

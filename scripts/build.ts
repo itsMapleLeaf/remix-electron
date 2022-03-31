@@ -23,6 +23,13 @@ await Promise.all([
   }),
   tsup.build({
     ...options,
+    entry: ["./src/renderer.ts"],
+    format: ["cjs"],
+    dts: true,
+    watch: process.argv.includes("--watch"),
+  }),
+  tsup.build({
+    ...options,
     entry: ["./src/cli.ts"],
     format: ["esm"],
     watch: process.argv.includes("--watch"),
