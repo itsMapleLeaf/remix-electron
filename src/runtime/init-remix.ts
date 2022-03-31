@@ -1,17 +1,13 @@
 import type { ServerBuild } from "@remix-run/server-runtime"
 import { createRequestHandler } from "@remix-run/server-runtime"
-import { matchServerRoutes } from "@remix-run/server-runtime/routeMatching"
-import { createRoutes } from "@remix-run/server-runtime/routes"
-import { app, BrowserWindow, protocol } from "electron"
+import { app, protocol } from "electron"
 import { stat } from "node:fs/promises"
 import { join } from "node:path"
 import { asAbsolutePath } from "../helpers/as-absolute-path"
 import { collectAssetFiles, serveAsset } from "../helpers/asset-files"
-import type {
-  LiveDataCleanupFunction,
-  LiveDataFunction,
-} from "../renderer/live-data"
-import { createRemixRequest, serveRemixResponse } from "./serve-remix-response"
+import type { LiveDataCleanupFunction } from "./live-data"
+import { serveLiveData } from "./live-data"
+import { serveRemixResponse } from "./serve-remix-response"
 
 export type ConfigureOptions = {
   getLoadContext?: (request: Electron.ProtocolRequest) => unknown
@@ -22,7 +18,7 @@ type LiveDataEffect = {
   cleanup?: LiveDataCleanupFunction | undefined | void
 }
 
-let liveDataEffects: LiveDataEffect[] = []
+const liveDataEffects: LiveDataEffect[] = []
 
 export async function initRemix(options: ConfigureOptions = {}) {
   const projectRoot = process.cwd()
@@ -60,52 +56,11 @@ export async function initRemix(options: ConfigureOptions = {}) {
       const requestHandler = createRequestHandler(serverBuild, mode)
 
       const response =
+        (await serveLiveData(request, serverBuild, context)) ??
         (await serveAsset(request, assetFiles)) ??
         (await serveRemixResponse(request, requestHandler, context))
 
       callback(response)
-
-      // run matching live data functions
-      const matches = matchServerRoutes(
-        createRoutes(serverBuild.routes),
-        new URL(request.url).pathname,
-      )
-
-      console.log(request.url)
-
-      for (const effect of liveDataEffects) {
-        effect.running = false
-        effect.cleanup?.()
-      }
-
-      liveDataEffects = []
-
-      for (const match of matches ?? []) {
-        const liveDataFunction: LiveDataFunction<unknown> | undefined = (
-          match.route.module as any
-        ).liveData
-
-        if (typeof liveDataFunction !== "function") continue
-
-        const cleanup = liveDataFunction({
-          request: createRemixRequest(request),
-          params: match.params,
-          context,
-          publish: (data) => {
-            if (!effect.running) return
-            for (const window of BrowserWindow.getAllWindows()) {
-              window.webContents.send(`remix-live-data:${match.pathname}`, data)
-            }
-          },
-        })
-
-        const effect: LiveDataEffect = {
-          running: true,
-          cleanup,
-        }
-
-        liveDataEffects.push(effect)
-      }
     } catch (error) {
       console.warn("[remix-electron]", error)
 
