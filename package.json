@@ -91,7 +91,8 @@
       "**/build/**",
       "**/coverage/**",
       "**/.cache/**",
-      "**/.vscode/**"
+      "**/.vscode/**",
+      "renderer.d.ts"
     ],
     "rules": {
       "prettier/prettier": "error",

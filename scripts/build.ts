@@ -1,37 +1,64 @@
-import { rm } from "node:fs/promises"
+import { copyFile, rm, stat, watch } from "node:fs/promises"
 import { dirname, join } from "node:path"
+import { setTimeout } from "node:timers/promises"
 import { fileURLToPath } from "node:url"
 import * as tsup from "tsup"
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-const options: tsup.Options = {
+const baseOptions: tsup.Options = {
   target: "node16",
   platform: "node",
   sourcemap: true,
 }
 
-await rm(join(__dirname, "../dist"), { recursive: true, force: true })
+async function moveFile(from: string, to: string) {
+  await copyFile(from, to)
+  await rm(from)
+}
 
-await Promise.all([
-  tsup.build({
-    ...options,
-    entry: ["./src/main.ts"],
-    format: ["cjs"],
-    dts: true,
-    watch: process.argv.includes("--watch"),
-  }),
-  tsup.build({
-    ...options,
-    entry: ["./src/renderer.ts"],
-    format: ["cjs"],
-    dts: true,
-    watch: process.argv.includes("--watch"),
-  }),
-  tsup.build({
-    ...options,
-    entry: ["./src/cli.ts"],
-    format: ["esm"],
-    watch: process.argv.includes("--watch"),
-  }),
-])
+async function waitForFile(file: string): Promise<void> {
+  const stats = await stat(file).catch(() => undefined)
+  if (!stats) {
+    await setTimeout(100)
+    return waitForFile(file)
+  }
+}
+
+async function build() {
+  await rm(join(__dirname, "../dist"), { recursive: true, force: true })
+
+  await Promise.all([
+    tsup.build({
+      ...baseOptions,
+      entry: ["./src/main.ts"],
+      format: ["cjs"],
+      dts: true,
+    }),
+    tsup.build({
+      ...baseOptions,
+      entry: ["./src/renderer.ts"],
+      format: ["cjs"],
+      dts: true,
+    }),
+    tsup.build({
+      ...baseOptions,
+      entry: ["./src/cli.ts"],
+      format: ["esm"],
+    }),
+  ])
+
+  await waitForFile("./dist/renderer.d.ts")
+  await moveFile("./dist/renderer.d.ts", "./renderer.d.ts")
+}
+
+await build()
+
+if (process.argv.includes("--watch")) {
+  const watcher = watch(join(__dirname, "../src"), { recursive: true })
+  for await (const info of watcher) {
+    if (info.filename.endsWith(".ts")) {
+      await build()
+    }
+  }
+}
