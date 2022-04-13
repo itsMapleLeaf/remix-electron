@@ -56,7 +56,7 @@ async function build() {
 
 await build()
 
-if (process.argv.includes("--watch")) {
+if (process.argv.includes("--watch") || process.argv.includes("-w")) {
   console.info("Starting watch mode")
 
   const watcher = chokidar.watch(["./src/**/*.{ts,tsx}", "package.json"], {
