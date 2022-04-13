@@ -1,5 +1,5 @@
 import type * as esbuild from "esbuild"
-import type { CompilerMode } from "./compiler-mode"
+import type { CompilerMode } from "../common/compiler-mode"
 import type { RemixElectronConfig } from "./config"
 import { getNodeExternals } from "./externals"
 

@@ -14,6 +14,13 @@
   - [ ] clean (?) (cleans build folders before dev/build)
 - [ ] mdx support
 - [ ] remix stack w/ tailwind, testing, etc
+- [ ] split into multiple packages?
+  - motivation: make it easier to enforce the dev/prod dependencies of each export
+
+# bugs
+
+- [ ] config paths need to be absolute, since we can't always rely on cwd being the project root
+- [x] runtime APIs currently rely on compiler APIs (config), which requires @remix-run/dev to be a prod dependency
 
 ## website
 

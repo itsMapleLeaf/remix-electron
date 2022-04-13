@@ -3,7 +3,12 @@ import type { RouteManifest } from "@remix-run/dev/config/routes.js"
 import { defineConventionalRoutes } from "@remix-run/dev/config/routesConvention.js"
 import type { ServerMode } from "@remix-run/dev/config/serverModes.js"
 import { join } from "node:path"
-import type { CompilerMode } from "./compiler-mode"
+import type { CompilerMode } from "../common/compiler-mode"
+import {
+  getPreloadBuildFile,
+  getProjectRoot,
+  getServerBuildFile,
+} from "../common/config"
 
 export type RemixElectronConfig = RemixConfig & {
   compilerMode: CompilerMode
@@ -16,7 +21,7 @@ export type RemixElectronConfig = RemixConfig & {
 export function getRemixElectronConfig(
   mode: CompilerMode,
 ): RemixElectronConfig {
-  const rootDirectory = process.cwd()
+  const rootDirectory = getProjectRoot()
   const appDirectory = join(rootDirectory, "app")
   const rootRouteFile = join(appDirectory, "root.tsx")
 
@@ -44,7 +49,7 @@ export function getRemixElectronConfig(
     publicPath: "/build/assets/",
     rootDirectory,
     routes,
-    serverBuildPath: join(rootDirectory, "build/server.cjs"),
+    serverBuildPath: getServerBuildFile(rootDirectory),
     serverBuildTargetEntryModule: "",
     serverDependenciesToBundle: [],
     serverMode: mode as ServerMode,
@@ -56,6 +61,6 @@ export function getRemixElectronConfig(
     electronEntryFile: join(rootDirectory, "app/entry.electron.ts"),
     electronBuildFile: join(rootDirectory, "build/main.cjs"),
     preloadEntryFile: join(rootDirectory, "app/entry.preload.ts"),
-    preloadBuildFile: join(rootDirectory, "build/preload.cjs"),
+    preloadBuildFile: getPreloadBuildFile(rootDirectory),
   }
 }

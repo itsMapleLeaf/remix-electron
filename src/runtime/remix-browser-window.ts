@@ -1,9 +1,12 @@
 import type { BrowserWindowConstructorOptions } from "electron"
 import { app, BrowserWindow } from "electron"
-import { maybeCompilerMode } from "../compiler/compiler-mode"
-import type { RemixElectronConfig } from "../compiler/config"
-import { getRemixElectronConfig } from "../compiler/config"
-import { isFile } from "../helpers/is-file"
+import { maybeCompilerMode } from "../common/compiler-mode"
+import {
+  getPreloadBuildFile,
+  getProjectRoot,
+  getServerBuildFile,
+} from "../common/config"
+import { isFile } from "../common/is-file"
 import { getRouteUrl } from "./get-route-url"
 
 export type RemixBrowserWindowOptions = BrowserWindowConstructorOptions & {
@@ -13,23 +16,25 @@ export type RemixBrowserWindowOptions = BrowserWindowConstructorOptions & {
 export async function createRemixBrowserWindow(
   options?: RemixBrowserWindowOptions,
 ) {
-  const config = getRemixElectronConfig(
+  const compilerMode =
     maybeCompilerMode(process.env.NODE_ENV) ||
-      (app.isPackaged ? "production" : "development"),
-  )
+    (app.isPackaged ? "production" : "development")
+
+  const projectRoot = getProjectRoot()
+
+  const preloadBuildFile = getPreloadBuildFile(projectRoot)
+  const preloadBuildFileExists = await isFile(preloadBuildFile)
 
   const window = new BrowserWindow({
     ...options,
     webPreferences: {
-      preload: (await isFile(config.preloadBuildFile))
-        ? config.preloadBuildFile
-        : undefined,
+      preload: preloadBuildFileExists ? preloadBuildFile : undefined,
       ...options?.webPreferences,
     },
   })
 
-  if (config.compilerMode === "development") {
-    const watcher = await createWatcher(config)
+  if (compilerMode === "development") {
+    const watcher = await createWatcher(projectRoot)
     watcher.on("change", () => window.reload())
   }
 
@@ -40,7 +45,9 @@ export async function createRemixBrowserWindow(
   return window
 }
 
-async function createWatcher(config: RemixElectronConfig) {
+async function createWatcher(projectRoot: string) {
+  // only import chokidar if a watcher is needed,
+  // so we don't pull it in in prod
   const chokidar = await import("chokidar")
-  return chokidar.watch(config.serverBuildPath)
+  return chokidar.watch(getServerBuildFile(projectRoot))
 }

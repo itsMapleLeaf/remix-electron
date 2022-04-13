@@ -1,10 +1,10 @@
 import type { AssetsManifestPromiseRef } from "@remix-run/dev/compiler/plugins/serverAssetsManifestPlugin"
 import * as esbuild from "esbuild"
-import { isFile } from "../helpers/is-file"
+import type { CompilerMode } from "../common/compiler-mode"
+import { maybeCompilerMode } from "../common/compiler-mode"
+import { isFile } from "../common/is-file"
 import { generateAssetsManifest } from "./assets-manifest"
 import { getBrowserBuildOptions } from "./browser-build"
-import type { CompilerMode } from "./compiler-mode"
-import { maybeCompilerMode } from "./compiler-mode"
 import { getRemixElectronConfig } from "./config"
 import {
   getElectronBuildOptions,

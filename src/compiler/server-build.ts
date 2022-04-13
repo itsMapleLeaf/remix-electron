@@ -8,7 +8,7 @@ import { serverBuildVirtualModule } from "@remix-run/dev/compiler/virtualModules
 import type { RemixConfig } from "@remix-run/dev/config.js"
 import type * as esbuild from "esbuild"
 import { join } from "node:path"
-import type { CompilerMode } from "./compiler-mode"
+import type { CompilerMode } from "../common/compiler-mode"
 import { getNodeExternals } from "./externals"
 
 export async function getServerBuildOptions(

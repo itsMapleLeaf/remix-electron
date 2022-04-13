@@ -8,7 +8,7 @@ import * as esbuild from "esbuild"
 import type { Mode } from "node:fs"
 import * as path from "node:path"
 import { join } from "node:path"
-import { nodeBuiltins } from "../helpers/node-builtins"
+import { nodeBuiltins } from "../common/node-builtins"
 
 export function createBrowserBuild(remixConfig: RemixConfig, mode: Mode) {
   return esbuild.build(getBrowserBuildOptions(remixConfig, mode))
