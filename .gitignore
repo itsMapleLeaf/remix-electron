@@ -1,14 +1,18 @@
-# generated files
+# dependencies
 node_modules
+coverage
+
+# build output
 .cache
 build
 dist
-bin
-coverage
-renderer.d.ts
+.turbo
 
 # env
 .env
 
 # editor folders
 .vscode
+
+# logs
+*.log*

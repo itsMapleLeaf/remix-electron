@@ -1,1 +1,0 @@
-import "./runtime/browser-globals"

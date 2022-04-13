@@ -1,0 +1,30 @@
+{
+  "name": "@remix-electron/renderer",
+  "version": "2.0.0-alpha.2",
+  "type": "module",
+  "exports": "./dist/main.cjs",
+  "types": "./dist/main.d.ts",
+  "scripts": {
+    "build": "tsup src/main.ts --clean",
+    "watch": "tsup src/main.ts --watch"
+  },
+  "dependencies": {
+    "@remix-run/react": "^1.3.3",
+    "electron": "^18.0.1"
+  },
+  "devDependencies": {
+    "@remix-electron/common": "workspace:*",
+    "tsup": "^5.12.1"
+  },
+  "sideEffects": [
+    "src/browser-globals.ts"
+  ],
+  "tsup": {
+    "sourcemap": true,
+    "target": "node16",
+    "format": [
+      "cjs"
+    ],
+    "dts": true
+  }
+}

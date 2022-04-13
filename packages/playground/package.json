@@ -1,4 +1,5 @@
 {
+  "name": "playground",
   "main": "build/main.cjs",
   "scripts": {
     "dev": "remix-electron dev",
@@ -11,9 +12,11 @@
     "electron": "^18.0.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "@remix-electron/cli": "file:../../packages/cli",
-    "@remix-electron/main": "file:../../packages/main",
-    "@remix-electron/renderer": "file:../../packages/renderer"
+    "react-router": "^6.2.2",
+    "react-router-dom": "^6.2.2",
+    "@remix-electron/cli": "workspace:*",
+    "@remix-electron/main": "workspace:*",
+    "@remix-electron/renderer": "workspace:*"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.3.3",

@@ -1,9 +1,9 @@
-import { app } from "electron"
 import {
   createRemixBrowserWindow,
   getRouteUrl,
   initRemix,
-} from "remix-electron"
+} from "@remix-electron/main"
+import { app } from "electron"
 
 app.on("ready", async () => {
   await initRemix()
