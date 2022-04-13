@@ -1,12 +1,10 @@
 import chokidar from "chokidar"
 import { on } from "node:events"
 import { copyFile, rm, stat } from "node:fs/promises"
-import { dirname, join } from "node:path"
+import { join } from "node:path"
 import { setTimeout } from "node:timers/promises"
 import { fileURLToPath } from "node:url"
 import * as tsup from "tsup"
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const baseOptions: tsup.Options = {
   target: "node16",
@@ -28,7 +26,10 @@ async function waitForFile(file: string): Promise<void> {
 }
 
 async function build() {
-  await rm(join(__dirname, "../dist"), { recursive: true, force: true })
+  await rm(join(fileURLToPath(import.meta.url), "../../dist"), {
+    recursive: true,
+    force: true,
+  })
 
   await Promise.all([
     tsup.build({
