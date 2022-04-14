@@ -4,6 +4,8 @@
   "type": "module",
   "version": "2.0.0-alpha.2",
   "scripts": {
+    "build": "turbo run build",
+    "watch": "turbo run watch --parallel --no-cache",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
     "lint": "eslint --ext js,ts,tsx .",
