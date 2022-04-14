@@ -130,7 +130,6 @@ importers:
       react-router: ^6.2.2
       react-router-dom: ^6.2.2
     dependencies:
-      '@remix-electron/cli': link:../cli
       '@remix-electron/main': link:../main
       '@remix-electron/renderer': link:../renderer
       '@remix-run/react': 1.3.3_react-dom@18.0.0+react@18.0.0
@@ -141,6 +140,7 @@ importers:
       react-router: 6.2.2_react@18.0.0
       react-router-dom: 6.2.2_react-dom@18.0.0+react@18.0.0
     devDependencies:
+      '@remix-electron/cli': link:../cli
       '@remix-run/dev': 1.3.3_react-dom@18.0.0+react@18.0.0
       '@types/react': 17.0.44
       '@types/react-dom': 17.0.15

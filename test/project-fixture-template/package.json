@@ -11,11 +11,11 @@
     "electron": "^18.0.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "@remix-electron/cli": "file:../../packages/cli",
     "@remix-electron/main": "file:../../packages/main",
     "@remix-electron/renderer": "file:../../packages/renderer"
   },
   "devDependencies": {
+    "@remix-electron/cli": "file:../../packages/cli",
     "@remix-run/dev": "^1.3.3",
     "@types/react": "^17.0.43",
     "@types/react-dom": "^17.0.14"
