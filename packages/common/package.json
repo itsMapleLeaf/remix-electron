@@ -1,7 +1,6 @@
 {
   "name": "@remix-electron/common",
   "private": true,
-  "version": "2.0.0-alpha.2",
   "type": "module",
   "exports": "./dist/main.js",
   "types": "./dist/main.d.ts",
