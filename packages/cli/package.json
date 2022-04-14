@@ -15,8 +15,8 @@
     "shims"
   ],
   "scripts": {
-    "build": "tsup-node src/main.ts --clean",
-    "watch": "tsup-node src/main.ts --watch"
+    "build": "tsup src/main.ts --clean",
+    "watch": "tsup src/main.ts --watch"
   },
   "dependencies": {
     "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
