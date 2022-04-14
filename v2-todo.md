@@ -14,13 +14,21 @@
   - [ ] clean (?) (cleans build folders before dev/build)
 - [ ] mdx support
 - [ ] remix stack w/ tailwind, testing, etc
-- [ ] split into multiple packages?
+- [x] split into multiple packages?
   - motivation: make it easier to enforce the dev/prod dependencies of each export
 
 # bugs
 
 - [ ] config paths need to be absolute, since we can't always rely on cwd being the project root
 - [x] runtime APIs currently rely on compiler APIs (config), which requires @remix-run/dev to be a prod dependency
+- [ ] cli dev needs to be resilient to added/removed electron preload file
+  - this probably means not using esbuild's watch mode, but there is an incremental option
+
+# optimizations
+
+- [ ] find a way to exclude `chokidar` from main package
+  - we can lazy-load it in prod, but tools like electron-build will still include it in the distribution, so it has to not be a dependency
+  - I think we can make the window reload by making the watcher from the CLI, then sending a process signal to the electron app
 
 ## website
 

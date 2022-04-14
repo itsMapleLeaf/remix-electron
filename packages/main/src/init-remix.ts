@@ -5,7 +5,7 @@ import { app, protocol } from "electron"
 import { stat } from "node:fs/promises"
 import { join } from "node:path"
 import { collectAssetFiles, serveAsset } from "./asset-files"
-import { serveLiveData } from "./live-data.main"
+import { serveLiveData } from "./live-data"
 import { serveRemixResponse } from "./serve-remix-response"
 
 export type ConfigureOptions = {

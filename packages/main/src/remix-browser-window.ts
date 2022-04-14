@@ -34,7 +34,10 @@ export async function createRemixBrowserWindow(
   })
 
   if (compilerMode === "development") {
-    const watcher = await createWatcher(projectRoot)
+    // only import chokidar if a watcher is needed,
+    // so we don't pull it in in prod
+    const chokidar = await import("chokidar")
+    const watcher = chokidar.watch(getServerBuildFile(projectRoot))
     watcher.on("change", () => window.reload())
   }
 
@@ -43,11 +46,4 @@ export async function createRemixBrowserWindow(
   }
 
   return window
-}
-
-async function createWatcher(projectRoot: string) {
-  // only import chokidar if a watcher is needed,
-  // so we don't pull it in in prod
-  const chokidar = await import("chokidar")
-  return chokidar.watch(getServerBuildFile(projectRoot))
 }

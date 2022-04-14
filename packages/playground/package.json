@@ -1,5 +1,6 @@
 {
   "name": "playground",
+  "private": true,
   "main": "build/main.cjs",
   "scripts": {
     "dev": "remix-electron dev",
