@@ -41,5 +41,8 @@
       "cjs"
     ],
     "dts": true
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
