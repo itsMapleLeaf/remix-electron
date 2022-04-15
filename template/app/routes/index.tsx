@@ -1,4 +1,4 @@
-import { useLoaderData } from "remix"
+import { useLoaderData } from "@remix-run/react";
 import { app } from "~/electron.server"
 
 export function loader() {

@@ -5,7 +5,6 @@
   "private": true,
   "main": "desktop/main.js",
   "scripts": {
-    "prepare": "remix setup node",
     "clean": "del-cli dist desktop/build public/build",
     "dev": "npm run clean && cross-env NODE_ENV=development npm-run-all --parallel --print-label --race dev:*",
     "dev:remix": "remix watch",
@@ -21,28 +20,26 @@
     ]
   },
   "dependencies": {
-    "@remix-run/node": "^1.3.1",
-    "@remix-run/react": "^1.3.1",
-    "@remix-run/serve": "^1.3.1",
-    "@remix-run/server-runtime": "^1.3.1",
+    "@remix-run/node": "^1.4.0",
+    "@remix-run/react": "^1.4.0",
+    "@remix-run/server-runtime": "^1.4.0",
     "fast-glob": "^3.2.11",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "remix": "^1.3.1",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "remix-electron": "latest"
   },
   "devDependencies": {
-    "@remix-run/dev": "^1.3.1",
-    "@types/react": "^17.0.40",
-    "@types/react-dom": "^17.0.13",
+    "@remix-run/dev": "^1.4.0",
+    "@types/react": "^18.0.5",
+    "@types/react-dom": "^18.0.1",
     "cross-env": "^7.0.3",
     "del-cli": "^4.0.1",
-    "electron": "^17.1.2",
-    "electron-builder": "^22.14.13",
+    "electron": "^18.0.4",
+    "electron-builder": "^23.0.3",
     "electron-devtools-installer": "^3.2.0",
     "nodemon": "^2.0.15",
     "npm-run-all": "^4.1.5",
-    "typescript": "^4.6.2",
+    "typescript": "^4.6.3",
     "wait-on": "^6.0.1"
   },
   "engines": {

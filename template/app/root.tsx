@@ -1,12 +1,5 @@
-import type { LinksFunction, MetaFunction } from "remix"
-import {
-  Links,
-  LiveReload,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-} from "remix"
+import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
 import styles from "./styles.css"
 
 export const meta: MetaFunction = () => ({
