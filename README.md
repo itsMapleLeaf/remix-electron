@@ -64,20 +64,14 @@ Build the app with `npm run build`, then run `npx electron desktop/main.js` to s
 
 Importing `"electron"` directly in route files results in Electron trying to get bundled and called in the browser / renderer process.
 
-To circumvent this, create a `electron.server.js` file, which re-exports from electron. The `.server` suffix tells Remix to only load it in the main process. You should use `.server` for any code that runs in the main process and uses node/electron APIs.
+To circumvent this, create a `electron.server.ts` file, which re-exports from electron. The `.server` suffix tells Remix to only load it in the main process. You should use `.server` for any code that runs in the main process and uses node/electron APIs.
 
 ```js
-// app/electron.server.js
-export * from "electron"
+// app/electron.server.ts
+// @ts-nocheck
+import electron from "electron"
+export = electron
 ```
-
-> **Note for TypeScript users:** The way that the Electron definitions are written doesn't let you do this in a .ts file. Instead, add this `.d.ts` file next to the `.js` file:
->
-> ```ts
-> // app/electron.server.d.ts
-> import * as electron from "electron"
-> export = electron
-> ```
 
 Likewise, for any code running in the renderer process, e.g. using the [clipboard](https://www.electronjs.org/docs/latest/api/clipboard) module, you can use the `.client` suffix. Renderer process modules require `nodeIntegration`.
 
