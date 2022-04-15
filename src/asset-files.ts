@@ -2,7 +2,6 @@ import glob from "fast-glob"
 import mime from "mime"
 import { readFile } from "node:fs/promises"
 import { relative } from "node:path"
-import { asAbsolutePath } from "./as-absolute-path"
 
 export type AssetFile = {
   path: string
@@ -10,8 +9,6 @@ export type AssetFile = {
 }
 
 export async function collectAssetFiles(folder: string): Promise<AssetFile[]> {
-  folder = asAbsolutePath(folder)
-
   const files = await glob("**/*", {
     cwd: folder,
     onlyFiles: true,

@@ -1,12 +1,12 @@
 import type { RequestHandler, ServerBuild } from "@remix-run/server-runtime"
 import { createRequestHandler } from "@remix-run/server-runtime"
 import { app, protocol } from "electron"
+import { stat } from "node:fs/promises"
 import { asAbsolutePath } from "./as-absolute-path"
 import type { AssetFile } from "./asset-files"
 import { collectAssetFiles, serveAsset } from "./asset-files"
 import "./browser-globals"
 import { serveRemixResponse } from "./serve-remix-response"
-import { stat } from "node:fs/promises"
 
 const defaultMode = app.isPackaged ? "production" : process.env.NODE_ENV
 
@@ -41,9 +41,12 @@ export type InitRemixOptions = {
 export async function initRemix({
   serverBuild: serverBuildOption,
   mode = defaultMode,
-  publicFolder = "public",
+  publicFolder: publicFolderOption = "public",
   getLoadContext,
 }: InitRemixOptions) {
+  const appRoot = app.getAppPath()
+  const publicFolder = asAbsolutePath(publicFolderOption, appRoot)
+
   let serverBuild: ServerBuild =
     typeof serverBuildOption === "string"
       ? require(serverBuildOption)
@@ -74,11 +77,11 @@ export async function initRemix({
 
       if (
         mode === "development" &&
-        typeof serverBuildOption === "string" &&
+        buildPath !== undefined &&
         lastBuildTime !== buildTime
       ) {
-        purgeRequireCache(asAbsolutePath(serverBuildOption))
-        serverBuild = require(serverBuildOption)
+        purgeRequireCache(buildPath)
+        serverBuild = require(buildPath)
         lastBuildTime = buildTime
       }
 
