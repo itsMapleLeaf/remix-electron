@@ -11,7 +11,6 @@ test(
       join(templateFolder, "dist"),
       join(templateFolder, "public/build"),
       join(templateFolder, "desktop/build"),
-      join(templateFolder, ".cache"),
     ]
 
     await execa("pnpm", ["run", "build"], {
