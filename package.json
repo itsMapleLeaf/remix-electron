@@ -9,6 +9,7 @@
     "test": "vitest",
     "lint": "eslint --ext js,ts,tsx .",
     "format": "prettier --write .",
+    "prepublishOnly": "pnpm run build && pnpm run test && pnpm run lint",
     "upgrade-deps": "lerna exec --concurrency 1 npm-upgrade -- --development --production"
   },
   "devDependencies": {
