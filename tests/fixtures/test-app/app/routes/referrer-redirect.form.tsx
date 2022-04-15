@@ -1,4 +1,4 @@
-import { useFetcher, useSearchParams } from "@remix-run/react";
+import { useFetcher, useSearchParams } from "@remix-run/react"
 
 export default function RedirectForm() {
   const fetcher = useFetcher()
