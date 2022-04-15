@@ -10,7 +10,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "tsup": "^5.12.1"
+    "tsup": "^5.12.5"
   },
   "tsup": {
     "target": "node16",

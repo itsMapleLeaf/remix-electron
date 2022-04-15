@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
-    "@remix-run/dev": "^1.3",
+    "@remix-run/dev": "^1.4.0",
     "cac": "^6.7.12",
     "esbuild": "^0.14.36",
     "execa": "^6.1.0",
@@ -34,11 +34,11 @@
     "react-dom": ">=17"
   },
   "devDependencies": {
-    "@remix-electron/common": "*",
-    "electron": "^18.0.1",
+    "@remix-electron/common": "workspace:*",
+    "electron": "^18.0.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "tsup": "^5.12.1"
+    "tsup": "^5.12.5"
   },
   "tsup": {
     "sourcemap": true,
