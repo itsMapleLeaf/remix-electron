@@ -1,6 +1,5 @@
 import {
   getPreloadBuildFile,
-  getProjectRoot,
   getServerBuildFile,
   isFile,
   maybeCompilerMode,
@@ -20,7 +19,7 @@ export async function createRemixBrowserWindow(
     maybeCompilerMode(process.env.NODE_ENV) ||
     (app.isPackaged ? "production" : "development")
 
-  const projectRoot = getProjectRoot()
+  const projectRoot = app.getAppPath()
 
   const preloadBuildFile = getPreloadBuildFile(projectRoot)
   const preloadBuildFileExists = await isFile(preloadBuildFile)

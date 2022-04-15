@@ -13,7 +13,7 @@ export type ConfigureOptions = {
 }
 
 export async function initRemix(options: ConfigureOptions = {}) {
-  const projectRoot = process.cwd()
+  const projectRoot = app.getAppPath()
   const serverBuildFile = join(projectRoot, "build/server.cjs")
   const publicFolder = join(projectRoot, "public")
   const mode = process.env.NODE_ENV || "development"

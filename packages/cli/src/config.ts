@@ -1,9 +1,5 @@
 import type { CompilerMode } from "@remix-electron/common"
-import {
-  getPreloadBuildFile,
-  getProjectRoot,
-  getServerBuildFile,
-} from "@remix-electron/common"
+import { getPreloadBuildFile, getServerBuildFile } from "@remix-electron/common"
 import type { RemixConfig } from "@remix-run/dev/config.js"
 import type { RouteManifest } from "@remix-run/dev/config/routes.js"
 import { defineConventionalRoutes } from "@remix-run/dev/config/routesConvention.js"
@@ -21,7 +17,7 @@ export type RemixElectronConfig = RemixConfig & {
 export function getRemixElectronConfig(
   mode: CompilerMode,
 ): RemixElectronConfig {
-  const rootDirectory = getProjectRoot()
+  const rootDirectory = process.cwd()
   const appDirectory = join(rootDirectory, "app")
   const rootRouteFile = join(appDirectory, "root.tsx")
 
