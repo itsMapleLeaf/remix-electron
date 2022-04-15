@@ -41,7 +41,9 @@ beforeEach(async () => {
 
 afterEach(async () => {
   await rm(fixtureFolder, { recursive: true, force: true })
-  await page?.close()
+}, 15_000)
+
+afterEach(async () => {
   await app?.close()
 }, 15_000)
 
