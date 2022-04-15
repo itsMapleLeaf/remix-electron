@@ -86,7 +86,7 @@ export async function initRemix({
       }
 
       const context = await getLoadContext?.(request)
-      const requestHandler = createRequestHandler(serverBuild, {}, mode)
+      const requestHandler = createRequestHandler(serverBuild, mode)
 
       callback(
         await handleRequest(request, assetFiles, requestHandler, context),
