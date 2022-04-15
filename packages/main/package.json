@@ -29,8 +29,8 @@
     "react-dom": ">=17"
   },
   "devDependencies": {
-    "@remix-electron/common": "workspace:*",
-    "@remix-electron/renderer": "workspace:^2.0.0-alpha.4",
+    "@remix-electron/common": "*",
+    "@remix-electron/renderer": "^2.0.0-alpha.4",
     "@remix-run/node": "^1.4.0",
     "@remix-run/server-runtime": "^1.4.0",
     "@types/mime": "^2.0.3",

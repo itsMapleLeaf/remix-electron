@@ -8,8 +8,8 @@
     "start": "electron ."
   },
   "dependencies": {
-    "@remix-electron/main": "workspace:*",
-    "@remix-electron/renderer": "workspace:*",
+    "@remix-electron/main": "*",
+    "@remix-electron/renderer": "*",
     "@remix-run/react": "^1.4.0",
     "@remix-run/server-runtime": "^1.4.0",
     "electron": "^18.0.4",
@@ -19,7 +19,7 @@
     "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
-    "@remix-electron/cli": "workspace:*",
+    "@remix-electron/cli": "*",
     "@remix-run/dev": "^1.4.0",
     "@types/react": "^18.0.5",
     "@types/react-dom": "^18.0.1"
