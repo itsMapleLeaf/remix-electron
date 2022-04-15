@@ -96,11 +96,11 @@ Initializes remix-electron. Returns a promise with a url to load in the browser 
 
 Options:
 
-- `serverBuild`: The path to your server build (e.g. `path.join(__dirname, 'build')`), or the server build itself (e.g. required from `@remix-run/dev/server-build`). Updates on refresh are only supported when passing a path.
+- `serverBuild`: The path to your server build (e.g. `path.join(__dirname, 'build')`), or the server build itself (e.g. required from `@remix-run/dev/server-build`). Updates on refresh are only supported when passing a path string.
 
 - `mode`: The mode the app is running in. Can be `"development"` or `"production"`. Defaults to `"production"` when packaged, otherwise uses `process.env.NODE_ENV`.
 
-- `publicFolder`: The folder where static assets are served from, including your browser build. Defaults to `"public"`.
+- `publicFolder`: The folder where static assets are served from, including your browser build. Defaults to `"public"`. Non-relative paths are resolved relative to `app.getAppPath()`.
 
 - `getLoadContext`: Use this to inject some value into all of your remix loaders, e.g. an API client. The loaders receive it as `context`
 
