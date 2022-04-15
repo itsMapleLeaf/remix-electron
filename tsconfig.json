@@ -8,7 +8,6 @@
     "**/dist/**",
     "**/build/**",
     "**/coverage/**",
-    "**/.cache/**",
-    "test/project-fixture-template"
+    "**/.cache/**"
   ]
 }

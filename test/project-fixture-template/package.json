@@ -6,13 +6,12 @@
     "start": "electron ."
   },
   "dependencies": {
+    "@remix-electron/main": "file:../../packages/main",
     "@remix-run/react": "^1.3.3",
     "@remix-run/server-runtime": "^1.3.3",
     "electron": "^18.0.1",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "@remix-electron/main": "file:../../packages/main",
-    "@remix-electron/renderer": "file:../../packages/renderer"
+    "react-dom": "^18.0.0"
   },
   "devDependencies": {
     "@remix-electron/cli": "file:../../packages/cli",
