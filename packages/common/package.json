@@ -8,8 +8,8 @@
     "build": "tsup src/main.ts --clean",
     "watch": "tsup src/main.ts --watch"
   },
-  "dependencies": {},
   "devDependencies": {
+    "@types/node": "^18.11.6",
     "tsup": "^5.12.5"
   },
   "tsup": {
