@@ -4,6 +4,9 @@ importers:
 
   .:
     dependencies:
+      '@remix-run/web-stream':
+        specifier: '>=1.0.3'
+        version: 1.0.3
       '@types/mime':
         specifier: ^2.0.3
         version: 2.0.3
@@ -2220,7 +2223,7 @@ packages:
     engines: {node: '>=6.0.0'}
     dependencies:
       '@jridgewell/set-array': 1.1.2
-      '@jridgewell/sourcemap-codec': 1.4.11
+      '@jridgewell/sourcemap-codec': 1.4.14
       '@jridgewell/trace-mapping': 0.3.18
     dev: true
 
@@ -2590,6 +2593,12 @@ packages:
       react-router-dom: 6.3.0(react-dom@18.0.0)(react@18.0.0)
       set-cookie-parser: 2.4.8
       source-map: 0.7.3
+
+  /@remix-run/web-stream@1.0.3:
+    resolution: {integrity: sha512-wlezlJaA5NF6SsNMiwQnnAW6tnPzQ5I8qk0Y0pSohm0eHKa2FQ1QhEKLVVcDDu02TmkfHgnux0igNfeYhDOXiA==}
+    dependencies:
+      web-streams-polyfill: 3.2.1
+    dev: false
 
   /@rollup/pluginutils@4.2.1:
     resolution: {integrity: sha512-iKnFXr7NkdZAIHiIWE+BX5ULi/ucVFYWD6TbAV+rZctiRTY2PL6tsIKhoIOaoskiWAkgu+VsbXgUVDNLHf+InQ==}

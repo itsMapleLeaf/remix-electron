@@ -45,7 +45,6 @@ export async function serveRemixResponse(
     }
   }
 
-
   return {
     data: createPassThroughStream(Buffer.from(await response.arrayBuffer())),
     headers,
