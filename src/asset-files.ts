@@ -2,6 +2,7 @@ import glob from "fast-glob"
 import mime from "mime"
 import { readFile } from "node:fs/promises"
 import { relative } from "node:path"
+import { Readable } from "node:stream"
 
 export type AssetFile = {
   path: string
@@ -31,7 +32,7 @@ export async function serveAsset(
   if (!file) return
 
   return {
-    data: await file.content(),
+    data: Readable.from(await file.content()),
     mimeType: mime.getType(file.path) ?? undefined,
   }
 }

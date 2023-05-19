@@ -63,7 +63,7 @@ export async function initRemix({
       ? require.resolve(serverBuildOption)
       : undefined
 
-  protocol.interceptBufferProtocol("http", async (request, callback) => {
+  protocol.interceptStreamProtocol("http", async (request, callback) => {
     try {
       if (mode === "development") {
         assetFiles = await collectAssetFiles(publicFolder)
