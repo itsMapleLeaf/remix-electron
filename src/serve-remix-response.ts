@@ -3,10 +3,11 @@ import { Readable, PassThrough } from "node:stream"
 import "./browser-globals"
 
 function createPassThroughStream(text: any) {
-  const pt = new PassThrough();
-  pt.push(text);
-  pt.push(null);
-  return pt;
+  const pt = new PassThrough()
+  pt.push(text)
+  /* prettier-ignore */
+  pt.push(null)
+  return pt
 }
 
 export async function serveRemixResponse(
@@ -40,8 +41,8 @@ export async function serveRemixResponse(
       // @ts-expect-error
       data: Readable.from(response.body),
       headers,
-      statusCode: response.status
-    };
+      statusCode: response.status,
+    }
   }
 
 
