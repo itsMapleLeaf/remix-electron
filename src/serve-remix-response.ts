@@ -4,10 +4,10 @@ import { Readable, PassThrough } from "node:stream"
 import "./browser-globals"
 
 function createPassThroughStream(text: any) {
-  const pt = new PassThrough()
-  pt.push(text)
-  pt.push(null) // eslint-disable-line
-  return pt
+  const readable = new PassThrough()
+  readable.push(text)
+  readable.push(null) // eslint-disable-line unicorn/no-null, unicorn/no-array-push-push
+  return readable
 }
 
 export async function serveRemixResponse(
