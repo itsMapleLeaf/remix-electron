@@ -1,12 +1,12 @@
 import type { RequestHandler } from "@remix-run/server-runtime"
+import { ReadableStream } from "@remix-run/web-stream"
 import { Readable, PassThrough } from "node:stream"
 import "./browser-globals"
 
 function createPassThroughStream(text: any) {
   const pt = new PassThrough()
   pt.push(text)
-  /* prettier-ignore */
-  pt.push(null)
+  pt.push(null) // eslint-disable-line
   return pt
 }
 
