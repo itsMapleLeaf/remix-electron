@@ -10,14 +10,17 @@ test("collectAssetFiles", async () => {
       {
         "content": [Function],
         "path": "/a.txt",
+        "stream": [Function],
       },
       {
         "content": [Function],
         "path": "/b.txt",
+        "stream": [Function],
       },
       {
         "content": [Function],
         "path": "/c/nested.txt",
+        "stream": [Function],
       },
     ]
   `)
