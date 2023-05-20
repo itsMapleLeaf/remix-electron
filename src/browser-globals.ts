@@ -15,3 +15,8 @@ Object.assign(globalThis, {
   FormData,
   AbortController,
 })
+
+if (typeof globalThis.ReadableStream === "undefined") {
+  const { ReadableStream } = require("@remix-run/web-stream")
+  globalThis.ReadableStream = ReadableStream
+}
