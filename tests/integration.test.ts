@@ -11,7 +11,7 @@ let electronApp: ElectronApplication
 let window: Page
 
 beforeAll(async () => {
-  await execa("pnpx", ["remix", "build"], {
+  await execa("pnpm", ["remix", "build"], {
     cwd: appFolder,
   })
 
