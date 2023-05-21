@@ -8,19 +8,32 @@ import { templateFolder } from "./paths"
 let electronApp: ElectronApplication
 let window: Page
 
+const getExecutablePath = () => {
+  if (process.platform === "win32") {
+    return join(templateFolder, "dist/win-unpacked/remix-electron-template.exe")
+  }
+  if (process.platform === "darwin") {
+    return join(
+      templateFolder,
+      "dist/mac/remix-electron-template.app/Contents/MacOS/remix-electron-template",
+    )
+  }
+  return join(templateFolder, "dist/linux-unpacked/remix-electron-template")
+}
+
 beforeAll(async () => {
+  console.info("Building template")
   await execa("pnpm", ["run", "build", "--", "--dir"], {
     cwd: templateFolder,
   })
 
+  console.info("Launching electron")
   electronApp = await electron.launch({
-    // TODO: figure out what the executablePath is for other platforms
-    executablePath: join(
-      templateFolder,
-      "dist/linux-unpacked/remix-electron-template",
-    ),
+    executablePath: getExecutablePath(),
+    env: { ...(process.env as { [key: string]: string }) },
   })
 
+  console.info("Waiting for window")
   window = await electronApp.firstWindow()
 }, 1000 * 60)
 
