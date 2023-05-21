@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { execa } from "execa"
 import { join } from "node:path"
 import type { ElectronApplication, Page } from "playwright"
@@ -22,20 +23,23 @@ const getExecutablePath = () => {
 }
 
 beforeAll(async () => {
-  console.info("Building template")
+  console.time("Building template")
   await execa("pnpm", ["run", "build", "--", "--dir"], {
     cwd: templateFolder,
   })
+  console.timeEnd("Building template")
 
-  console.info("Launching electron")
+  console.time("Launching electron")
   electronApp = await electron.launch({
     executablePath: getExecutablePath(),
     env: { ...(process.env as { [key: string]: string }) },
   })
+  console.timeEnd("Launching electron")
 
-  console.info("Waiting for window")
+  console.time("Waiting for window")
   window = await electronApp.firstWindow()
-}, 1000 * 60)
+  console.timeEnd("Waiting for window")
+}, 1000 * 90)
 
 afterAll(async () => {
   await electronApp.close()
