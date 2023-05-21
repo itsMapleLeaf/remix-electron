@@ -9,38 +9,49 @@ on:
 
 jobs:
   test:
+    name: Test (${{ matrix.os }})
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
           # https://github.com/actions/setup-node#supported-version-syntax
           node-version: "lts/*"
-      - run: npm install --global pnpm
-      - run: pnpm install
-
+          cache: "pnpm"
+      - name: Install
+        run: pnpm install
       - name: Test
-        uses: GabrielBB/xvfb-action@v1
+        uses: coactions/setup-xvfb@v1
         with:
           run: pnpm test
 
   lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
-      - name: Set git to use LF
-        run: |
-          git config --global core.autocrlf false
-          git config --global core.eol lf
-
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
           # https://github.com/actions/setup-node#supported-version-syntax
           node-version: "lts/*"
-      - run: npm install --global pnpm
-      - run: pnpm install
-      - run: pnpm run lint
+          cache: "pnpm"
+      - name: Install
+        run: pnpm install
+      - name: Lint
+        run: pnpm run lint
