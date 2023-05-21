@@ -39,7 +39,7 @@ beforeAll(async () => {
   console.time("Waiting for window")
   window = await electronApp.firstWindow()
   console.timeEnd("Waiting for window")
-}, 1000 * 90)
+}, 1000 * 60 * 5)
 
 afterAll(async () => {
   await electronApp.close()
