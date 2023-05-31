@@ -27,7 +27,9 @@ app.on("ready", async () => {
       await installExtension(REACT_DEVELOPER_TOOLS)
     }
 
-    const url = await initRemix({ serverBuild: join(__dirname, "build") })
+    const url = await initRemix({
+      serverBuild: join(__dirname, "../build/index.js"),
+    })
     await createWindow(url)
   } catch (error) {
     dialog.showErrorBox("Error", getErrorStack(error))
