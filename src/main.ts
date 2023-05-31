@@ -1,4 +1,8 @@
-import type { RequestHandler, ServerBuild } from "@remix-run/server-runtime"
+import type {
+  AppLoadContext,
+  RequestHandler,
+  ServerBuild,
+} from "@remix-run/server-runtime"
 import { createRequestHandler } from "@remix-run/server-runtime"
 import { app, protocol } from "electron"
 import { stat } from "node:fs/promises"
@@ -12,7 +16,7 @@ const defaultMode = app.isPackaged ? "production" : process.env.NODE_ENV
 
 export type GetLoadContextFunction = (
   request: Electron.ProtocolRequest,
-) => unknown
+) => AppLoadContext | undefined | Promise<AppLoadContext | undefined>
 
 export type InitRemixOptions = {
   /**
@@ -113,7 +117,7 @@ async function handleRequest(
   request: Electron.ProtocolRequest,
   assetFiles: AssetFile[],
   requestHandler: RequestHandler,
-  context: unknown,
+  context: AppLoadContext | undefined,
 ): Promise<Electron.ProtocolResponse> {
   return (
     serveAsset(request, assetFiles) ??
