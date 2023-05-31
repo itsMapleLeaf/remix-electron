@@ -1,4 +1,4 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/node"
+import type { LinksFunction, V2_MetaFunction } from "@remix-run/node"
 import {
   Links,
   LiveReload,
@@ -9,9 +9,7 @@ import {
 } from "@remix-run/react"
 import styles from "./styles.css"
 
-export const meta: MetaFunction = () => ({
-  title: "New Remix App",
-})
+export const meta: V2_MetaFunction = () => [{ title: "New Remix App" }]
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }]
 
