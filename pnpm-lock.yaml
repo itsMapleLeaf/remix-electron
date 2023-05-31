@@ -137,6 +137,9 @@ importers:
       fast-glob:
         specifier: ^3.2.12
         version: 3.2.12
+      isbot:
+        specifier: latest
+        version: 3.6.10
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -6702,6 +6705,11 @@ packages:
     resolution: {integrity: sha512-iHrqe5shvBUcFbmZq9zOQHBoeOhZJu6RQGrDpBgenUm/Am+F3JM2MgQj+rK3Z601fzrL5gLZWtAPH2OBaSVcyw==}
     engines: {node: '>= 8.0.0'}
     dev: true
+
+  /isbot@3.6.10:
+    resolution: {integrity: sha512-+I+2998oyP4oW9+OTQD8TS1r9P6wv10yejukj+Ksj3+UR5pUhsZN3f8W7ysq0p1qxpOVNbl5mCuv0bCaF8y5iQ==}
+    engines: {node: '>=12'}
+    dev: false
 
   /isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
