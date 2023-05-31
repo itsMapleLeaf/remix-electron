@@ -7,6 +7,7 @@ module.exports = {
   publicPath: "/build/",
   serverBuildPath: "desktop/build/index.js",
   devServerPort: 8002,
+  serverModuleFormat: "cjs",
   future: {
     v2_errorBoundary: true,
     v2_meta: true,
