@@ -1,11 +1,11 @@
-import {
+const {
   AbortController,
   fetch,
   FormData,
   Headers,
   Request,
   Response,
-} from "@remix-run/node"
+} = require("@remix-run/node")
 
 Object.assign(globalThis, {
   Request,
@@ -17,8 +17,6 @@ Object.assign(globalThis, {
 })
 
 if (globalThis.ReadableStream === undefined) {
-  const { ReadableStream } =
-    // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-    require("@remix-run/web-stream") as typeof import("@remix-run/web-stream")
+  const { ReadableStream } = require("@remix-run/web-stream")
   globalThis.ReadableStream = ReadableStream
 }

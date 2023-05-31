@@ -1,20 +1,28 @@
-import type { AppLoadContext, RequestHandler } from "@remix-run/server-runtime"
-import { ReadableStream } from "@remix-run/web-stream"
-import { PassThrough, Readable } from "node:stream"
-import "./browser-globals"
+const { ReadableStream } = require("@remix-run/web-stream")
+const { PassThrough, Readable } = require("node:stream")
+require("./browser-globals.cjs")
 
-function createPassThroughStream(text: string | Buffer) {
+/**
+ * @param {string | Buffer} text
+ */
+function createPassThroughStream(text) {
   const readable = new PassThrough()
   readable.push(text)
   readable.push(null) // eslint-disable-line unicorn/no-null, unicorn/no-array-push-push
   return readable
 }
 
-export async function serveRemixResponse(
-  request: Electron.ProtocolRequest,
-  handleRequest: RequestHandler,
-  context: AppLoadContext | undefined,
-): Promise<Electron.ProtocolResponse> {
+/**
+ * @param {Electron.ProtocolRequest} request
+ * @param {import("@remix-run/node").RequestHandler} handleRequest
+ * @param {import("@remix-run/node").AppLoadContext | undefined} context
+ * @returns {Promise<Electron.ProtocolResponse>}
+ */
+exports.serveRemixResponse = async function serveRemixResponse(
+  request,
+  handleRequest,
+  context,
+) {
   const body = request.uploadData
     ? Buffer.concat(request.uploadData.map((data) => data.bytes))
     : undefined
@@ -30,7 +38,8 @@ export async function serveRemixResponse(
 
   const response = await handleRequest(remixRequest, context)
 
-  const headers: Record<string, string[]> = {}
+  /** @type {Record<string, string[]>} */
+  const headers = {}
   for (const [key, value] of response.headers) {
     const values = (headers[key] ??= [])
     values.push(value)
@@ -38,9 +47,8 @@ export async function serveRemixResponse(
 
   if (response.body instanceof ReadableStream) {
     return {
-      data: Readable.from(
-        response.body as unknown as AsyncIterable<Uint8Array>,
-      ),
+      // @ts-expect-error: Argument of type 'ReadableStream<Uint8Array>' is not assignable to parameter of type 'Iterable<any> | AsyncIterable<any>'.
+      data: Readable.from(response.body),
       headers,
       statusCode: response.status,
     }

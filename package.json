@@ -5,22 +5,18 @@
   "description": "Electron integration for Remix",
   "license": "MIT",
   "repository": "https://github.com/itsMapleLeaf/remix-electron",
-  "types": "./dist/main.d.ts",
-  "main": "./dist/main.js",
+  "types": "./src/main.d.ts",
+  "main": "./src/main.cjs",
   "files": [
-    "dist",
     "src"
   ],
   "scripts": {
-    "build": "tsup-node src/main.ts --target node16 --format cjs --dts --sourcemap",
-    "build-watch": "pnpm build --watch",
     "lint": "eslint --ext js,ts,tsx .",
     "lint-fix": "pnpm lint --fix",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
-    "test": "pnpm build && vitest --no-watch",
-    "test-dev": "run-p --print-label --race vitest-ui build-watch",
-    "vitest-ui": "vitest --ui",
+    "test": "vitest --no-watch",
+    "test-ui": "vitest --ui",
     "release": "pnpm test && release-it"
   },
   "dependencies": {

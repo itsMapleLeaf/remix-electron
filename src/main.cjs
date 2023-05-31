@@ -1,60 +1,44 @@
-import type {
-  AppLoadContext,
-  RequestHandler,
-  ServerBuild,
-} from "@remix-run/server-runtime"
-import { createRequestHandler } from "@remix-run/server-runtime"
-import { app, protocol } from "electron"
-import { stat } from "node:fs/promises"
-import { asAbsolutePath } from "./as-absolute-path"
-import type { AssetFile } from "./asset-files"
-import { collectAssetFiles, serveAsset } from "./asset-files"
-import "./browser-globals"
-import { serveRemixResponse } from "./serve-remix-response"
+require("./browser-globals.cjs")
+const { createRequestHandler } = require("@remix-run/server-runtime")
+const { app, protocol } = require("electron")
+const { stat } = require("node:fs/promises")
+const { asAbsolutePath } = require("./as-absolute-path.cjs")
+const { collectAssetFiles, serveAsset } = require("./asset-files.cjs")
+const { serveRemixResponse } = require("./serve-remix-response.cjs")
 
 const defaultMode = app.isPackaged ? "production" : process.env.NODE_ENV
 
-export type GetLoadContextFunction = (
-  request: Electron.ProtocolRequest,
-) => AppLoadContext | undefined | Promise<AppLoadContext | undefined>
+/**
+ * @typedef {import("@remix-run/node").AppLoadContext} AppLoadContext
+ */
 
-export type InitRemixOptions = {
-  /**
-   * The path to the server build, or the server build itself.
-   */
-  serverBuild: ServerBuild | string
+/**
+ * @typedef {(request: Electron.ProtocolRequest) => AppLoadContext | undefined | Promise<AppLoadContext | undefined>} GetLoadContextFunction
+ */
 
-  /**
-   * The mode to run the app in, either development or production
-   * @default app.isPackaged ? "production" : process.env.NODE_ENV
-   */
-  mode?: string
+/**
+ * @typedef {object} InitRemixOptions
+ * @property {import('@remix-run/node').ServerBuild | string} serverBuild The path to the server build, or the server build itself.
+ * @property {string} [mode] The mode to run the app in, either development or production
+ * @property {string} [publicFolder] The path where static assets are served from.
+ * @property {GetLoadContextFunction} [getLoadContext] A function to provide a `context` object to your loaders.
+ */
 
-  /**
-   * The path where static assets are served from.
-   * @default "public"
-   */
-  publicFolder?: string
-
-  /**
-   * A function to provide a `context` object to your loaders.
-   */
-  getLoadContext?: GetLoadContextFunction
-}
-
-export async function initRemix({
+/**
+ * @param {InitRemixOptions} options
+ */
+exports.initRemix = async function initRemix({
   serverBuild: serverBuildOption,
   mode = defaultMode,
   publicFolder: publicFolderOption = "public",
   getLoadContext,
-}: InitRemixOptions) {
+}) {
   const appRoot = app.getAppPath()
   const publicFolder = asAbsolutePath(publicFolderOption, appRoot)
 
   let serverBuild =
     typeof serverBuildOption === "string"
-      ? // eslint-disable-next-line @typescript-eslint/no-var-requires
-        (require(serverBuildOption) as ServerBuild)
+      ? require(serverBuildOption)
       : serverBuildOption
 
   let [assetFiles] = await Promise.all([
@@ -87,8 +71,7 @@ export async function initRemix({
         lastBuildTime !== buildTime
       ) {
         purgeRequireCache(buildPath)
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        serverBuild = require(buildPath) as ServerBuild
+        serverBuild = require(buildPath)
         lastBuildTime = buildTime
       }
 
@@ -113,19 +96,22 @@ export async function initRemix({
   return `http://localhost/`
 }
 
-async function handleRequest(
-  request: Electron.ProtocolRequest,
-  assetFiles: AssetFile[],
-  requestHandler: RequestHandler,
-  context: AppLoadContext | undefined,
-): Promise<Electron.ProtocolResponse> {
+/**
+ * @param {Electron.ProtocolRequest} request
+ * @param {import("./asset-files.cjs").AssetFile[]} assetFiles
+ * @param {import('@remix-run/node').RequestHandler} requestHandler
+ * @param {AppLoadContext | undefined} context
+ * @returns {Promise<Electron.ProtocolResponse>}
+ */
+async function handleRequest(request, assetFiles, requestHandler, context) {
   return (
     serveAsset(request, assetFiles) ??
     (await serveRemixResponse(request, requestHandler, context))
   )
 }
 
-function purgeRequireCache(prefix: string) {
+/** @param {string} prefix */
+function purgeRequireCache(prefix) {
   for (const key in require.cache) {
     if (key.startsWith(prefix)) {
       delete require.cache[key]
@@ -133,6 +119,7 @@ function purgeRequireCache(prefix: string) {
   }
 }
 
-function toError(value: unknown) {
+/** @param {unknown} value */
+function toError(value) {
   return value instanceof Error ? value : new Error(String(value))
 }

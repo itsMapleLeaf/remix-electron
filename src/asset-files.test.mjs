@@ -1,6 +1,6 @@
 import { join } from "node:path"
 import { expect, test } from "vitest"
-import { collectAssetFiles } from "./asset-files"
+import { collectAssetFiles } from "./asset-files.cjs"
 
 test("collectAssetFiles", async () => {
   expect(

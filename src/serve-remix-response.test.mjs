@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest"
-import "./browser-globals"
-import { serveRemixResponse } from "./serve-remix-response"
+import "./browser-globals.cjs"
+import { serveRemixResponse } from "./serve-remix-response.cjs"
 
 describe("serveRemixResponse", () => {
   it("sets referer", async () => {
-    const handler = (request: Request) => {
+    /** @param {Request} request */
+    const handler = (request) => {
       expect(request.headers.get("Referer")).toEqual("http://localhost/def")
 
       // node-fetch 2 doesn't seem to support this property at all,
@@ -14,7 +15,8 @@ describe("serveRemixResponse", () => {
       return Promise.resolve(new Response())
     }
 
-    const mockRequest: Electron.ProtocolRequest = {
+    /** @type {Electron.ProtocolRequest} */
+    const mockRequest = {
       method: "POST",
       url: "http://localhost/abc",
       headers: {},
