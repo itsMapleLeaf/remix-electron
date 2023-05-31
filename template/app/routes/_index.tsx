@@ -1,9 +1,9 @@
 import { useLoaderData } from "@remix-run/react"
-import { app } from "~/electron.server"
+import { getAppDataPath } from "~/electron.server"
 
 export function loader() {
   return {
-    userDataPath: app.getPath("userData"),
+    userDataPath: getAppDataPath(),
   }
 }
 
@@ -11,7 +11,7 @@ export default function Index() {
   const data = useLoaderData<typeof loader>()
   return (
     <main>
-      <h1>Welcome to Remix</h1>
+      <h1>Welcome to Remix :D</h1>
       <p>{data.userDataPath}</p>
     </main>
   )

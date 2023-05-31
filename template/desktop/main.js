@@ -28,6 +28,7 @@ app.on("ready", async () => {
     }
 
     const url = await initRemix({ serverBuild: join(__dirname, "build") })
+    console.log({ url })
     await createWindow(url)
   } catch (error) {
     dialog.showErrorBox("Error", getErrorStack(error))

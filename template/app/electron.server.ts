@@ -1,3 +1,7 @@
-// @ts-nocheck
 import electron from "electron"
-export = electron
+
+console.log(electron)
+
+export function getAppDataPath() {
+  return electron.app.getPath("appData")
+}

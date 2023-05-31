@@ -5,7 +5,6 @@ import type {
 } from "@remix-run/server-runtime"
 import { createRequestHandler } from "@remix-run/server-runtime"
 import { app, protocol } from "electron"
-import { stat } from "node:fs/promises"
 import { asAbsolutePath } from "./as-absolute-path"
 import type { AssetFile } from "./asset-files"
 import { collectAssetFiles, serveAsset } from "./asset-files"
@@ -48,50 +47,27 @@ export async function initRemix({
   publicFolder: publicFolderOption = "public",
   getLoadContext,
 }: InitRemixOptions) {
+  if (mode === "development") {
+    return `http://localhost:3000/`
+  }
+
   const appRoot = app.getAppPath()
   const publicFolder = asAbsolutePath(publicFolderOption, appRoot)
 
-  let serverBuild =
+  const serverBuild =
     typeof serverBuildOption === "string"
       ? // eslint-disable-next-line @typescript-eslint/no-var-requires
         (require(serverBuildOption) as ServerBuild)
       : serverBuildOption
 
-  let [assetFiles] = await Promise.all([
+  const [assetFiles] = await Promise.all([
     collectAssetFiles(publicFolder),
     app.whenReady(),
   ])
 
-  let lastBuildTime = 0
-  const buildPath =
-    typeof serverBuildOption === "string"
-      ? require.resolve(serverBuildOption)
-      : undefined
-
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   protocol.interceptStreamProtocol("http", async (request, callback) => {
     try {
-      if (mode === "development") {
-        assetFiles = await collectAssetFiles(publicFolder)
-      }
-
-      let buildTime = 0
-      if (mode === "development" && buildPath !== undefined) {
-        const buildStat = await stat(buildPath)
-        buildTime = buildStat.mtimeMs
-      }
-
-      if (
-        mode === "development" &&
-        buildPath !== undefined &&
-        lastBuildTime !== buildTime
-      ) {
-        purgeRequireCache(buildPath)
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        serverBuild = require(buildPath) as ServerBuild
-        lastBuildTime = buildTime
-      }
-
       const context = await getLoadContext?.(request)
       const requestHandler = createRequestHandler(serverBuild, mode)
 
@@ -108,8 +84,6 @@ export async function initRemix({
     }
   })
 
-  // the remix web socket reads the websocket host from the browser url,
-  // so this _has_ to be localhost
   return `http://localhost/`
 }
 
@@ -123,14 +97,6 @@ async function handleRequest(
     serveAsset(request, assetFiles) ??
     (await serveRemixResponse(request, requestHandler, context))
   )
-}
-
-function purgeRequireCache(prefix: string) {
-  for (const key in require.cache) {
-    if (key.startsWith(prefix)) {
-      delete require.cache[key]
-    }
-  }
 }
 
 function toError(value: unknown) {
