@@ -6,9 +6,7 @@
   "main": "desktop/main.js",
   "scripts": {
     "clean": "del-cli dist desktop/build public/build",
-    "dev": "npm run clean && cross-env NODE_ENV=development npm-run-all --parallel --print-label --race dev:*",
-    "dev:remix": "remix watch",
-    "dev:nodemon": "wait-on file:desktop/main.js && nodemon .",
+    "dev": "remix dev --command \"electron .\"",
     "build": "npm run clean && remix build && electron-builder",
     "start": "cross-env NODE_ENV=production electron ."
   },
@@ -38,8 +36,6 @@
     "electron": "^25.0.0",
     "electron-builder": "^23.6.0",
     "electron-devtools-installer": "^3.2.0",
-    "nodemon": "^2.0.22",
-    "npm-run-all": "^4.1.5",
     "typescript": "^5.0.4",
     "wait-on": "^7.0.1"
   },

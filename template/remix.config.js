@@ -7,4 +7,7 @@ module.exports = {
   publicPath: "/build/",
   serverBuildPath: "desktop/build/index.js",
   devServerPort: 8002,
+  future: {
+    unstable_dev: true,
+  },
 }
