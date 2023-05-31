@@ -43,8 +43,5 @@
     "typescript": "^5.0.4",
     "wait-on": "^7.0.1"
   },
-  "engines": {
-    "node": ">=14"
-  },
   "sideEffects": false
 }
