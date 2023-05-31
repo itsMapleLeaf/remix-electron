@@ -16,7 +16,9 @@ Object.assign(globalThis, {
   AbortController,
 })
 
-if (typeof globalThis.ReadableStream === "undefined") {
-  const { ReadableStream } = require("@remix-run/web-stream")
+if (globalThis.ReadableStream === undefined) {
+  const { ReadableStream } =
+    // eslint-disable-next-line @typescript-eslint/consistent-type-imports
+    require("@remix-run/web-stream") as typeof import("@remix-run/web-stream")
   globalThis.ReadableStream = ReadableStream
 }

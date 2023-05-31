@@ -13,9 +13,9 @@
   ],
   "scripts": {
     "build": "tsup-node src/main.ts --target node16 --format cjs --dts --sourcemap",
-    "build-watch": "pnpm build -- --watch",
+    "build-watch": "pnpm build --watch",
     "lint": "eslint --ext js,ts,tsx .",
-    "lint-fix": "pnpm lint -- --fix",
+    "lint-fix": "pnpm lint --fix",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "test": "pnpm build && vitest --no-watch",
@@ -71,35 +71,6 @@
     "typescript": "^5.0.4",
     "vite": "^4.3.9",
     "vitest": "^0.31.2"
-  },
-  "eslintConfig": {
-    "extends": [
-      "./node_modules/@itsmapleleaf/configs/eslint"
-    ],
-    "plugins": [
-      "prettier"
-    ],
-    "ignorePatterns": [
-      "**/node_modules/**",
-      "**/dist/**",
-      "**/build/**",
-      "**/.cache/**",
-      "**/.vscode/**",
-      "**/integration/fixtures/**"
-    ],
-    "rules": {
-      "prettier/prettier": "error",
-      "import/no-unused-modules": "off",
-      "unicorn/prefer-module": "off",
-      "unicorn/prevent-abbreviations": "off",
-      "unicorn/no-process-exit": "off",
-      "prefer-const": "error"
-    },
-    "settings": {
-      "react": {
-        "version": "detect"
-      }
-    }
   },
   "prettier": "@itsmapleleaf/configs/prettier",
   "release-it": {

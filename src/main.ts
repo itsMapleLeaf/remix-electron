@@ -47,9 +47,10 @@ export async function initRemix({
   const appRoot = app.getAppPath()
   const publicFolder = asAbsolutePath(publicFolderOption, appRoot)
 
-  let serverBuild: ServerBuild =
+  let serverBuild =
     typeof serverBuildOption === "string"
-      ? require(serverBuildOption)
+      ? // eslint-disable-next-line @typescript-eslint/no-var-requires
+        (require(serverBuildOption) as ServerBuild)
       : serverBuildOption
 
   let [assetFiles] = await Promise.all([
@@ -63,6 +64,7 @@ export async function initRemix({
       ? require.resolve(serverBuildOption)
       : undefined
 
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   protocol.interceptStreamProtocol("http", async (request, callback) => {
     try {
       if (mode === "development") {
@@ -81,7 +83,8 @@ export async function initRemix({
         lastBuildTime !== buildTime
       ) {
         purgeRequireCache(buildPath)
-        serverBuild = require(buildPath)
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        serverBuild = require(buildPath) as ServerBuild
         lastBuildTime = buildTime
       }
 
@@ -93,10 +96,10 @@ export async function initRemix({
       )
     } catch (error) {
       console.warn("[remix-electron]", error)
+      const { stack, message } = toError(error)
       callback({
         statusCode: 500,
-        // @ts-expect-error
-        data: `<pre>${error?.stack || error?.message || String(error)}</pre>`,
+        data: `<pre>${stack || message}</pre>`,
       })
     }
   })
@@ -113,7 +116,7 @@ async function handleRequest(
   context: unknown,
 ): Promise<Electron.ProtocolResponse> {
   return (
-    (await serveAsset(request, assetFiles)) ??
+    serveAsset(request, assetFiles) ??
     (await serveRemixResponse(request, requestHandler, context))
   )
 }
@@ -124,4 +127,8 @@ function purgeRequireCache(prefix: string) {
       delete require.cache[key]
     }
   }
+}
+
+function toError(value: unknown) {
+  return value instanceof Error ? value : new Error(String(value))
 }

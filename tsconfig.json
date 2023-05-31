@@ -1,7 +1,7 @@
 {
   "extends": "@itsmapleleaf/configs/tsconfig.base",
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "esnext",
     "noUnusedLocals": true,
     "jsx": "react-jsx",
     "paths": {

@@ -3,7 +3,7 @@ import mime from "mime"
 import { createReadStream } from "node:fs"
 import { readFile } from "node:fs/promises"
 import { relative } from "node:path"
-import { Readable } from "node:stream"
+import { type Readable } from "node:stream"
 
 export type AssetFile = {
   path: string
@@ -19,16 +19,16 @@ export async function collectAssetFiles(folder: string): Promise<AssetFile[]> {
   })
 
   return files.map((file) => ({
-    path: "/" + relative(folder, file).replace(/\\/g, "/"),
+    path: "/" + relative(folder, file).replaceAll("\\", "/"),
     content: () => readFile(file),
     stream: () => createReadStream(file),
   }))
 }
 
-export async function serveAsset(
+export function serveAsset(
   request: Electron.ProtocolRequest,
   files: AssetFile[],
-): Promise<Electron.ProtocolResponse | undefined> {
+): Electron.ProtocolResponse | undefined {
   const url = new URL(request.url)
 
   const file = files.find((file) => file.path === url.pathname)

@@ -8,7 +8,7 @@ export function loader() {
 }
 
 export default function Index() {
-  const data = useLoaderData()
+  const data = useLoaderData<typeof loader>()
   return (
     <main>
       <h1>Welcome to Remix</h1>

@@ -1,5 +1,5 @@
-import { useState } from "react"
 import { useLoaderData } from "@remix-run/react"
+import { useState } from "react"
 import { app } from "~/electron.server"
 
 export function loader() {
@@ -9,7 +9,7 @@ export function loader() {
 }
 
 export default function Index() {
-  const data = useLoaderData()
+  const data = useLoaderData<typeof loader>()
   const [count, setCount] = useState(0)
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
