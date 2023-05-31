@@ -1,5 +1,13 @@
 import type { RequestHandler } from "@remix-run/server-runtime"
+import { Readable, PassThrough } from "node:stream"
 import "./browser-globals"
+
+function createPassThroughStream(text: any) {
+  const readable = new PassThrough()
+  readable.push(text)
+  readable.push(null) // eslint-disable-line unicorn/no-null, unicorn/no-array-push-push
+  return readable
+}
 
 export async function serveRemixResponse(
   request: Electron.ProtocolRequest,
@@ -27,8 +35,17 @@ export async function serveRemixResponse(
     values.push(value)
   }
 
+  if (response.body instanceof ReadableStream) {
+    return {
+      // @ts-expect-error
+      data: Readable.from(response.body),
+      headers,
+      statusCode: response.status,
+    }
+  }
+
   return {
-    data: Buffer.from(await response.arrayBuffer()),
+    data: createPassThroughStream(Buffer.from(await response.arrayBuffer())),
     headers,
     statusCode: response.status,
   }

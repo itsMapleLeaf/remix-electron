@@ -1,11 +1,14 @@
 import glob from "fast-glob"
 import mime from "mime"
+import { createReadStream } from "node:fs"
 import { readFile } from "node:fs/promises"
 import { relative } from "node:path"
+import { Readable } from "node:stream"
 
 export type AssetFile = {
   path: string
   content: () => Promise<string | Buffer>
+  stream: () => Readable
 }
 
 export async function collectAssetFiles(folder: string): Promise<AssetFile[]> {
@@ -18,6 +21,7 @@ export async function collectAssetFiles(folder: string): Promise<AssetFile[]> {
   return files.map((file) => ({
     path: "/" + relative(folder, file).replace(/\\/g, "/"),
     content: () => readFile(file),
+    stream: () => createReadStream(file),
   }))
 }
 
@@ -31,7 +35,7 @@ export async function serveAsset(
   if (!file) return
 
   return {
-    data: await file.content(),
+    data: file.stream(),
     mimeType: mime.getType(file.path) ?? undefined,
   }
 }
