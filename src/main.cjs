@@ -1,7 +1,9 @@
-require("./browser-globals.cjs")
-const { createRequestHandler } = require("@remix-run/server-runtime")
+const {
+  createRequestHandler,
+  broadcastDevReady,
+} = require("@remix-run/server-runtime")
 const { app, protocol } = require("electron")
-const { stat } = require("node:fs/promises")
+const { watch } = require("node:fs/promises")
 const { asAbsolutePath } = require("./as-absolute-path.cjs")
 const { collectAssetFiles, serveAsset } = require("./asset-files.cjs")
 const { serveRemixResponse } = require("./serve-remix-response.cjs")
@@ -26,7 +28,7 @@ const defaultMode = app.isPackaged ? "production" : process.env.NODE_ENV
 
 /**
  * Initialize and configure remix-electron
- * 
+ *
  * @param {InitRemixOptions} options
  * @returns {Promise<string>} The url to use to access the app.
  */
@@ -39,6 +41,11 @@ exports.initRemix = async function initRemix({
   const appRoot = app.getAppPath()
   const publicFolder = asAbsolutePath(publicFolderOption, appRoot)
 
+  const buildPath =
+    typeof serverBuildOption === "string"
+      ? require.resolve(serverBuildOption)
+      : undefined
+
   let serverBuild =
     typeof serverBuildOption === "string"
       ? require(serverBuildOption)
@@ -49,38 +56,11 @@ exports.initRemix = async function initRemix({
     app.whenReady(),
   ])
 
-  let lastBuildTime = 0
-  const buildPath =
-    typeof serverBuildOption === "string"
-      ? require.resolve(serverBuildOption)
-      : undefined
-
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   protocol.interceptStreamProtocol("http", async (request, callback) => {
     try {
-      if (mode === "development") {
-        assetFiles = await collectAssetFiles(publicFolder)
-      }
-
-      let buildTime = 0
-      if (mode === "development" && buildPath !== undefined) {
-        const buildStat = await stat(buildPath)
-        buildTime = buildStat.mtimeMs
-      }
-
-      if (
-        mode === "development" &&
-        buildPath !== undefined &&
-        lastBuildTime !== buildTime
-      ) {
-        purgeRequireCache(buildPath)
-        serverBuild = require(buildPath)
-        lastBuildTime = buildTime
-      }
-
       const context = await getLoadContext?.(request)
       const requestHandler = createRequestHandler(serverBuild, mode)
-
       callback(
         await handleRequest(request, assetFiles, requestHandler, context),
       )
@@ -93,6 +73,21 @@ exports.initRemix = async function initRemix({
       })
     }
   })
+
+  if (mode === "development" && typeof buildPath === "string") {
+    ;(async () => {
+      for await (const _event of watch(buildPath)) {
+        purgeRequireCache(buildPath)
+        serverBuild = require(buildPath)
+        broadcastDevReady(serverBuild)
+      }
+    })()
+    ;(async () => {
+      for await (const _event of watch(publicFolder, { recursive: true })) {
+        assetFiles = await collectAssetFiles(publicFolder)
+      }
+    })()
+  }
 
   // the remix web socket reads the websocket host from the browser url,
   // so this _has_ to be localhost

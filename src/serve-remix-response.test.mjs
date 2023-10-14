@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest"
-import "./browser-globals.cjs"
 import { serveRemixResponse } from "./serve-remix-response.cjs"
 
 describe("serveRemixResponse", () => {

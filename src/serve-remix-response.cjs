@@ -1,6 +1,5 @@
 const { ReadableStream } = require("@remix-run/web-stream")
 const { PassThrough, Readable } = require("node:stream")
-require("./browser-globals.cjs")
 
 /**
  * @param {string | Buffer} text

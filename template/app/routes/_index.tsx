@@ -1,9 +1,9 @@
 import { useLoaderData } from "@remix-run/react"
-import { app } from "~/electron.server"
+import electron from "~/electron.server"
 
 export function loader() {
   return {
-    userDataPath: app.getPath("userData"),
+    userDataPath: electron.app.getPath("userData"),
   }
 }
 
@@ -12,7 +12,7 @@ export default function Index() {
   return (
     <main>
       <h1>Welcome to Remix</h1>
-      <p>{data.userDataPath}</p>
+      <p>User data path: {data.userDataPath}</p>
     </main>
   )
 }
