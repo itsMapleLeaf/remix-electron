@@ -15,6 +15,7 @@ test(
 
     await execa("pnpm", ["run", "build"], {
       cwd: templateFolder,
+      stdio: "inherit",
     })
 
     await Promise.all(
@@ -26,6 +27,7 @@ test(
 
     await execa("pnpm", ["run", "clean"], {
       cwd: templateFolder,
+      stdio: "inherit",
     })
 
     await Promise.all(

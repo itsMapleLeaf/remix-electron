@@ -26,6 +26,7 @@ beforeAll(async () => {
   console.time("Building template")
   await execa("pnpm", ["run", "build", "--", "--dir"], {
     cwd: templateFolder,
+    stdio: "inherit",
   })
   console.timeEnd("Building template")
 
