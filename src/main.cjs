@@ -5,7 +5,7 @@ const {
 const { app, protocol } = require("electron")
 const { watch } = require("node:fs/promises")
 const { asAbsolutePath } = require("./as-absolute-path.cjs")
-const { collectAssetFiles, serveAsset } = require("./asset-files.cjs")
+const { serveAsset } = require("./asset-files.cjs")
 const { serveRemixResponse } = require("./serve-remix-response.cjs")
 
 const defaultMode = app.isPackaged ? "production" : process.env.NODE_ENV
@@ -51,10 +51,7 @@ exports.initRemix = async function initRemix({
       ? require(serverBuildOption)
       : serverBuildOption
 
-  let [assetFiles] = await Promise.all([
-    collectAssetFiles(publicFolder),
-    app.whenReady(),
-  ])
+  await app.whenReady()
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   protocol.interceptStreamProtocol("http", async (request, callback) => {
@@ -62,7 +59,7 @@ exports.initRemix = async function initRemix({
       const context = await getLoadContext?.(request)
       const requestHandler = createRequestHandler(serverBuild, mode)
       callback(
-        await handleRequest(request, assetFiles, requestHandler, context),
+        await handleRequest(request, publicFolder, requestHandler, context),
       )
     } catch (error) {
       console.warn("[remix-electron]", error)
@@ -82,11 +79,6 @@ exports.initRemix = async function initRemix({
         broadcastDevReady(serverBuild)
       }
     })()
-    ;(async () => {
-      for await (const _event of watch(publicFolder, { recursive: true })) {
-        assetFiles = await collectAssetFiles(publicFolder)
-      }
-    })()
   }
 
   // the remix web socket reads the websocket host from the browser url,
@@ -96,14 +88,14 @@ exports.initRemix = async function initRemix({
 
 /**
  * @param {Electron.ProtocolRequest} request
- * @param {import("./asset-files.cjs").AssetFile[]} assetFiles
+ * @param {string} publicFolder
  * @param {import('@remix-run/node').RequestHandler} requestHandler
  * @param {AppLoadContext | undefined} context
  * @returns {Promise<Electron.ProtocolResponse>}
  */
-async function handleRequest(request, assetFiles, requestHandler, context) {
+async function handleRequest(request, publicFolder, requestHandler, context) {
   return (
-    serveAsset(request, assetFiles) ??
+    (await serveAsset(request, publicFolder)) ??
     (await serveRemixResponse(request, requestHandler, context))
   )
 }
