@@ -25,7 +25,10 @@ const defaultMode = app.isPackaged ? "production" : process.env.NODE_ENV
  */
 
 /**
+ * Initialize and configure remix-electron
+ * 
  * @param {InitRemixOptions} options
+ * @returns {Promise<string>} The url to use to access the app.
  */
 exports.initRemix = async function initRemix({
   serverBuild: serverBuildOption,
