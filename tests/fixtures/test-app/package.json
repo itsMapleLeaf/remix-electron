@@ -2,7 +2,7 @@
   "name": "remix-electron-test-app",
   "version": "0.0.0",
   "private": true,
-  "main": "desktop/main.js",
+  "main": "desktop/index.js",
   "scripts": {
     "build": "remix build"
   },

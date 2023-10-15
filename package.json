@@ -5,16 +5,16 @@
   "description": "Electron integration for Remix",
   "license": "MIT",
   "repository": "https://github.com/itsMapleLeaf/remix-electron",
-  "types": "./src/main.d.ts",
-  "main": "./src/main.cjs",
+  "main": "./src/index.cjs",
+  "types": "./src/index.d.ts",
   "files": [
     "src/**/*.cjs",
-    "src/main.d.ts"
+    "src/index.d.ts"
   ],
   "exports": {
     ".": {
-      "types": "./src/main.d.ts",
-      "require": "./src/main.cjs"
+      "types": "./src/index.d.ts",
+      "require": "./src/index.cjs"
     }
   },
   "scripts": {
