@@ -9,24 +9,24 @@ import { templateFolder } from "./paths.mts"
 import { tmpdir } from "node:os"
 import { fileURLToPath } from "node:url"
 
+const packagePath = fileURLToPath(new URL("../", import.meta.url))
+const tempFolder = join(tmpdir(), `remix-electron-template-${Date.now()}`)
+
 let electronApp: ElectronApplication
 let window: Page
 
 const getExecutablePath = () => {
 	if (process.platform === "win32") {
-		return join(templateFolder, "dist/win-unpacked/remix-electron-template.exe")
+		return join(tempFolder, "dist/win-unpacked/remix-electron-template.exe")
 	}
 	if (process.platform === "darwin") {
 		return join(
-			templateFolder,
+			tempFolder,
 			"dist/mac/remix-electron-template.app/Contents/MacOS/remix-electron-template",
 		)
 	}
-	return join(templateFolder, "dist/linux-unpacked/remix-electron-template")
+	return join(tempFolder, "dist/linux-unpacked/remix-electron-template")
 }
-
-const packagePath = fileURLToPath(new URL("../", import.meta.url))
-const tempFolder = join(tmpdir(), `remix-electron-template-${Date.now()}`)
 
 beforeAll(
 	async () => {
