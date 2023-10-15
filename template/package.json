@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "private": true,
   "main": "desktop/main.js",
+  "sideEffects": false,
   "scripts": {
     "dev": "cross-env NODE_ENV=development remix dev --command \"nodemon .\" --manual",
     "build": "remix build && electron-builder",
@@ -41,6 +42,5 @@
     "npm-run-all": "^4.1.5",
     "typescript": "^5.2.2",
     "wait-on": "^7.0.1"
-  },
-  "sideEffects": false
+  }
 }
