@@ -1,3 +1,2 @@
-// @ts-nocheck
 import electron from "electron"
-export = electron
+export default electron

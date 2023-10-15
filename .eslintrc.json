@@ -1,0 +1,23 @@
+{
+	"extends": ["./node_modules/@itsmapleleaf/configs/eslint.config.cjs"],
+	"plugins": ["prettier"],
+	"ignorePatterns": ["**/node_modules/**", "**/dist/**", "**/build/**"],
+	"parserOptions": {
+		"EXPERIMENTAL_useProjectService": true
+	},
+	"rules": {
+		"prettier/prettier": "error",
+		"@typescript-eslint/no-var-requires": "off",
+		"@typescript-eslint/no-misused-promises": [
+			"error",
+			{
+				"checksVoidReturn": false
+			}
+		]
+	},
+	"settings": {
+		"react": {
+			"version": "detect"
+		}
+	}
+}

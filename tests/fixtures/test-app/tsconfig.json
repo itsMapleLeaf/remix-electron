@@ -1,21 +1,9 @@
 {
-  "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ES2019"],
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "jsx": "react-jsx",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "target": "ES2019",
-    "strict": true,
-    "baseUrl": ".",
-    "paths": {
-      "~/*": ["./app/*"]
-    },
-    "noEmit": true,
-    "allowJs": true,
-    "checkJs": true,
-    "skipLibCheck": true
-  },
-  "exclude": ["desktop/build", "public/build", ".cache"]
+	"extends": "../../../tsconfig.base.json",
+	"compilerOptions": {
+		"paths": {
+			"~/*": ["./app/*"]
+		}
+	},
+	"exclude": ["node_modules", "build", "public/build"]
 }

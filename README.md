@@ -14,51 +14,39 @@ npx degit itsMapleLeaf/remix-electron/template my-desktop-app
 
 ### Adding to an existing Remix project
 
-Install remix-electron and peer dependencies:
+Install remix-electron and electron:
 
 ```bash
-npm i remix-electron electron @remix-run/node @remix-run/server-runtime react react-dom
+npm i remix-electron electron
 ```
 
-Add a file at `desktop/main.js` to run the electron app. The `initRemix` function returns a url to load in the browser window.
+Add a file at `desktop/index.js` to run the electron app. The `initRemix` function returns a url to load in the browser window.
 
 ```ts
-// desktop/main.js
+// desktop/index.js
 const { initRemix } = require("remix-electron")
 const { app, BrowserWindow } = require("electron")
 const { join } = require("node:path")
 
+/** @type {BrowserWindow | undefined} */
 let win
 
 app.on("ready", async () => {
-  try {
-    const url = await initRemix({
-      serverBuild: join(__dirname, "build"),
-    })
+	try {
+		const url = await initRemix({
+			serverBuild: join(__dirname, "../build/index.js"),
+		})
 
-    win = new BrowserWindow({ show: false })
-    await win.loadURL(url)
-    win.show()
-  } catch (error) {
-    console.error(error)
-  }
+		win = new BrowserWindow({ show: false })
+		await win.loadURL(url)
+		win.show()
+	} catch (error) {
+		console.error(error)
+	}
 })
 ```
 
-Update `serverBuildPath` in your Remix config:
-
-```js
-// remix.config.js
-/**
- * @type {import('@remix-run/dev/config').AppConfig}
- */
-module.exports = {
-  serverBuildPath: "desktop/build/index.js",
-  // ...
-}
-```
-
-Build the app with `npm run build`, then run `npx electron desktop/main.js` to start the app! 🚀
+Build the app with `npm run build`, then run `npx electron desktop/index.js` to start the app! 🚀
 
 ## Using Electron APIs
 
@@ -66,25 +54,35 @@ Importing `"electron"` directly in route files results in Electron trying to get
 
 To circumvent this, create a `electron.server.ts` file, which re-exports from electron. The `.server` suffix tells Remix to only load it in the main process. You should use `.server` for any code that runs in the main process and uses node/electron APIs.
 
-```js
+```ts
 // app/electron.server.ts
-// @ts-nocheck
 import electron from "electron"
-export = electron
+export default electron
+```
+
+```ts
+// app/routes/_index.tsx
+import electron from "~/electron.server"
+
+export function loader() {
+	return {
+		userDataPath: electron.app.getPath("userData"),
+	}
+}
 ```
 
 Likewise, for any code running in the renderer process, e.g. using the [clipboard](https://www.electronjs.org/docs/latest/api/clipboard) module, you can use the `.client` suffix. Renderer process modules require `nodeIntegration`.
 
-```js
-// desktop/main.ts
+```ts
+// desktop/index.js
 function createWindow() {
-  // ...
-  win = new BrowserWindow({
-    // ...
-    webPreferences: {
-      nodeIntegration: true,
-    },
-  })
+	// ...
+	win = new BrowserWindow({
+		// ...
+		webPreferences: {
+			nodeIntegration: true,
+		},
+	})
 }
 ```
 
@@ -110,16 +108,16 @@ Options:
 **app/context.ts**
 
 ```ts
-import type * as remix from "@remix-run/server-runtime"
+import type * as remix from "@remix-run/node"
 
 // your context type
 export type LoadContext = {
-  secret: string
+	secret: string
 }
 
 // a custom data function args type to use for loaders/actions
 export type DataFunctionArgs = Omit<remix.DataFunctionArgs, "context"> & {
-  context: LoadContext
+	context: LoadContext
 }
 ```
 
@@ -127,12 +125,12 @@ export type DataFunctionArgs = Omit<remix.DataFunctionArgs, "context"> & {
 
 ```ts
 const url = await initRemix({
-  // ...
+	// ...
 
-  /** @type {import("~/context").LoadContext} */
-  getLoadContext: () => ({
-    secret: "123",
-  }),
+	/** @type {import("~/context").LoadContext} */
+	getLoadContext: () => ({
+		secret: "123",
+	}),
 })
 ```
 
@@ -142,7 +140,7 @@ In a route file:
 import type { DataFunctionArgs, LoadContext } from "~/context"
 
 export async function loader({ context }: DataFunctionArgs) {
-  // do something with context
+	// do something with context
 }
 ```
 
