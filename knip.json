@@ -9,7 +9,7 @@
 			"ignoreDependencies": ["basic"]
 		},
 		"template": {
-			"ignoreDependencies": ["isbot"]
+			"ignoreDependencies": ["isbot", "nodemon"]
 		}
 	}
 }
