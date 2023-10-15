@@ -28,18 +28,19 @@
     "release": "pnpm test && release-it"
   },
   "dependencies": {
-    "@remix-run/server-runtime": "*",
+    "@remix-run/web-fetch": "^4.4.1",
     "@types/mime": "^3.0.2",
     "@types/node": "^20.8.6",
     "mime": "^3.0.0"
   },
   "peerDependencies": {
+    "@remix-run/node": ">=2",
     "electron": ">=27"
   },
   "devDependencies": {
     "@itsmapleleaf/configs": "github:itsMapleLeaf/configs",
     "@playwright/test": "^1.39.0",
-    "@remix-run/server-runtime": "^2.0.1",
+    "@remix-run/node": "^2.0.1",
     "@vitest/ui": "^0.34.6",
     "electron": "^27.0.0",
     "eslint": "^8.51.0",
