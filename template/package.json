@@ -12,6 +12,7 @@
   },
   "build": {
     "files": [
+      "build",
       "desktop",
       "public",
       "remix.config.js"
