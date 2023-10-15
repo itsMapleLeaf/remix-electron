@@ -17,5 +17,5 @@
     "checkJs": true,
     "skipLibCheck": true
   },
-  "exclude": ["desktop/build", "public/build", ".cache"]
+  "exclude": ["node_modules", "build", "public/build"]
 }

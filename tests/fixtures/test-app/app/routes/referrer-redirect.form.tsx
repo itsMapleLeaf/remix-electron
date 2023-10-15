@@ -10,7 +10,6 @@ export default function RedirectForm() {
       <fetcher.Form
         action="/referrer-redirect/action"
         method="post"
-        replace
         data-testid="referrer-form"
       >
         <button type="submit" name="redirects" value={redirects ?? 0}>

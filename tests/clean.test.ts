@@ -7,16 +7,15 @@ import { templateFolder } from "./paths"
 test(
   "clean script",
   async () => {
-    const buildFolders = [
-      join(templateFolder, "dist"),
-      join(templateFolder, "public/build"),
-      join(templateFolder, "desktop/build"),
-    ]
-
     await execa("pnpm", ["run", "build"], {
       cwd: templateFolder,
       stdio: "inherit",
     })
+
+    const buildFolders = [
+      join(templateFolder, "dist"),
+      join(templateFolder, "public/build"),
+    ]
 
     await Promise.all(
       buildFolders.map(async (path) => {

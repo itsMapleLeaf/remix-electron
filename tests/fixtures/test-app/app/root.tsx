@@ -9,7 +9,7 @@ import {
 } from "@remix-run/react"
 
 export const meta: MetaFunction = () => {
-  return { title: "New Remix App" }
+  return [{ title: "New Remix App" }]
 }
 
 export default function App() {

@@ -202,9 +202,6 @@ importers:
       '@remix-run/server-runtime':
         specifier: ^2.0.1
         version: 2.0.1(typescript@5.2.2)
-      '@remix-run/web-stream':
-        specifier: ^1.1.0
-        version: 1.1.0
       fast-glob:
         specifier: ^3.3.1
         version: 3.3.1
