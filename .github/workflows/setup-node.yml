@@ -8,7 +8,7 @@ on:
 
 jobs:
   setup-node:
-    runs-on: ${{ github.event.inputs.runs-on }}
+    runs-on: ${{ inputs.runs-on }}
     steps:
       - uses: actions/cache@v3
         with:
