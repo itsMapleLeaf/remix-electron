@@ -71,8 +71,6 @@ beforeAll(
 
 afterAll(async () => {
 	await electronApp.close()
-})
-afterAll(async () => {
 	await rm(tempFolder, { recursive: true, force: true })
 })
 
