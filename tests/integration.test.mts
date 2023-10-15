@@ -1,7 +1,18 @@
 import { expect } from "@playwright/test"
 import { execa } from "execa"
 import { join } from "node:path"
-import type { ElectronApplication, Page } from "playwright"
+import type { ElectronApplication,
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	Page } from "playwright"
 import { _electron as electron } from "playwright"
 import { afterAll, beforeAll, test } from "vitest"
 
