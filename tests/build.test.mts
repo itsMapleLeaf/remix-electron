@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { execa } from "execa"
 import { join } from "node:path"
 import { cp, rm } from "node:fs/promises"
@@ -31,7 +30,6 @@ const getExecutablePath = () => {
 
 beforeAll(
 	async () => {
-		console.info(`Copying template to ${tempFolder}`)
 		await cp(templateFolder, tempFolder, {
 			recursive: true,
 			filter: (source) =>
@@ -42,30 +40,23 @@ beforeAll(
 				!source.includes(".cache"),
 		})
 
-		console.time("Building template")
 		const commands = [
 			["pnpm", "install", packagePath],
 			["pnpm", "run", "build", "--dir"],
 		] as const
 		for (const [command, ...args] of commands) {
-			console.info("Run:", command)
 			await execa(command, args, {
 				cwd: tempFolder,
 				stdio: "inherit",
 			})
 		}
-		console.timeEnd("Building template")
 
-		console.time("Launching electron")
 		electronApp = await electron.launch({
 			executablePath: getExecutablePath(),
 			env: { ...(process.env as Record<string, string>) },
 		})
-		console.timeEnd("Launching electron")
 
-		console.time("Waiting for window")
 		window = await electronApp.firstWindow()
-		console.timeEnd("Waiting for window")
 	},
 	1000 * 60 * 5,
 )
