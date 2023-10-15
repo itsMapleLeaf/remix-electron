@@ -43,13 +43,12 @@ beforeAll(
 
 		console.time("Building template")
 		const commands = [
-			`pnpm install file:${packagePath}`,
-			`pnpm run build --dir`,
-		]
-		for (const command of commands) {
-			const [file = "", ...args] = command.split(" ")
+			["pnpm", "install", `file:${packagePath}`],
+			["pnpm", "run", "build", "--dir"],
+		] as const
+		for (const [command, ...args] of commands) {
 			console.info("Run:", command)
-			await execa(file, args, {
+			await execa(command, args, {
 				cwd: tempFolder,
 				stdio: "inherit",
 			})
