@@ -4,6 +4,7 @@
 		"module": "NodeNext",
 		"moduleResolution": "NodeNext",
 		"verbatimModuleSyntax": false,
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"incremental": true
 	}
 }
