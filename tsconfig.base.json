@@ -1,0 +1,9 @@
+{
+	"extends": "@itsmapleleaf/configs/tsconfig",
+	"compilerOptions": {
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"verbatimModuleSyntax": false,
+		"skipLibCheck": true
+	}
+}

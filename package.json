@@ -8,13 +8,20 @@
   "types": "./src/main.d.ts",
   "main": "./src/main.cjs",
   "files": [
-    "src"
+    "src/**/*.cjs",
+    "src/main.d.ts"
   ],
+  "exports": {
+    ".": {
+      "types": "./src/main.d.ts",
+      "require": "./src/main.cjs"
+    }
+  },
   "scripts": {
-    "lint": "eslint --ext js,ts,tsx .",
-    "lint-fix": "pnpm lint --fix",
-    "format": "prettier --write .",
-    "typecheck": "tsc --noEmit",
+    "lint": "run-s --continue-on-error lint:*",
+    "lint:eslint": "eslint . --fix --cache --cache-file=node_modules/.cache/.eslintcache --report-unused-disable-directives",
+    "lint:format": "prettier . --write --cache",
+    "lint:types": "tsc -b",
     "test": "vitest --no-watch",
     "test-ui": "vitest --ui",
     "release": "pnpm test && release-it"
@@ -37,7 +44,7 @@
     "react-dom": ">=17"
   },
   "devDependencies": {
-    "@itsmapleleaf/configs": "^3.0.1",
+    "@itsmapleleaf/configs": "github:itsMapleLeaf/configs",
     "@playwright/test": "^1.39.0",
     "@remix-run/dev": "^2.0.1",
     "@remix-run/node": "^2.0.1",

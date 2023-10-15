@@ -1,9 +1,11 @@
-const { isAbsolute, join } = require("node:path")
+const path = require("node:path")
 
 /**
  * @param {string} filePath
  * @param {string} workingDirectory
  */
 exports.asAbsolutePath = function asAbsolutePath(filePath, workingDirectory) {
-  return isAbsolute(filePath) ? filePath : join(workingDirectory, filePath)
+	return path.isAbsolute(filePath)
+		? filePath
+		: path.join(workingDirectory, filePath)
 }

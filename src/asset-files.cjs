@@ -8,16 +8,16 @@ const path = require("node:path")
  * @returns {Promise<Electron.ProtocolResponse | undefined>}
  */
 exports.serveAsset = async function serveAsset(request, publicFolder) {
-  const url = new URL(request.url)
+	const url = new URL(request.url)
 
-  const fullFilePath = path.join(publicFolder, url.pathname)
-  if (!fullFilePath.startsWith(publicFolder)) return
+	const fullFilePath = path.join(publicFolder, url.pathname)
+	if (!fullFilePath.startsWith(publicFolder)) return
 
-  const stat = await fs.promises.stat(fullFilePath).catch(() => undefined)
-  if (!stat?.isFile()) return
+	const stat = await fs.promises.stat(fullFilePath).catch(() => undefined)
+	if (!stat?.isFile()) return
 
-  return {
-    data: fs.createReadStream(fullFilePath),
-    mimeType: mime.getType(fullFilePath) ?? undefined,
-  }
+	return {
+		data: fs.createReadStream(fullFilePath),
+		mimeType: mime.getType(fullFilePath) ?? undefined,
+	}
 }

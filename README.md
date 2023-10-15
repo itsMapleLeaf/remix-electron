@@ -31,17 +31,17 @@ const { join } = require("node:path")
 let win
 
 app.on("ready", async () => {
-  try {
-    const url = await initRemix({
-      serverBuild: join(__dirname, "build"),
-    })
+	try {
+		const url = await initRemix({
+			serverBuild: join(__dirname, "build"),
+		})
 
-    win = new BrowserWindow({ show: false })
-    await win.loadURL(url)
-    win.show()
-  } catch (error) {
-    console.error(error)
-  }
+		win = new BrowserWindow({ show: false })
+		await win.loadURL(url)
+		win.show()
+	} catch (error) {
+		console.error(error)
+	}
 })
 ```
 
@@ -49,12 +49,10 @@ Update `serverBuildPath` in your Remix config:
 
 ```js
 // remix.config.js
-/**
- * @type {import('@remix-run/dev/config').AppConfig}
- */
+/** @type {import("@remix-run/dev/config").AppConfig} */
 module.exports = {
-  serverBuildPath: "desktop/build/index.js",
-  // ...
+	serverBuildPath: "desktop/build/index.js",
+	// ...
 }
 ```
 
@@ -78,13 +76,13 @@ Likewise, for any code running in the renderer process, e.g. using the [clipboar
 ```js
 // desktop/main.ts
 function createWindow() {
-  // ...
-  win = new BrowserWindow({
-    // ...
-    webPreferences: {
-      nodeIntegration: true,
-    },
-  })
+	// ...
+	win = new BrowserWindow({
+		// ...
+		webPreferences: {
+			nodeIntegration: true,
+		},
+	})
 }
 ```
 
@@ -114,12 +112,12 @@ import type * as remix from "@remix-run/server-runtime"
 
 // your context type
 export type LoadContext = {
-  secret: string
+	secret: string
 }
 
 // a custom data function args type to use for loaders/actions
 export type DataFunctionArgs = Omit<remix.DataFunctionArgs, "context"> & {
-  context: LoadContext
+	context: LoadContext
 }
 ```
 
@@ -127,12 +125,12 @@ export type DataFunctionArgs = Omit<remix.DataFunctionArgs, "context"> & {
 
 ```ts
 const url = await initRemix({
-  // ...
+	// ...
 
-  /** @type {import("~/context").LoadContext} */
-  getLoadContext: () => ({
-    secret: "123",
-  }),
+	/** @type {import("~/context").LoadContext} */
+	getLoadContext: () => ({
+		secret: "123",
+	}),
 })
 ```
 
@@ -142,7 +140,7 @@ In a route file:
 import type { DataFunctionArgs, LoadContext } from "~/context"
 
 export async function loader({ context }: DataFunctionArgs) {
-  // do something with context
+	// do something with context
 }
 ```
 

@@ -1,14 +1,8 @@
 {
-  "extends": "@itsmapleleaf/configs/tsconfig.base",
-  "compilerOptions": {
-    "module": "CommonJS",
-    "moduleResolution": "node",
-    "allowJs": true,
-    "checkJs": true,
-    "jsx": "react-jsx",
-    "paths": {
-      "~/*": ["./template/app/*"]
-    }
-  },
-  "exclude": ["**/node_modules/**", "**/dist/**", "**/build/**", "**/.cache/**"]
+	"files": [],
+	"references": [
+		{ "path": "./tsconfig.root.json" },
+		{ "path": "./template" },
+		{ "path": "./tests/fixtures/test-app" }
+	]
 }
