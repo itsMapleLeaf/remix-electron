@@ -23,7 +23,7 @@
     "lint:format": "prettier . --write --cache",
     "lint:types": "tsc -b",
     "lint:knip": "knip",
-    "test": "vitest --no-watch",
+    "test": "vitest run",
     "test-ui": "vitest --ui",
     "release": "pnpm test && release-it"
   },
