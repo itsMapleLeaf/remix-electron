@@ -8,11 +8,12 @@ import { afterAll, beforeAll, expect, test } from "vitest"
 import { templateFolder } from "./paths.mts"
 import { tmpdir } from "node:os"
 import { fileURLToPath } from "node:url"
+import retry from "p-retry"
 
 const packagePath = fileURLToPath(new URL("../", import.meta.url))
 const tempFolder = join(tmpdir(), `remix-electron-template-${Date.now()}`)
 
-let electronApp: ElectronApplication
+let electronApp: ElectronApplication | undefined
 let window: Page
 
 const getExecutablePath = () => {
@@ -70,8 +71,8 @@ beforeAll(
 )
 
 afterAll(async () => {
-	await electronApp.close()
-	await rm(tempFolder, { recursive: true, force: true })
+	await electronApp?.close()
+	await retry(() => rm(tempFolder, { recursive: true, force: true }))
 })
 
 test("packaged build", async () => {
