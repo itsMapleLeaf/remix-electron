@@ -11,6 +11,7 @@ const { serveRemixResponse } = require("./serve-remix-response.cjs")
 const defaultMode = app.isPackaged ? "production" : process.env.NODE_ENV
 
 /** @typedef {import("@remix-run/node").AppLoadContext} AppLoadContext */
+/** @typedef {import("@remix-run/server-runtime").ServerBuild} ServerBuild */
 
 /**
  * @typedef {(
@@ -52,7 +53,7 @@ exports.initRemix = async function initRemix({
 
 	let serverBuild =
 		typeof serverBuildOption === "string"
-			? require(serverBuildOption)
+			? /** @type {ServerBuild} */ (require(serverBuildOption))
 			: serverBuildOption
 
 	await app.whenReady()
@@ -76,11 +77,12 @@ exports.initRemix = async function initRemix({
 	})
 
 	if (mode === "development" && typeof buildPath === "string") {
-		;(async () => {
+		void (async () => {
 			for await (const _event of watch(buildPath)) {
 				purgeRequireCache(buildPath)
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 				serverBuild = require(buildPath)
-				broadcastDevReady(serverBuild)
+				await broadcastDevReady(serverBuild)
 			}
 		})()
 	}
@@ -108,6 +110,7 @@ async function handleRequest(request, publicFolder, requestHandler, context) {
 function purgeRequireCache(prefix) {
 	for (const key in require.cache) {
 		if (key.startsWith(prefix)) {
+			// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
 			delete require.cache[key]
 		}
 	}

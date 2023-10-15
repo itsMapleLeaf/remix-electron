@@ -35,7 +35,7 @@ importers:
     devDependencies:
       '@itsmapleleaf/configs':
         specifier: github:itsMapleLeaf/configs
-        version: github.com/itsMapleLeaf/configs/de9386a81bda3b008bc1efb2cf587f4a725799bc(eslint@8.51.0)(prettier@3.0.3)(tailwindcss@3.3.3)(typescript@5.2.2)
+        version: github.com/itsMapleLeaf/configs/2268e9ead9447949afa3fc61312c682b87a5fe17(eslint@8.51.0)(prettier@3.0.3)(tailwindcss@3.3.3)(typescript@5.2.2)
       '@playwright/test':
         specifier: ^1.39.0
         version: 1.39.0
@@ -10630,9 +10630,9 @@ packages:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
     dev: true
 
-  github.com/itsMapleLeaf/configs/de9386a81bda3b008bc1efb2cf587f4a725799bc(eslint@8.51.0)(prettier@3.0.3)(tailwindcss@3.3.3)(typescript@5.2.2):
-    resolution: {tarball: https://codeload.github.com/itsMapleLeaf/configs/tar.gz/de9386a81bda3b008bc1efb2cf587f4a725799bc}
-    id: github.com/itsMapleLeaf/configs/de9386a81bda3b008bc1efb2cf587f4a725799bc
+  github.com/itsMapleLeaf/configs/2268e9ead9447949afa3fc61312c682b87a5fe17(eslint@8.51.0)(prettier@3.0.3)(tailwindcss@3.3.3)(typescript@5.2.2):
+    resolution: {tarball: https://codeload.github.com/itsMapleLeaf/configs/tar.gz/2268e9ead9447949afa3fc61312c682b87a5fe17}
+    id: github.com/itsMapleLeaf/configs/2268e9ead9447949afa3fc61312c682b87a5fe17
     name: '@itsmapleleaf/configs'
     version: 4.0.0
     peerDependencies:
