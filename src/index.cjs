@@ -10,7 +10,7 @@ const { serveRemixResponse } = require("./serve-remix-response.cjs")
 
 const defaultMode = app.isPackaged ? "production" : process.env.NODE_ENV
 
-/** @typedef {import("@remix-run/node").AppLoadContext} AppLoadContext */
+/** @typedef {import("@remix-run/server-runtime").AppLoadContext} AppLoadContext */
 /** @typedef {import("@remix-run/server-runtime").ServerBuild} ServerBuild */
 
 /**
@@ -21,8 +21,8 @@ const defaultMode = app.isPackaged ? "production" : process.env.NODE_ENV
 
 /**
  * @typedef {object} InitRemixOptions
- * @property {import("@remix-run/node").ServerBuild | string} serverBuild The
- *   path to the server build, or the server build itself.
+ * @property {import("@remix-run/server-runtime").ServerBuild | string} serverBuild
+ *   The path to the server build, or the server build itself.
  * @property {string} [mode] The mode to run the app in, either development or
  *   production
  * @property {string} [publicFolder] The path where static assets are served
@@ -95,7 +95,7 @@ exports.initRemix = async function initRemix({
 /**
  * @param {Electron.ProtocolRequest} request
  * @param {string} publicFolder
- * @param {import("@remix-run/node").RequestHandler} requestHandler
+ * @param {import("@remix-run/server-runtime").RequestHandler} requestHandler
  * @param {AppLoadContext | undefined} context
  * @returns {Promise<Electron.ProtocolResponse>}
  */

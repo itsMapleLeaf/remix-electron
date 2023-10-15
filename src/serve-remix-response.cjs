@@ -10,8 +10,8 @@ function createPassThroughStream(text) {
 
 /**
  * @param {Electron.ProtocolRequest} request
- * @param {import("@remix-run/node").RequestHandler} handleRequest
- * @param {import("@remix-run/node").AppLoadContext | undefined} context
+ * @param {import("@remix-run/server-runtime").RequestHandler} handleRequest
+ * @param {import("@remix-run/server-runtime").AppLoadContext | undefined} context
  * @returns {Promise<Electron.ProtocolResponse>}
  */
 exports.serveRemixResponse = async function serveRemixResponse(
