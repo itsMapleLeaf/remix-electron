@@ -1,30 +1,28 @@
 const { initRemix } = require("remix-electron")
-const { app, BrowserWindow, dialog } = require("electron")
+const { app, BrowserWindow } = require("electron")
 const path = require("node:path")
-
-/** @type {BrowserWindow | undefined} */
-let win
 
 /** @param {string} url */
 async function createWindow(url) {
-	win = new BrowserWindow({ show: false })
-	await win.loadURL(url)
-	win.show()
+	const win = new BrowserWindow()
+
+	// load the devtools first before loading the app URL so we can see initial network requests
+	// electron needs some page content to show the dev tools, so we'll load a dummy page first
+	await win.loadURL(
+		"data:text/html;charset=utf-8," + encodeURI("<p>Loading...</p>"),
+	)
+	win.webContents.openDevTools()
+	win.webContents.on("devtools-opened", () => {
+		// devtools takes a bit to load, so we'll wait a bit before loading the app URL
+		setTimeout(() => {
+			win.loadURL(url).catch(console.error)
+		}, 500)
+	})
 }
 
 app.on("ready", async () => {
-	try {
-		const url = await initRemix({
-			serverBuild: path.join(__dirname, "../build/index.js"),
-		})
-		await createWindow(url)
-	} catch (error) {
-		dialog.showErrorBox("Error", getErrorStack(error))
-		console.error(error)
-	}
+	const url = await initRemix({
+		serverBuild: path.join(__dirname, "../build/index.js"),
+	})
+	await createWindow(url)
 })
-
-/** @param {unknown} error */
-function getErrorStack(error) {
-	return error instanceof Error ? error.stack || error.message : String(error)
-}
