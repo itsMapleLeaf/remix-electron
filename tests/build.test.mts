@@ -47,7 +47,7 @@ beforeAll(
 		for (const [command, ...args] of commands) {
 			await execa(command, args, {
 				cwd: tempFolder,
-				stdio: "inherit",
+				stderr: "inherit",
 			})
 		}
 
