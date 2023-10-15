@@ -1,10 +1,10 @@
 import { useLoaderData } from "@remix-run/react"
 import { useState } from "react"
-import { app } from "~/electron.server"
+import electron from "~/electron.server"
 
 export function loader() {
 	return {
-		userDataPath: app.getPath("userData"),
+		userDataPath: electron.app.getPath("userData"),
 	}
 }
 
