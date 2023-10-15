@@ -22,6 +22,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/workflows/setup-node.yml
+        with:
+          runs-on: ${{ matrix.os }}
       - uses: coactions/setup-xvfb@v1
         with:
           run: pnpm test
@@ -31,7 +33,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/workflows/setup-node
+      - uses: ./.github/workflows/setup-node.yml
+        with:
+          runs-on: ubuntu-latest
       - run: pnpm run lint
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
