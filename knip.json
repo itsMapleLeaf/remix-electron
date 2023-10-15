@@ -1,6 +1,5 @@
 {
 	"$schema": "./node_modules/knip/schema.json",
-	"ignoreDependencies": ["isbot", "nodemon"],
 	"workspaces": {
 		".": {
 			"vitest": {
@@ -8,6 +7,12 @@
 				"entry": ["**/*.test.?(c|m)[jt]s?(x)"]
 			},
 			"ignoreDependencies": ["basic"]
+		},
+		"template": {
+			"ignoreDependencies": ["isbot", "nodemon"]
+		},
+		"tests/fixtures/test-app": {
+			"ignoreDependencies": ["isbot", "nodemon"]
 		}
 	}
 }

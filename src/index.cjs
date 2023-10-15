@@ -1,4 +1,5 @@
-// @ts-expect-error: weird ESM error
+// eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error
+// @ts-ignore: weird ESM error
 const webFetch = require("@remix-run/web-fetch")
 
 // only override the File global

@@ -1,6 +1,6 @@
 import { Form, useActionData } from "@remix-run/react"
 import {
-	ActionFunctionArgs,
+	type ActionFunctionArgs,
 	NodeOnDiskFile,
 	json,
 	unstable_createFileUploadHandler,
