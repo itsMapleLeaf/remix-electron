@@ -43,7 +43,7 @@ beforeAll(
 
 		console.time("Building template")
 		const commands = [
-			["pnpm", "install", `file:${packagePath}`],
+			["pnpm", "install", packagePath],
 			["pnpm", "run", "build", "--dir"],
 		] as const
 		for (const [command, ...args] of commands) {
