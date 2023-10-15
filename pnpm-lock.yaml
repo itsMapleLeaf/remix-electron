@@ -8,9 +8,9 @@ importers:
 
   .:
     dependencies:
-      '@remix-run/server-runtime':
-        specifier: '*'
-        version: 2.0.1(typescript@5.2.2)
+      '@remix-run/web-fetch':
+        specifier: ^4.4.1
+        version: 4.4.1
       '@types/mime':
         specifier: ^3.0.2
         version: 3.0.2
@@ -27,6 +27,9 @@ importers:
       '@playwright/test':
         specifier: ^1.39.0
         version: 1.39.0
+      '@remix-run/node':
+        specifier: ^2.0.1
+        version: 2.0.1(typescript@5.2.2)
       '@vitest/ui':
         specifier: ^0.34.6
         version: 0.34.6(vitest@0.34.6)
@@ -127,6 +130,9 @@ importers:
       '@remix-run/react':
         specifier: ^2.0.1
         version: 2.0.1(react-dom@18.2.0)(react@18.2.0)(typescript@5.2.2)
+      isbot:
+        specifier: latest
+        version: 3.7.0
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -149,6 +155,9 @@ importers:
       electron:
         specifier: ^27.0.0
         version: 27.0.0
+      nodemon:
+        specifier: ^3.0.1
+        version: 3.0.1
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -3163,6 +3172,7 @@ packages:
   /clone@1.0.4:
     resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
     engines: {node: '>=0.8'}
+    requiresBuild: true
     dev: true
 
   /color-convert@1.9.3:
