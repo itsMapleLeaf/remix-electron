@@ -1,6 +1,8 @@
 import { expect } from "@playwright/test"
 import { execa } from "execa"
+import { readFile } from "node:fs/promises"
 import { join } from "node:path"
+import { fileURLToPath } from "node:url"
 import type { ElectronApplication, Page } from "playwright"
 import { _electron as electron } from "playwright"
 import { afterAll, beforeAll, test } from "vitest"
@@ -53,4 +55,21 @@ test("action referrer redirect", async () => {
 	await expect(redirectCount).toHaveText("0")
 	await window.click("text=submit")
 	await expect(redirectCount).toHaveText("1")
+})
+
+test.skip("multipart uploads", async () => {
+	await window.goto("http://localhost/multipart-uploads")
+
+	const assetUrl = new URL(
+		"./fixtures/asset-files/file-upload.txt",
+		import.meta.url,
+	)
+
+	const assetContent = await readFile(assetUrl, "utf-8")
+
+	await window
+		.locator("input[type=file]")
+		.setInputFiles(fileURLToPath(assetUrl))
+	await window.locator("button").click()
+	await expect(window.locator("[data-testid=result]")).toHaveText(assetContent)
 })
