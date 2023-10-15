@@ -5,9 +5,8 @@
   "private": true,
   "main": "desktop/main.js",
   "scripts": {
-    "clean": "del-cli dist public/build",
     "dev": "cross-env NODE_ENV=development remix dev --command \"nodemon .\" --manual",
-    "build": "npm run clean && remix build && electron-builder",
+    "build": "remix build && electron-builder",
     "start": "cross-env NODE_ENV=production electron ."
   },
   "build": {
