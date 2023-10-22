@@ -20,7 +20,7 @@
   "scripts": {
     "lint": "run-s --continue-on-error lint:*",
     "lint:eslint": "eslint . --fix --cache --cache-file=node_modules/.cache/.eslintcache --report-unused-disable-directives",
-    "lint:format": "prettier . --write --cache",
+    "lint:format": "prettier . --write --cache --list-different",
     "lint:types": "tsc -b",
     "lint:knip": "knip",
     "test": "vitest run",
