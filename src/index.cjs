@@ -65,6 +65,7 @@ exports.initRemix = async function initRemix({
 	await app.whenReady()
 
 	protocol.handle("http", async (request) => {
+		request.headers.append("Referer", request.referrer)
 		try {
 			const assetResponse = await serveAsset(request, publicFolder)
 			if (assetResponse) {
