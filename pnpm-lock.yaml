@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@vitest/expect@1.0.0-beta.2':
+    hash: ewmu7bdp6wcru5zcb7oh5gwts4
+    path: patches/@vitest__expect@1.0.0-beta.2.patch
+
 importers:
 
   .:
@@ -2198,13 +2203,14 @@ packages:
     resolution: {integrity: sha512-17kVyLq3ePTKOkveHxXuIJZtGYs+cSoev7BlP+Lf4916qfDhk/HBjvlYDe8egrea7LNPHKwSZJK/bzZC+Q6AwQ==}
     dev: true
 
-  /@vitest/expect@1.0.0-beta.2:
+  /@vitest/expect@1.0.0-beta.2(patch_hash=ewmu7bdp6wcru5zcb7oh5gwts4):
     resolution: {integrity: sha512-u3CoUMNn+0SxGzqLC4hdbyoCACduaBmM2AcGWpqdweM7CS8PxfDhbbuhClLmLg7OOd1RjFAGO09x5iWQjX+Rmw==}
     dependencies:
       '@vitest/spy': 1.0.0-beta.2
       '@vitest/utils': 1.0.0-beta.2
       chai: 4.3.10
     dev: true
+    patched: true
 
   /@vitest/runner@1.0.0-beta.2:
     resolution: {integrity: sha512-+W59xEwQg8re9kQOitAYgjjO6LBkPgyUIhCryEslfxwFYJZC3+4CPIJI/8Wac53cUR0NcXzraF8mplE5JYIptQ==}
@@ -9922,7 +9928,7 @@ packages:
         optional: true
     dependencies:
       '@types/node': 20.8.7
-      '@vitest/expect': 1.0.0-beta.2
+      '@vitest/expect': 1.0.0-beta.2(patch_hash=ewmu7bdp6wcru5zcb7oh5gwts4)
       '@vitest/runner': 1.0.0-beta.2
       '@vitest/snapshot': 1.0.0-beta.2
       '@vitest/spy': 1.0.0-beta.2
