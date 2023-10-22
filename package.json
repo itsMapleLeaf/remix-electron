@@ -29,8 +29,8 @@
   },
   "dependencies": {
     "@remix-run/web-fetch": "^4.4.1",
-    "@types/mime": "^3.0.2",
-    "@types/node": "^20.8.6",
+    "@types/mime": "^3.0.3",
+    "@types/node": "^20.8.7",
     "mime": "^3.0.0"
   },
   "peerDependencies": {
@@ -40,13 +40,13 @@
   "devDependencies": {
     "@itsmapleleaf/configs": "github:itsMapleLeaf/configs",
     "@playwright/test": "^1.39.0",
-    "@remix-run/node": "^2.0.1",
+    "@remix-run/node": "^2.1.0",
     "@vitest/ui": "^0.34.6",
-    "electron": "^27.0.0",
-    "eslint": "^8.51.0",
+    "electron": "^27.0.2",
+    "eslint": "^8.52.0",
     "eslint-plugin-prettier": "^5.0.1",
     "execa": "^8.0.1",
-    "knip": "^2.33.3",
+    "knip": "^2.37.0",
     "npm-run-all": "^4.1.5",
     "p-retry": "^6.1.0",
     "playwright": "^1.39.0",

@@ -8,18 +8,18 @@
     "build": "remix build"
   },
   "dependencies": {
-    "@remix-run/node": "^2.0.1",
-    "@remix-run/react": "^2.0.1",
-    "isbot": "latest",
+    "@remix-run/node": "^2.1.0",
+    "@remix-run/react": "^2.1.0",
+    "isbot": "^3.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "remix-electron": "workspace:^"
   },
   "devDependencies": {
-    "@remix-run/dev": "^2.0.1",
-    "@types/react": "^18.2.28",
-    "@types/react-dom": "^18.2.13",
-    "electron": "^27.0.0",
+    "@remix-run/dev": "^2.1.0",
+    "@types/react": "^18.2.31",
+    "@types/react-dom": "^18.2.14",
+    "electron": "^27.0.2",
     "nodemon": "^3.0.1",
     "typescript": "^5.2.2"
   },
