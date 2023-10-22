@@ -6,9 +6,9 @@
   "main": "desktop/index.js",
   "sideEffects": false,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development remix dev --command \"nodemon .\" --manual",
+    "dev": "remix dev --command \"nodemon .\" --manual",
     "build": "remix build && electron-builder",
-    "start": "cross-env NODE_ENV=production electron ."
+    "start": "electron ."
   },
   "build": {
     "files": [
@@ -31,7 +31,6 @@
     "@remix-run/serve": "^2.0.1",
     "@types/react": "^18.2.28",
     "@types/react-dom": "^18.2.13",
-    "cross-env": "^7.0.3",
     "electron": "^27.0.0",
     "electron-builder": "^24.6.4",
     "electron-devtools-installer": "^3.2.0",
