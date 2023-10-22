@@ -1,28 +1,34 @@
-const {
-	createRequestHandler,
-	broadcastDevReady,
-} = require("@remix-run/server-runtime")
+// eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error
+// @ts-ignore: weird ESM error
+const webFetch = require("@remix-run/web-fetch")
+
+// only override the File global
+// if we override everything else, we get errors caused by the mismatch of built-in types and remix types
+global.File = webFetch.File
+
+const { createRequestHandler, broadcastDevReady } = require("@remix-run/node")
 const { app, protocol } = require("electron")
 const { watch } = require("node:fs/promises")
 const { asAbsolutePath } = require("./as-absolute-path.cjs")
 const { serveAsset } = require("./asset-files.cjs")
-const { serveRemixResponse } = require("./serve-remix-response.cjs")
 
-const defaultMode = app.isPackaged ? "production" : process.env.NODE_ENV
+const getDefaultMode = () =>
+	app.isPackaged ? "production" : process.env.NODE_ENV
 
-/** @typedef {import("@remix-run/server-runtime").AppLoadContext} AppLoadContext */
-/** @typedef {import("@remix-run/server-runtime").ServerBuild} ServerBuild */
+/** @typedef {import("@remix-run/node").AppLoadContext} AppLoadContext */
+/** @typedef {import("@remix-run/node").ServerBuild} ServerBuild */
 
 /**
- * @typedef {(
- * 	request: Electron.ProtocolRequest,
- * ) => AppLoadContext | undefined | Promise<AppLoadContext | undefined>} GetLoadContextFunction
+ * @template T
+ * @typedef {Promise<T> | T} MaybePromise
  */
+
+/** @typedef {(request: Request) => MaybePromise<AppLoadContext | undefined>} GetLoadContextFunction */
 
 /**
  * @typedef {object} InitRemixOptions
- * @property {import("@remix-run/server-runtime").ServerBuild | string} serverBuild
- *   The path to the server build, or the server build itself.
+ * @property {ServerBuild | string} serverBuild The path to the server build, or
+ *   the server build itself.
  * @property {string} [mode] The mode to run the app in, either development or
  *   production
  * @property {string} [publicFolder] The path where static assets are served
@@ -39,7 +45,7 @@ const defaultMode = app.isPackaged ? "production" : process.env.NODE_ENV
  */
 exports.initRemix = async function initRemix({
 	serverBuild: serverBuildOption,
-	mode = defaultMode,
+	mode,
 	publicFolder: publicFolderOption = "public",
 	getLoadContext,
 }) {
@@ -58,25 +64,34 @@ exports.initRemix = async function initRemix({
 
 	await app.whenReady()
 
-	// eslint-disable-next-line @typescript-eslint/no-misused-promises
-	protocol.interceptStreamProtocol("http", async (request, callback) => {
+	protocol.handle("http", async (request) => {
+		request.headers.append("Referer", request.referrer)
 		try {
+			const assetResponse = await serveAsset(request, publicFolder)
+			if (assetResponse) {
+				return assetResponse
+			}
+
 			const context = await getLoadContext?.(request)
-			const requestHandler = createRequestHandler(serverBuild, mode)
-			callback(
-				await handleRequest(request, publicFolder, requestHandler, context),
+			const handleRequest = createRequestHandler(
+				serverBuild,
+				mode ?? getDefaultMode(),
 			)
+			return await handleRequest(request, context)
 		} catch (error) {
 			console.warn("[remix-electron]", error)
 			const { stack, message } = toError(error)
-			callback({
-				statusCode: 500,
-				data: `<pre>${stack || message}</pre>`,
+			return new Response(`<pre>${stack || message}</pre>`, {
+				status: 500,
+				headers: { "content-type": "text/html" },
 			})
 		}
 	})
 
-	if (mode === "development" && typeof buildPath === "string") {
+	if (
+		(mode ?? getDefaultMode()) !== "production" &&
+		typeof buildPath === "string"
+	) {
 		void (async () => {
 			for await (const _event of watch(buildPath)) {
 				purgeRequireCache(buildPath)
@@ -90,20 +105,6 @@ exports.initRemix = async function initRemix({
 	// the remix web socket reads the websocket host from the browser url,
 	// so this _has_ to be localhost
 	return `http://localhost/`
-}
-
-/**
- * @param {Electron.ProtocolRequest} request
- * @param {string} publicFolder
- * @param {import("@remix-run/server-runtime").RequestHandler} requestHandler
- * @param {AppLoadContext | undefined} context
- * @returns {Promise<Electron.ProtocolResponse>}
- */
-async function handleRequest(request, publicFolder, requestHandler, context) {
-	return (
-		(await serveAsset(request, publicFolder)) ??
-		(await serveRemixResponse(request, requestHandler, context))
-	)
 }
 
 /** @param {string} prefix */

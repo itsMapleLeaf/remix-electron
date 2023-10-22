@@ -20,7 +20,7 @@
   "scripts": {
     "lint": "run-s --continue-on-error lint:*",
     "lint:eslint": "eslint . --fix --cache --cache-file=node_modules/.cache/.eslintcache --report-unused-disable-directives",
-    "lint:format": "prettier . --write --cache",
+    "lint:format": "prettier . --write --cache --list-different",
     "lint:types": "tsc -b",
     "lint:knip": "knip",
     "test": "vitest run",
@@ -28,31 +28,32 @@
     "release": "pnpm test && release-it"
   },
   "dependencies": {
-    "@remix-run/server-runtime": "*",
-    "@types/mime": "^3.0.2",
-    "@types/node": "^20.8.6",
+    "@remix-run/web-fetch": "^4.4.1",
+    "@types/mime": "^3.0.3",
+    "@types/node": "^20.8.7",
     "mime": "^3.0.0"
   },
   "peerDependencies": {
+    "@remix-run/node": ">=2",
     "electron": ">=27"
   },
   "devDependencies": {
     "@itsmapleleaf/configs": "github:itsMapleLeaf/configs",
     "@playwright/test": "^1.39.0",
-    "@remix-run/server-runtime": "^2.0.1",
-    "@vitest/ui": "^0.34.6",
-    "electron": "^27.0.0",
-    "eslint": "^8.51.0",
+    "@remix-run/node": "^2.1.0",
+    "@vitest/ui": "^1.0.0-beta.2",
+    "electron": "^27.0.2",
+    "eslint": "^8.52.0",
     "eslint-plugin-prettier": "^5.0.1",
     "execa": "^8.0.1",
-    "knip": "^2.33.3",
+    "knip": "^2.37.0",
     "npm-run-all": "^4.1.5",
     "p-retry": "^6.1.0",
     "playwright": "^1.39.0",
     "prettier": "^3.0.3",
     "release-it": "^16.2.1",
     "typescript": "^5.2.2",
-    "vitest": "^0.34.6"
+    "vitest": "^1.0.0-beta.2"
   },
   "prettier": "@itsmapleleaf/configs/prettier",
   "release-it": {
@@ -68,6 +69,11 @@
     "github": {
       "release": true,
       "web": true
+    }
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@vitest/expect@1.0.0-beta.2": "patches/@vitest__expect@1.0.0-beta.2.patch"
     }
   }
 }

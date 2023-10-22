@@ -10,6 +10,9 @@
 		},
 		"template": {
 			"ignoreDependencies": ["isbot", "nodemon"]
+		},
+		"tests/fixtures/test-app": {
+			"ignoreDependencies": ["isbot", "nodemon"]
 		}
 	}
 }
