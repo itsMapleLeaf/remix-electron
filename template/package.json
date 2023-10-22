@@ -24,7 +24,7 @@
     "isbot": "^3.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "remix-electron": "^1.3.0"
+    "remix-electron": "^2.0.0"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.1.0",
