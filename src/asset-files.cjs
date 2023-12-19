@@ -10,7 +10,7 @@ const { createReadableStreamFromReadable } = require("@remix-run/node")
  */
 exports.serveAsset = async function serveAsset(request, publicFolder) {
 	const url = new URL(request.url)
-	const fullFilePath = path.join(publicFolder, url.pathname)
+	const fullFilePath = path.join(publicFolder, decodeURIComponent(url.pathname))
 	if (!fullFilePath.startsWith(publicFolder)) return
 
 	const stat = await fs.promises.stat(fullFilePath).catch(() => undefined)
