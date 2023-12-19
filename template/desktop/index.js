@@ -2,7 +2,7 @@ const { initRemix } = require("remix-electron")
 const { app, BrowserWindow, dialog } = require("electron")
 const path = require("node:path")
 
-/** @type {BrowserWindow | undefined} */
+/** @type {import("electron").BrowserWindow | undefined} */
 let win
 
 /** @param {string} url */

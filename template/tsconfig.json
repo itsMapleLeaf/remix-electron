@@ -1,12 +1,14 @@
 {
 	"compilerOptions": {
-		"lib": ["DOM", "DOM.Iterable", "ES2019"],
+		"lib": ["DOM", "DOM.Iterable", "ESNext"],
 		"isolatedModules": true,
+		"verbatimModuleSyntax": true,
 		"esModuleInterop": true,
 		"jsx": "react-jsx",
-		"moduleResolution": "node",
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
 		"resolveJsonModule": true,
-		"target": "ES2019",
+		"target": "ESNext",
 		"strict": true,
 		"baseUrl": ".",
 		"paths": {
@@ -17,5 +19,5 @@
 		"checkJs": true,
 		"skipLibCheck": true
 	},
-	"exclude": ["build", "public/build", ".cache"]
+	"exclude": ["build", "public/build", "dist", ".cache"]
 }

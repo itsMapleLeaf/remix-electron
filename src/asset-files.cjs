@@ -1,4 +1,3 @@
-const mime = require("mime")
 const fs = require("node:fs")
 const path = require("node:path")
 const { createReadableStreamFromReadable } = require("@remix-run/node")
@@ -18,6 +17,7 @@ exports.serveAsset = async function serveAsset(request, publicFolder) {
 
 	const headers = new Headers()
 
+	const { default: mime } = await import("mime")
 	const mimeType = mime.getType(fullFilePath)
 	if (mimeType) headers.set("Content-Type", mimeType)
 
