@@ -109,3 +109,15 @@ test.skip(
 	},
 	1000 * 30,
 )
+
+test("can load public assets that contain whitespace in their path", async () => {
+	const { window, dispose } = await launch()
+
+	await window.goto("http://localhost/with spaces.txt")
+
+	await expect(window.locator("body")).toHaveText(
+		"This is a file with spaces in the path",
+	)
+
+	await dispose()
+})
