@@ -3,7 +3,7 @@
   "description": "",
   "version": "0.0.0",
   "private": true,
-  "main": "desktop/index.js",
+  "main": "desktop/index.cjs",
   "sideEffects": false,
   "scripts": {
     "dev": "remix dev --command \"nodemon .\" --manual",
