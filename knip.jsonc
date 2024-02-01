@@ -8,8 +8,7 @@
 			"vitest": {
 				"config": ["vitest.config.mts"],
 				"entry": ["**/*.test.?(c|m)[jt]s?(x)"]
-			},
-			"ignoreDependencies": ["basic"]
+			}
 		},
 		"workspaces/template": {
 			"ignoreDependencies": ["isbot", "nodemon"]
