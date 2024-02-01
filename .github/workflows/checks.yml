@@ -27,7 +27,10 @@ jobs:
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
 
-      - name: Setup xvfb
+      - name: Install Playwright deps
+        run: pnpm exec playwright install --with-deps
+
+      - name: Run tests with xvfb
         uses: coactions/setup-xvfb@v1
         with:
           run: pnpm test
