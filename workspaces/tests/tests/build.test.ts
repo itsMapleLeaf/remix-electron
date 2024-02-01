@@ -13,6 +13,7 @@ test("packaged build", async () => {
 	test.setTimeout(1000 * 60);
 
 	await using tempFolder = useTempFolder("remix-electron-template");
+	console.info("[test:build] Temp folder path:", tempFolder.path);
 
 	await cp(templateFolder, tempFolder.path, {
 		recursive: true,
@@ -23,6 +24,9 @@ test("packaged build", async () => {
 			!source.includes("public/dist") &&
 			!source.includes(".cache"),
 	});
+	console.info(
+		`[test:build] Copied from ${templateFolder} to ${tempFolder.path}`,
+	);
 
 	const commands = [
 		["pnpm", "install", `${packagePath}`],
@@ -30,15 +34,18 @@ test("packaged build", async () => {
 	] as const;
 
 	for (const [command, ...args] of commands) {
+		console.info(`[test:build] Running command: ${command} ${args.join(" ")}`);
 		await execa(command, args, {
 			cwd: tempFolder.path,
 			stderr: "inherit",
 		});
 	}
 
+	console.info("[test:build] Launching Electron window...");
 	await using window = await launchElectron({
 		executablePath: fileURLToPath(getExecutablePath(tempFolder.path)),
 	});
+	console.info("[test:build] Launched Electron window ✅");
 
 	await expect(window.locator("h1")).toHaveText("Welcome to Remix");
 });
