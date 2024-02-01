@@ -32,7 +32,7 @@ test("electron apis", async () => {
 	);
 });
 
-test.only("scripts", async () => {
+test("scripts", async () => {
 	await using window = await launchTestApp();
 
 	const counter = window.locator("[data-testid='counter']");
