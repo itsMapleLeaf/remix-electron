@@ -21,6 +21,7 @@
 		"format-unsafe": "biome check . --apply-unsafe",
 		"typecheck": "pnpm -r exec tsc --noEmit",
 		"knip": "knip",
+		"checks": "npm-run-all --continue-on-error lint typecheck knip test",
 		"test": "vitest run",
 		"test-ui": "vitest --ui",
 		"release": "pnpm test && release-it"
