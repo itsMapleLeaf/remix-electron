@@ -42,6 +42,9 @@ jobs:
         uses: actions/checkout@v3
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
+      - name: Build
+        if: ${{ matrix.script == 'typecheck' }}
+        run: pnpm run build
       - name: Run ${{ matrix.script }}
         run: pnpm run ${{ matrix.script }}
 
