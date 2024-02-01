@@ -15,4 +15,4 @@ runs:
         node-version: "lts/*"
         cache: "pnpm"
     - shell: bash
-      run: pnpm install --frozen-lockfile
+      run: pnpm install --no-frozen-lockfile
