@@ -4,10 +4,10 @@ import * as webFetch from "@remix-run/web-fetch"
 // if we override everything else, we get errors caused by the mismatch of built-in types and remix types
 global.File = webFetch.File
 
+import { watch } from "node:fs/promises"
 import type { AppLoadContext, ServerBuild } from "@remix-run/node"
 import { broadcastDevReady, createRequestHandler } from "@remix-run/node"
 import { app, protocol } from "electron"
-import { watch } from "node:fs/promises"
 import { asAbsolutePath } from "./as-absolute-path.mjs"
 import { serveAsset } from "./asset-files.mjs"
 
@@ -94,7 +94,7 @@ export async function initRemix({
 
 	// the remix web socket reads the websocket host from the browser url,
 	// so this _has_ to be localhost
-	return `http://localhost/`
+	return "http://localhost/"
 }
 
 function purgeRequireCache(prefix: string) {

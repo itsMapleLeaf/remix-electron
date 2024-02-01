@@ -1,13 +1,13 @@
-import { execa } from "execa"
-import { join } from "node:path"
 import { cp, rm } from "node:fs/promises"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
+import { fileURLToPath } from "node:url"
+import { execa } from "execa"
+import retry from "p-retry"
 import type { ElectronApplication, Page } from "playwright"
 import { _electron as electron } from "playwright"
 import { afterAll, beforeAll, expect, test } from "vitest"
-import { templateFolder } from "./paths.mts"
-import { tmpdir } from "node:os"
-import { fileURLToPath } from "node:url"
-import retry from "p-retry"
+import { templateFolder } from "./paths.mjs"
 
 const packagePath = fileURLToPath(new URL("../", import.meta.url))
 const tempFolder = join(tmpdir(), `remix-electron-template-${Date.now()}`)

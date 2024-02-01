@@ -1,8 +1,8 @@
-import { expect } from "@playwright/test"
-import { execa } from "execa"
 import { readFile } from "node:fs/promises"
 import { join } from "node:path"
 import { fileURLToPath } from "node:url"
+import { expect } from "@playwright/test"
+import { execa } from "execa"
 import { _electron as electron } from "playwright"
 import { beforeAll, test } from "vitest"
 

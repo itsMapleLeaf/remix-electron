@@ -1,7 +1,7 @@
-import { createReadableStreamFromReadable } from "@remix-run/node"
-import mime from "mime"
 import fs from "node:fs"
 import path from "node:path"
+import { createReadableStreamFromReadable } from "@remix-run/node"
+import mime from "mime"
 
 export async function serveAsset(
 	request: Request,

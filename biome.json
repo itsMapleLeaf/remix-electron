@@ -14,6 +14,11 @@
 		"clientKind": "git",
 		"useIgnoreFile": true
 	},
+	"javascript": {
+		"formatter": {
+			"semicolons": "asNeeded"
+		}
+	},
 	"json": {
 		"parser": {
 			"allowTrailingCommas": true,

@@ -9,7 +9,7 @@ async function createWindow(url) {
 	// load the devtools first before loading the app URL so we can see initial network requests
 	// electron needs some page content to show the dev tools, so we'll load a dummy page first
 	await win.loadURL(
-		"data:text/html;charset=utf-8," + encodeURI("<p>Loading...</p>"),
+		`data:text/html;charset=utf-8,${encodeURI("<p>Loading...</p>")}`,
 	)
 	win.webContents.openDevTools()
 	win.webContents.on("devtools-opened", () => {
