@@ -10,7 +10,10 @@ type ElectronLaunchOptions = Parameters<Electron["launch"]>[0];
 
 export async function launchElectron(options: ElectronLaunchOptions = {}) {
 	console.info("Launching...");
-	const app = await electron.launch(options);
+	const app = await electron.launch({
+		env: { ...(process.env as Record<string, string>) },
+		...options,
+	});
 
 	app.process().stdout?.pipe(process.stdout);
 	app.process().stderr?.pipe(process.stderr);
