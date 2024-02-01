@@ -1,4 +1,5 @@
 {
+	"name": "remix-electron-monorepo",
 	"type": "module",
 	"scripts": {
 		"build": "pnpm run -r --filter ./workspaces/remix-electron build",
