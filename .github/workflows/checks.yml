@@ -1,9 +1,10 @@
-name: tests
+name: checks
 
 on:
   push:
     branches: [main]
   pull_request:
+    types: [opened, synchronize, reopened]
     branches: [main]
   workflow_dispatch:
 
@@ -21,19 +22,29 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/pnpm-install-cached
+      - uses: ./.github/actions/setup-pnpm
       - uses: coactions/setup-xvfb@v1
         with:
           run: pnpm test
 
   lint:
+    name: ${{ matrix.script }}
+    strategy:
+      fail-fast: false
+      matrix:
+        script: [lint, typecheck, knip]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/pnpm-install-cached
-      - run: pnpm run lint
+      - uses: ./.github/actions/setup-pnpm
+      - run: pnpm run ${{ matrix.script }}
+
+  format:
+    if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-pnpm
+      - run: pnpm run format
       - uses: stefanzweifel/git-auto-commit-action@v5
         if: ${{ always() }}
-        continue-on-error: true
-        with:
-          commit_message: "ci: lint fix"
