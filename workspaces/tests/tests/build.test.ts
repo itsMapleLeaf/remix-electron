@@ -41,7 +41,6 @@ test("packaged build", async () => {
 		});
 	}
 
-	console.info("[test:build] Launching Electron window...");
 	await using window = await launchElectron({
 		executablePath: fileURLToPath(getExecutablePath(tempFolder.path)),
 	});
