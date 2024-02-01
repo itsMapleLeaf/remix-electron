@@ -23,8 +23,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
+
       - name: Setup xvfb
         uses: coactions/setup-xvfb@v1
         with:
@@ -40,11 +42,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
+
       - name: Build
         if: ${{ matrix.script == 'typecheck' }}
         run: pnpm run build
+
       - name: Run ${{ matrix.script }}
         run: pnpm run ${{ matrix.script }}
 
@@ -54,10 +59,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
+
       - name: Format
         run: pnpm run format
+
       - name: Commit changes
         if: ${{ always() }}
         uses: stefanzweifel/git-auto-commit-action@v5
