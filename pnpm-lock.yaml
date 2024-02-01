@@ -143,6 +143,9 @@ importers:
 
   workspaces/tests:
     devDependencies:
+      '@electron/fuses':
+        specifier: 1.7.0
+        version: 1.7.0
       '@playwright/test':
         specifier: 1.41.1
         version: 1.41.1
@@ -155,9 +158,6 @@ importers:
       p-retry:
         specifier: 6.2.0
         version: 6.2.0
-      playwright:
-        specifier: 1.41.1
-        version: 1.41.1
 
 packages:
 
@@ -607,6 +607,15 @@ packages:
       commander: 5.1.0
       glob: 7.2.3
       minimatch: 3.1.2
+    dev: true
+
+  /@electron/fuses@1.7.0:
+    resolution: {integrity: sha512-mfhLoZGQdqrSU/SeOFBs6r+D7g1tYiVs2C/hh7t3NFQ0chcXGoWrrad17rCQL1ImNJuCXs4cu23YBj5CAnj5SA==}
+    hasBin: true
+    dependencies:
+      chalk: 4.1.2
+      fs-extra: 9.1.0
+      minimist: 1.2.8
     dev: true
 
   /@electron/get@2.0.3:

@@ -1,6 +1,7 @@
 import { cp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { FuseV1Options, FuseVersion, flipFuses } from "@electron/fuses";
 import { expect, test } from "@playwright/test";
 import { execa } from "execa";
 import retry from "p-retry";
@@ -41,8 +42,15 @@ test("packaged build", async () => {
 		});
 	}
 
+	const executablePath = fileURLToPath(getExecutablePath(tempFolder.path));
+
+	flipFuses(executablePath, {
+		version: FuseVersion.V1,
+		[FuseV1Options.EnableNodeCliInspectArguments]: true,
+	});
+
 	await using window = await launchElectron({
-		executablePath: fileURLToPath(getExecutablePath(tempFolder.path)),
+		executablePath: executablePath,
 	});
 	console.info("[test:build] Launched Electron window ✅");
 
