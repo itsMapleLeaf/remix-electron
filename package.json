@@ -7,9 +7,7 @@
 	"repository": "https://github.com/itsMapleLeaf/remix-electron",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
-	"files": [
-		"dist"
-	],
+	"files": ["dist"],
 	"exports": {
 		".": {
 			"require": "./dist/index.js",
@@ -21,7 +19,7 @@
 		"lint": "biome check .",
 		"format": "biome check . --apply",
 		"format-unsafe": "biome check . --apply-unsafe",
-		"typecheck": "tsc -b",
+		"typecheck": "pnpm -r exec tsc --noEmit",
 		"knip": "knip",
 		"test": "vitest run",
 		"test-ui": "vitest --ui",

@@ -1,8 +1,23 @@
 {
-	"files": [],
-	"references": [
-		{ "path": "./tsconfig.root.json" },
-		{ "path": "./template" },
-		{ "path": "./tests/fixtures/test-app" },
-	],
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"isolatedModules": true,
+		"jsx": "react-jsx",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"moduleDetection": "force",
+		"noEmit": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
+		"resolveJsonModule": true,
+		"skipDefaultLibCheck": true,
+		"strict": true,
+		"target": "esnext",
+		"verbatimModuleSyntax": true
+	},
+	"exclude": ["node_modules", "template", "tests/fixtures", "dist"]
 }

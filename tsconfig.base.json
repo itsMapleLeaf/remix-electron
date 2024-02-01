@@ -1,7 +1,0 @@
-{
-	"extends": "@itsmapleleaf/configs/tsconfig.node.json",
-	"compilerOptions": {
-		// incremental: true breaks tsup
-		"incremental": false
-	}
-}
