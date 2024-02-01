@@ -1,14 +1,12 @@
-const mime = require("mime")
-const fs = require("node:fs")
-const path = require("node:path")
-const { createReadableStreamFromReadable } = require("@remix-run/node")
+import { createReadableStreamFromReadable } from "@remix-run/node"
+import mime from "mime"
+import fs from "node:fs"
+import path from "node:path"
 
-/**
- * @param {Request} request
- * @param {string} publicFolder
- * @returns {Promise<Response | undefined>}
- */
-exports.serveAsset = async function serveAsset(request, publicFolder) {
+export async function serveAsset(
+	request: Request,
+	publicFolder: string,
+): Promise<Response | undefined> {
 	const url = new URL(request.url)
 	const fullFilePath = path.join(publicFolder, decodeURIComponent(url.pathname))
 	if (!fullFilePath.startsWith(publicFolder)) return

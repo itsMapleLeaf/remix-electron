@@ -3,6 +3,6 @@
 	"references": [
 		{ "path": "./tsconfig.root.json" },
 		{ "path": "./template" },
-		{ "path": "./tests/fixtures/test-app" }
-	]
+		{ "path": "./tests/fixtures/test-app" },
+	],
 }

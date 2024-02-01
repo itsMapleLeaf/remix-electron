@@ -1,79 +1,72 @@
 {
-  "name": "remix-electron",
-  "version": "2.0.1",
-  "author": "itsMapleLeaf",
-  "description": "Electron integration for Remix",
-  "license": "MIT",
-  "repository": "https://github.com/itsMapleLeaf/remix-electron",
-  "main": "./src/index.cjs",
-  "types": "./src/index.d.ts",
-  "files": [
-    "src/**/*.cjs",
-    "src/index.d.ts"
-  ],
-  "exports": {
-    ".": {
-      "types": "./src/index.d.ts",
-      "require": "./src/index.cjs"
-    }
-  },
-  "scripts": {
-    "lint": "run-s --continue-on-error lint:*",
-    "lint:eslint": "eslint . --fix --cache --cache-file=node_modules/.cache/.eslintcache --report-unused-disable-directives",
-    "lint:format": "prettier . --write --cache --list-different",
-    "lint:types": "tsc -b",
-    "lint:knip": "knip",
-    "test": "vitest run",
-    "test-ui": "vitest --ui",
-    "release": "pnpm test && release-it"
-  },
-  "dependencies": {
-    "@remix-run/web-fetch": "^4.4.1",
-    "@types/mime": "^3.0.3",
-    "@types/node": "^20.8.7",
-    "mime": "^3.0.0"
-  },
-  "peerDependencies": {
-    "@remix-run/node": ">=2",
-    "electron": ">=27"
-  },
-  "devDependencies": {
-    "@itsmapleleaf/configs": "github:itsMapleLeaf/configs",
-    "@playwright/test": "^1.39.0",
-    "@remix-run/node": "^2.1.0",
-    "@vitest/ui": "^1.0.0-beta.2",
-    "electron": "^27.0.2",
-    "eslint": "^8.52.0",
-    "eslint-plugin-prettier": "^5.0.1",
-    "execa": "^8.0.1",
-    "knip": "^2.37.0",
-    "npm-run-all": "^4.1.5",
-    "p-retry": "^6.1.0",
-    "playwright": "^1.39.0",
-    "prettier": "^3.0.3",
-    "release-it": "^16.2.1",
-    "typescript": "^5.2.2",
-    "vitest": "^1.0.0-beta.2"
-  },
-  "prettier": "@itsmapleleaf/configs/prettier",
-  "release-it": {
-    "git": {
-      "commitMessage": "v${version}",
-      "commit": true,
-      "tag": true,
-      "push": true
-    },
-    "npm": {
-      "publish": true
-    },
-    "github": {
-      "release": true,
-      "web": true
-    }
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "@vitest/expect@1.0.0-beta.2": "patches/@vitest__expect@1.0.0-beta.2.patch"
-    }
-  }
+	"name": "remix-electron",
+	"version": "2.0.1",
+	"author": "itsMapleLeaf",
+	"description": "Electron integration for Remix",
+	"license": "MIT",
+	"repository": "https://github.com/itsMapleLeaf/remix-electron",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"exports": {
+		".": {
+			"require": "./dist/index.js",
+			"import": "./dist/index.mjs"
+		}
+	},
+	"scripts": {
+		"build": "tsup --config ./tsup.config.mts",
+		"lint": "biome check .",
+		"format": "biome check . --apply",
+		"format-unsafe": "biome check . --apply-unsafe",
+		"typecheck": "tsc -b",
+		"knip": "knip",
+		"test": "vitest run",
+		"test-ui": "vitest --ui",
+		"release": "pnpm test && release-it"
+	},
+	"dependencies": {
+		"@remix-run/web-fetch": "^4.4.2",
+		"@types/mime": "^3.0.4",
+		"@types/node": "^20.11.14",
+		"mime": "^3"
+	},
+	"peerDependencies": {
+		"@remix-run/node": ">=2",
+		"electron": ">=27"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.5.3",
+		"@itsmapleleaf/configs": "github:itsMapleLeaf/configs",
+		"@playwright/test": "^1.41.1",
+		"@remix-run/node": "^2.5.1",
+		"@vitest/ui": "^1.2.2",
+		"electron": "^28.2.1",
+		"execa": "^8.0.1",
+		"knip": "^4.2.3",
+		"npm-run-all": "^4.1.5",
+		"p-retry": "^6.2.0",
+		"playwright": "^1.41.1",
+		"release-it": "^17.0.3",
+		"tsup": "8.0.1",
+		"typescript": "^5.3.3",
+		"vitest": "^1.2.2"
+	},
+	"release-it": {
+		"git": {
+			"commitMessage": "v${version}",
+			"commit": true,
+			"tag": true,
+			"push": true
+		},
+		"npm": {
+			"publish": true
+		},
+		"github": {
+			"release": true,
+			"web": true
+		}
+	}
 }

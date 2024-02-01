@@ -1,54 +1,44 @@
-// eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error
-// @ts-ignore: weird ESM error
-const webFetch = require("@remix-run/web-fetch")
+import * as webFetch from "@remix-run/web-fetch"
 
 // only override the File global
 // if we override everything else, we get errors caused by the mismatch of built-in types and remix types
 global.File = webFetch.File
 
-const { createRequestHandler, broadcastDevReady } = require("@remix-run/node")
-const { app, protocol } = require("electron")
-const { watch } = require("node:fs/promises")
-const { asAbsolutePath } = require("./as-absolute-path.cjs")
-const { serveAsset } = require("./asset-files.cjs")
+import type { AppLoadContext, ServerBuild } from "@remix-run/node"
+import { broadcastDevReady, createRequestHandler } from "@remix-run/node"
+import { app, protocol } from "electron"
+import { watch } from "node:fs/promises"
+import { asAbsolutePath } from "./as-absolute-path.mjs"
+import { serveAsset } from "./asset-files.mjs"
 
 const getDefaultMode = () =>
 	app.isPackaged ? "production" : process.env.NODE_ENV
 
-/** @typedef {import("@remix-run/node").AppLoadContext} AppLoadContext */
-/** @typedef {import("@remix-run/node").ServerBuild} ServerBuild */
+type MaybePromise<T> = Promise<T> | T
 
-/**
- * @template T
- * @typedef {Promise<T> | T} MaybePromise
- */
+type GetLoadContextFunction = (
+	request: Request,
+) => MaybePromise<AppLoadContext | undefined>
 
-/** @typedef {(request: Request) => MaybePromise<AppLoadContext | undefined>} GetLoadContextFunction */
-
-/**
- * @typedef {object} InitRemixOptions
- * @property {ServerBuild | string} serverBuild The path to the server build, or
- *   the server build itself.
- * @property {string} [mode] The mode to run the app in, either development or
- *   production
- * @property {string} [publicFolder] The path where static assets are served
- *   from.
- * @property {GetLoadContextFunction} [getLoadContext] A function to provide a
- *   `context` object to your loaders.
- */
+interface InitRemixOptions {
+	serverBuild: ServerBuild | string
+	mode?: string
+	publicFolder?: string
+	getLoadContext?: GetLoadContextFunction
+}
 
 /**
  * Initialize and configure remix-electron
  *
- * @param {InitRemixOptions} options
- * @returns {Promise<string>} The url to use to access the app.
+ * @param options
+ * @returns The url to use to access the app.
  */
-exports.initRemix = async function initRemix({
+export async function initRemix({
 	serverBuild: serverBuildOption,
 	mode,
 	publicFolder: publicFolderOption = "public",
 	getLoadContext,
-}) {
+}: InitRemixOptions): Promise<string> {
 	const appRoot = app.getAppPath()
 	const publicFolder = asAbsolutePath(publicFolderOption, appRoot)
 
@@ -59,7 +49,7 @@ exports.initRemix = async function initRemix({
 
 	let serverBuild =
 		typeof serverBuildOption === "string"
-			? /** @type {ServerBuild} */ (require(serverBuildOption))
+			? /** @type {ServerBuild} */ require(serverBuildOption)
 			: serverBuildOption
 
 	await app.whenReady()
@@ -107,8 +97,7 @@ exports.initRemix = async function initRemix({
 	return `http://localhost/`
 }
 
-/** @param {string} prefix */
-function purgeRequireCache(prefix) {
+function purgeRequireCache(prefix: string) {
 	for (const key in require.cache) {
 		if (key.startsWith(prefix)) {
 			// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
@@ -117,7 +106,6 @@ function purgeRequireCache(prefix) {
 	}
 }
 
-/** @param {unknown} value */
-function toError(value) {
+function toError(value: unknown) {
 	return value instanceof Error ? value : new Error(String(value))
 }

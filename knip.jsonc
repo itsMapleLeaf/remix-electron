@@ -2,6 +2,9 @@
 	"$schema": "./node_modules/knip/schema.json",
 	"workspaces": {
 		".": {
+			"tsup": {
+				"config": "tsup.config.mts"
+			},
 			"vitest": {
 				"config": ["vitest.config.mts"],
 				"entry": ["**/*.test.?(c|m)[jt]s?(x)"]

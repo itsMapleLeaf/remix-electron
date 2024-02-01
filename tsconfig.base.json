@@ -1,10 +1,7 @@
 {
-	"extends": "@itsmapleleaf/configs/tsconfig",
+	"extends": "@itsmapleleaf/configs/tsconfig.node.json",
 	"compilerOptions": {
-		"module": "NodeNext",
-		"moduleResolution": "NodeNext",
-		"verbatimModuleSyntax": false,
-		"skipLibCheck": true,
-		"incremental": true
+		// incremental: true breaks tsup
+		"incremental": false
 	}
 }

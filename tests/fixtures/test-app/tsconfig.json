@@ -2,8 +2,8 @@
 	"extends": "../../../tsconfig.base.json",
 	"compilerOptions": {
 		"paths": {
-			"~/*": ["./app/*"]
-		}
+			"~/*": ["./app/*"],
+		},
 	},
-	"exclude": ["node_modules", "build", "public/build"]
+	"exclude": ["node_modules", "build", "public/build"],
 }
