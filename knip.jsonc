@@ -1,7 +1,7 @@
 {
 	"$schema": "./node_modules/knip/schema.json",
 	"workspaces": {
-		".": {
+		"workspaces/remix-electron": {
 			"tsup": {
 				"config": "tsup.config.mts"
 			},
@@ -11,10 +11,11 @@
 			},
 			"ignoreDependencies": ["basic"]
 		},
-		"template": {
+		"workspaces/template": {
 			"ignoreDependencies": ["isbot", "nodemon"]
 		},
-		"tests/fixtures/test-app": {
+		"workspaces/tests": {},
+		"workspaces/test-app": {
 			"ignoreDependencies": ["isbot", "nodemon"]
 		}
 	}

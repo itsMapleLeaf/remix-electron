@@ -1,70 +1,23 @@
 {
-	"name": "remix-electron",
-	"version": "2.0.1",
-	"author": "itsMapleLeaf",
-	"description": "Electron integration for Remix",
-	"license": "MIT",
-	"repository": "https://github.com/itsMapleLeaf/remix-electron",
-	"main": "./dist/index.js",
-	"types": "./dist/index.d.ts",
-	"files": ["dist"],
-	"exports": {
-		".": {
-			"require": "./dist/index.js",
-			"import": "./dist/index.mjs"
-		}
-	},
+	"type": "module",
 	"scripts": {
-		"build": "tsup --config ./tsup.config.mts",
+		"build": "pnpm run -r --filter ./workspaces/remix-electron build",
 		"lint": "biome lint .",
 		"format": "biome check . --apply",
 		"format-unsafe": "biome check . --apply-unsafe",
 		"typecheck": "pnpm -r exec tsc --noEmit",
 		"knip": "knip",
-		"checks": "npm-run-all --continue-on-error lint typecheck knip test",
-		"test": "vitest run",
-		"test-ui": "vitest --ui",
-		"release": "pnpm test && release-it"
+		"checks": "npm-run-all --continue-on-error build lint typecheck knip test",
+		"test": "pnpm --filter ./workspaces/tests run test",
+		"test-ui": "pnpm --filter ./workspaces/tests run test-ui",
+		"release": "pnpm test && pnpm --filter ./workspaces/remix-electron exec release-it"
 	},
-	"dependencies": {
-		"@remix-run/web-fetch": "^4.4.2",
-		"@types/mime": "^3.0.4",
-		"@types/node": "^20.11.14",
-		"mime": "^3"
-	},
-	"peerDependencies": {
-		"@remix-run/node": ">=2",
-		"electron": ">=27"
-	},
+	"dependencies": {},
 	"devDependencies": {
 		"@biomejs/biome": "1.5.3",
-		"@playwright/test": "^1.41.1",
-		"@remix-run/node": "^2.5.1",
-		"@vitest/ui": "^1.2.2",
-		"electron": "^28.2.1",
-		"execa": "^8.0.1",
 		"knip": "^4.2.3",
 		"npm-run-all": "^4.1.5",
-		"p-retry": "^6.2.0",
-		"playwright": "^1.41.1",
 		"release-it": "^17.0.3",
-		"tsup": "8.0.1",
-		"typescript": "^5.3.3",
-		"vitest": "^1.2.2"
-	},
-	"release-it": {
-		"git": {
-			"commitMessage": "v${version}",
-			"commit": true,
-			"tag": true,
-			"push": true
-		},
-		"npm": {
-			"publish": true
-		},
-		"github": {
-			"release": true,
-			"web": true
-		}
+		"typescript": "^5.3.3"
 	}
 }

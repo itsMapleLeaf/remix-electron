@@ -1,0 +1,13 @@
+{
+	"name": "remix-electron-tests",
+	"type": "module",
+	"scripts": {
+		"test": "playwright test"
+	},
+	"devDependencies": {
+		"@playwright/test": "1.41.1",
+		"@types/node": "20.11.14",
+		"execa": "8.0.1",
+		"p-retry": "6.2.0"
+	}
+}

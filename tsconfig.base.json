@@ -14,10 +14,10 @@
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedIndexedAccess": true,
 		"resolveJsonModule": true,
-		"skipDefaultLibCheck": true,
+		"skipLibCheck": true,
 		"strict": true,
 		"target": "esnext",
 		"verbatimModuleSyntax": true
 	},
-	"exclude": ["node_modules", "template", "tests/fixtures", "dist"]
+	"exclude": ["**/node_modules/**", "**/build/**", "**/dist/**"]
 }
