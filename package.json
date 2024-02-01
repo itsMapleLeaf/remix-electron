@@ -38,7 +38,6 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.5.3",
-		"@itsmapleleaf/configs": "github:itsMapleLeaf/configs",
 		"@playwright/test": "^1.41.1",
 		"@remix-run/node": "^2.5.1",
 		"@vitest/ui": "^1.2.2",
