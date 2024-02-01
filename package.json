@@ -16,7 +16,7 @@
 	},
 	"scripts": {
 		"build": "tsup --config ./tsup.config.mts",
-		"lint": "biome check .",
+		"lint": "biome lint .",
 		"format": "biome check . --apply",
 		"format-unsafe": "biome check . --apply-unsafe",
 		"typecheck": "pnpm -r exec tsc --noEmit",
