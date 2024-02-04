@@ -18,10 +18,5 @@ export async function launchElectron(options: ElectronLaunchOptions = {}) {
 	console.info("Waiting for load event...")
 	await window.waitForEvent("load")
 
-	return Object.assign(window, {
-		app,
-		async [Symbol.asyncDispose]() {
-			await app.close()
-		},
-	})
+	return { app, window }
 }

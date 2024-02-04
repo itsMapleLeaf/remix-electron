@@ -2,7 +2,12 @@ import { cp, rm } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { FuseV1Options, FuseVersion, flipFuses } from "@electron/fuses"
-import { expect, test } from "@playwright/test"
+import {
+	type ElectronApplication,
+	type Page,
+	expect,
+	test,
+} from "@playwright/test"
 import { execa } from "execa"
 import retry from "p-retry"
 import { launchElectron } from "./launchElectron.js"
@@ -10,7 +15,10 @@ import { launchElectron } from "./launchElectron.js"
 const templateFolder = new URL("../../template", import.meta.url)
 const packagePath = new URL("../../remix-electron", import.meta.url)
 
-test("packaged build", async () => {
+let app!: ElectronApplication
+let window!: Page
+
+test.beforeAll(async () => {
 	await using tempFolder = useTempFolder("remix-electron-template")
 	console.info("[test:build] Temp folder path:", tempFolder.path)
 
@@ -47,9 +55,16 @@ test("packaged build", async () => {
 		[FuseV1Options.EnableNodeCliInspectArguments]: true,
 	})
 
-	await using window = await launchElectron({
+	;({ app, window } = await launchElectron({
 		executablePath,
-	})
+	}))
+})
+
+test.afterAll(async () => {
+	await app.close()
+})
+
+test("packaged build", async () => {
 	console.info("[test:build] Launched Electron window ✅")
 
 	await expect(window.locator("h1")).toHaveText("Welcome to Remix")
