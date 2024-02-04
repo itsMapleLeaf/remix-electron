@@ -15,9 +15,6 @@ export async function launchElectron(options: ElectronLaunchOptions = {}) {
 		...options,
 	});
 
-	app.process().stdout?.pipe(process.stdout);
-	app.process().stderr?.pipe(process.stderr);
-
 	console.info("Waiting for first window...");
 	const window = await app.firstWindow();
 
