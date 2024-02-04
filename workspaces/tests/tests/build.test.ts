@@ -14,7 +14,10 @@ test("packaged build", async () => {
 	test.setTimeout(1000 * 60 * 5);
 
 	await using tempFolder = useTempFolder("remix-electron-template");
-	console.info("[test:build] Temp folder path:", tempFolder.path);
+	console.info(
+		"[test:build] Temp folder path:",
+		fileURLToPath(tempFolder.path),
+	);
 
 	await cp(templateFolder, tempFolder.path, {
 		recursive: true,
