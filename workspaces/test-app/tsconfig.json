@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"verbatimModuleSyntax": false,
+		"paths": {
+			"~/*": ["./app/*"]
+		}
+	},
+	"extends": "../../tsconfig.base.json"
+}

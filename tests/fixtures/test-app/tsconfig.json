@@ -1,9 +1,0 @@
-{
-	"extends": "../../../tsconfig.base.json",
-	"compilerOptions": {
-		"paths": {
-			"~/*": ["./app/*"]
-		}
-	},
-	"exclude": ["node_modules", "build", "public/build"]
-}

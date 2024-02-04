@@ -9,7 +9,7 @@ Electron integration for Remix
 Use degit to create a new project from the template.
 
 ```sh
-npx degit itsMapleLeaf/remix-electron/template my-desktop-app
+npx degit itsMapleLeaf/remix-electron/workspaces/template my-desktop-app
 ```
 
 ### Adding to an existing Remix project

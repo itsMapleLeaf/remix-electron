@@ -1,0 +1,21 @@
+{
+	"$schema": "./node_modules/knip/schema.json",
+	"workspaces": {
+		"workspaces/remix-electron": {
+			"tsup": {
+				"config": "tsup.config.mts"
+			},
+			"vitest": {
+				"config": ["vitest.config.mts"],
+				"entry": ["**/*.test.?(c|m)[jt]s?(x)"]
+			}
+		},
+		"workspaces/template": {
+			"ignoreDependencies": ["isbot", "nodemon"]
+		},
+		"workspaces/tests": {},
+		"workspaces/test-app": {
+			"ignoreDependencies": ["isbot", "nodemon"]
+		}
+	}
+}

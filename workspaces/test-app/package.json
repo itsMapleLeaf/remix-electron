@@ -1,0 +1,26 @@
+{
+	"name": "remix-electron-test-app",
+	"version": "0.0.0",
+	"private": true,
+	"main": "desktop/index.js",
+	"scripts": {
+		"dev": "remix dev --manual --command \"nodemon .\"",
+		"build": "remix build"
+	},
+	"dependencies": {
+		"@remix-run/node": "^2.5.1",
+		"@remix-run/react": "^2.5.1",
+		"isbot": "^4.4.0",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"remix-electron": "^2.0.1"
+	},
+	"devDependencies": {
+		"@remix-run/dev": "^2.5.1",
+		"@types/react": "^18.2.48",
+		"@types/react-dom": "^18.2.18",
+		"electron": "^28.2.1",
+		"nodemon": "^3.0.3",
+		"typescript": "^5.3.3"
+	}
+}

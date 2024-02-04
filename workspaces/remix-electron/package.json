@@ -1,0 +1,51 @@
+{
+	"name": "remix-electron",
+	"version": "2.0.1",
+	"author": "itsMapleLeaf",
+	"description": "Electron integration for Remix",
+	"license": "GPL-3.0+",
+	"repository": "https://github.com/itsMapleLeaf/remix-electron",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": ["dist"],
+	"exports": {
+		".": {
+			"require": "./dist/index.js",
+			"import": "./dist/index.mjs"
+		}
+	},
+	"scripts": {
+		"build": "tsup --config ./tsup.config.mts"
+	},
+	"dependencies": {
+		"@remix-run/web-fetch": "^4.4.2",
+		"@types/mime": "^3.0.4",
+		"@types/node": "^20.11.14",
+		"mime": "^3"
+	},
+	"peerDependencies": {
+		"@remix-run/node": ">=2",
+		"electron": ">=27"
+	},
+	"devDependencies": {
+		"@remix-run/node": "^2.5.1",
+		"electron": "^28.2.1",
+		"tsup": "8.0.1",
+		"typescript": "^5.3.3"
+	},
+	"release-it": {
+		"git": {
+			"commitMessage": "v${version}",
+			"commit": true,
+			"tag": true,
+			"push": true
+		},
+		"npm": {
+			"publish": true
+		},
+		"github": {
+			"release": true,
+			"web": true
+		}
+	}
+}

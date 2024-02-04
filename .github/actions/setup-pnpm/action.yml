@@ -1,0 +1,22 @@
+name: PNPM Install with Cache
+description: Setup pnpm and install dependencies, caches node_modules
+runs:
+  using: composite
+  steps:
+    - name: Cache node_modules
+      uses: actions/cache@v3
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: "lts/*"
+        cache: "pnpm"
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install --no-frozen-lockfile

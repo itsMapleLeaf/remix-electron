@@ -1,8 +1,0 @@
-{
-	"files": [],
-	"references": [
-		{ "path": "./tsconfig.root.json" },
-		{ "path": "./template" },
-		{ "path": "./tests/fixtures/test-app" }
-	]
-}
