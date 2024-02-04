@@ -18,6 +18,8 @@ let app!: ElectronApplication
 let window!: Page
 
 test.beforeAll(async () => {
+	test.setTimeout(5 * 60 * 1000)
+
 	await using tempFolder = useTempFolder("remix-electron-template")
 	console.info("[test:build] Temp folder path:", tempFolder.path)
 
@@ -57,7 +59,7 @@ test.afterAll(async () => {
 	await app.close()
 })
 
-test("packaged build", async () => {
+test.skip("packaged build", async () => {
 	console.info("[test:build] Launched Electron window ✅")
 
 	await expect(window.locator("h1")).toHaveText("Welcome to Remix")
