@@ -11,7 +11,8 @@
 		"checks": "npm-run-all --continue-on-error build lint typecheck knip test",
 		"test": "pnpm --filter ./workspaces/tests run test",
 		"test-ui": "pnpm --filter ./workspaces/tests run test-ui",
-		"release": "pnpm test && pnpm --filter ./workspaces/remix-electron exec release-it"
+		"release": "pnpm test && pnpm run release-only",
+		"release-only": "pnpm --filter ./workspaces/remix-electron exec release-it"
 	},
 	"dependencies": {},
 	"devDependencies": {
