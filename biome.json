@@ -6,7 +6,11 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"recommended": true,
+			"nursery": {
+				"noUnusedImports": "error",
+				"useImportType": "error"
+			}
 		}
 	},
 	"vcs": {
@@ -17,12 +21,6 @@
 	"javascript": {
 		"formatter": {
 			"semicolons": "asNeeded"
-		}
-	},
-	"json": {
-		"parser": {
-			"allowTrailingCommas": true,
-			"allowComments": true
 		}
 	}
 }
