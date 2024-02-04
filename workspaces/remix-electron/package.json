@@ -1,13 +1,15 @@
 {
 	"name": "remix-electron",
-	"version": "2.0.1",
+	"version": "2.0.2",
 	"author": "itsMapleLeaf",
 	"description": "Electron integration for Remix",
 	"license": "GPL-3.0+",
 	"repository": "https://github.com/itsMapleLeaf/remix-electron",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"exports": {
 		".": {
 			"require": "./dist/index.js",
