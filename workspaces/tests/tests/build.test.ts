@@ -1,5 +1,6 @@
 import { cp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { FuseV1Options, FuseVersion, flipFuses } from "@electron/fuses";
 import { expect, test } from "@playwright/test";
@@ -43,9 +44,9 @@ test("packaged build", async () => {
 		});
 	}
 
-	const executablePath = fileURLToPath(getExecutablePath(tempFolder.path));
+	const executablePath = getExecutablePath(fileURLToPath(tempFolder.path));
 
-	flipFuses(executablePath, {
+	await flipFuses(executablePath, {
 		version: FuseVersion.V1,
 		[FuseV1Options.EnableNodeCliInspectArguments]: true,
 	});
@@ -59,8 +60,7 @@ test("packaged build", async () => {
 });
 
 function useTempFolder(prefix: string) {
-	const tmpUrl = pathToFileURL(tmpdir());
-	const path = new URL(`${prefix}-${Date.now()}`, `${tmpUrl}/`);
+	const path = join(tmpdir(), `${prefix}-${Date.now()}`);
 	return {
 		path,
 		async [Symbol.asyncDispose]() {
@@ -69,18 +69,15 @@ function useTempFolder(prefix: string) {
 	};
 }
 
-function getExecutablePath(folder: URL) {
+function getExecutablePath(folderPath: string) {
 	if (process.platform === "win32") {
-		return new URL(
-			"./dist/win-unpacked/remix-electron-template.exe",
-			`${folder}/`,
-		);
+		return join(folderPath, "dist/win-unpacked/remix-electron-template.exe");
 	}
 	if (process.platform === "darwin") {
-		return new URL(
-			"./dist/mac/remix-electron-template.app/Contents/MacOS/remix-electron-template",
-			`${folder}/`,
+		return join(
+			folderPath,
+			"dist/mac/remix-electron-template.app/Contents/MacOS/remix-electron-template",
 		);
 	}
-	return new URL("./dist/linux-unpacked/remix-electron-template", `${folder}/`);
+	return join(folderPath, "dist/linux-unpacked/remix-electron-template");
 }
