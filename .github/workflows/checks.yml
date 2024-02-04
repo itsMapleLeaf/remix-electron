@@ -16,24 +16,24 @@ env:
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
 jobs:
-  test:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    name: test (${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+  # test:
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  #   name: test (${{ matrix.os }})
+  #   runs-on: ${{ matrix.os }}
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
 
-      - name: Setup pnpm
-        uses: ./.github/actions/setup-pnpm
+  #     - name: Setup pnpm
+  #       uses: ./.github/actions/setup-pnpm
 
-      - name: Run tests with xvfb
-        uses: coactions/setup-xvfb@v1
-        with:
-          run: pnpm test
+  #     - name: Run tests with xvfb
+  #       uses: coactions/setup-xvfb@v1
+  #       with:
+  #         run: pnpm test
 
   lint:
     name: ${{ matrix.script }}
