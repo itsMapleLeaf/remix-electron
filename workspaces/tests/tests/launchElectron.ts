@@ -4,13 +4,7 @@ type ElectronLaunchOptions = Parameters<Electron["launch"]>[0]
 
 export async function launchElectron(options: ElectronLaunchOptions = {}) {
 	console.info("Launching...")
-	const app = await electron.launch({
-		...options,
-		env: {
-			...(process.env as Record<string, string>),
-			...options.env,
-		},
-	})
+	const app = await electron.launch(options)
 
 	console.info("Waiting for first window...")
 	const window = await app.firstWindow()
