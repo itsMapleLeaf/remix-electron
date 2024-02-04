@@ -30,10 +30,8 @@ jobs:
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
 
-      - name: Run tests with xvfb
-        uses: coactions/setup-xvfb@v1
-        with:
-          run: pnpm test
+      - name: Run tests
+        run: pnpm test
 
   lint:
     name: ${{ matrix.script }}
