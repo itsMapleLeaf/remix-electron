@@ -11,8 +11,6 @@ const templateFolder = new URL("../../template", import.meta.url);
 const packagePath = new URL("../../remix-electron", import.meta.url);
 
 test("packaged build", async () => {
-	test.setTimeout(1000 * 60 * 5);
-
 	await using tempFolder = useTempFolder("remix-electron-template");
 	console.info(
 		"[test:build] Temp folder path:",
