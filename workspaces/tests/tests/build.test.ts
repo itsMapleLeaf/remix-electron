@@ -1,7 +1,6 @@
 import { cp, rm } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
-import { FuseV1Options, FuseVersion, flipFuses } from "@electron/fuses"
 import {
 	type ElectronApplication,
 	type Page,
@@ -49,12 +48,6 @@ test.beforeAll(async () => {
 	}
 
 	const executablePath = getExecutablePath(tempFolder.path)
-
-	await flipFuses(executablePath, {
-		version: FuseVersion.V1,
-		[FuseV1Options.EnableNodeCliInspectArguments]: true,
-	})
-
 	;({ app, window } = await launchElectron({
 		executablePath,
 	}))
