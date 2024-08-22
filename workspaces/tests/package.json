@@ -1,5 +1,6 @@
 {
 	"name": "remix-electron-tests",
+	"license": "MIT",
 	"type": "module",
 	"scripts": {
 		"test": "playwright test"
