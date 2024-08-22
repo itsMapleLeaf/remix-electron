@@ -55,6 +55,17 @@ export async function initRemix({
 	await app.whenReady()
 
 	protocol.handle("http", async (request) => {
+		const url = new URL(request.url)
+		if (
+			// We only want to handle local (Remix) requests to port 80.
+			// Requests to other hosts or ports should not be intercepted,
+			// this might be the case when an application makes requests to a local service.
+			!["localhost", "127.0.0.1"].includes(url.hostname) ||
+			(url.port && url.port !== "80")
+		) {
+			return await fetch(request)
+		}
+
 		request.headers.append("Referer", request.referrer)
 		try {
 			const assetResponse = await serveAsset(request, publicFolder)
