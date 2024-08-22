@@ -1,30 +1,30 @@
-import * as webFetch from "@remix-run/web-fetch";
+import * as webFetch from "@remix-run/web-fetch"
 
 // only override the File global
 // if we override everything else, we get errors caused by the mismatch of built-in types and remix types
-global.File = webFetch.File;
+global.File = webFetch.File
 
-import { watch } from "node:fs/promises";
-import type { AppLoadContext, ServerBuild } from "@remix-run/node";
-import { broadcastDevReady, createRequestHandler } from "@remix-run/node";
-import { app, protocol } from "electron";
-import { asAbsolutePath } from "./as-absolute-path.mjs";
-import { serveAsset } from "./asset-files.mjs";
+import { watch } from "node:fs/promises"
+import type { AppLoadContext, ServerBuild } from "@remix-run/node"
+import { broadcastDevReady, createRequestHandler } from "@remix-run/node"
+import { app, protocol } from "electron"
+import { asAbsolutePath } from "./as-absolute-path.mjs"
+import { serveAsset } from "./asset-files.mjs"
 
 const getDefaultMode = () =>
-	app.isPackaged ? "production" : process.env.NODE_ENV;
+	app.isPackaged ? "production" : process.env.NODE_ENV
 
-type MaybePromise<T> = Promise<T> | T;
+type MaybePromise<T> = Promise<T> | T
 
 type GetLoadContextFunction = (
 	request: Request,
-) => MaybePromise<AppLoadContext | undefined>;
+) => MaybePromise<AppLoadContext | undefined>
 
 interface InitRemixOptions {
-	serverBuild: ServerBuild | string;
-	mode?: string;
-	publicFolder?: string;
-	getLoadContext?: GetLoadContextFunction;
+	serverBuild: ServerBuild | string
+	mode?: string
+	publicFolder?: string
+	getLoadContext?: GetLoadContextFunction
 }
 
 /**
@@ -39,23 +39,23 @@ export async function initRemix({
 	publicFolder: publicFolderOption = "public",
 	getLoadContext,
 }: InitRemixOptions): Promise<string> {
-	const appRoot = app.getAppPath();
-	const publicFolder = asAbsolutePath(publicFolderOption, appRoot);
+	const appRoot = app.getAppPath()
+	const publicFolder = asAbsolutePath(publicFolderOption, appRoot)
 
 	const buildPath =
 		typeof serverBuildOption === "string"
 			? require.resolve(serverBuildOption)
-			: undefined;
+			: undefined
 
 	let serverBuild =
 		typeof serverBuildOption === "string"
 			? /** @type {ServerBuild} */ require(serverBuildOption)
-			: serverBuildOption;
+			: serverBuildOption
 
-	await app.whenReady();
+	await app.whenReady()
 
 	protocol.handle("http", async (request) => {
-		const url = new URL(request.url);
+		const url = new URL(request.url)
 		if (
 			// We only want to handle local (Remix) requests to port 80.
 			// Requests to other hosts or ports should not be intercepted,
@@ -63,31 +63,31 @@ export async function initRemix({
 			!["localhost", "127.0.0.1"].includes(url.hostname) ||
 			(url.port && url.port !== "80")
 		) {
-			return await fetch(request);
+			return await fetch(request)
 		}
 
-		request.headers.append("Referer", request.referrer);
+		request.headers.append("Referer", request.referrer)
 		try {
-			const assetResponse = await serveAsset(request, publicFolder);
+			const assetResponse = await serveAsset(request, publicFolder)
 			if (assetResponse) {
-				return assetResponse;
+				return assetResponse
 			}
 
-			const context = await getLoadContext?.(request);
+			const context = await getLoadContext?.(request)
 			const handleRequest = createRequestHandler(
 				serverBuild,
 				mode ?? getDefaultMode(),
-			);
-			return await handleRequest(request, context);
+			)
+			return await handleRequest(request, context)
 		} catch (error) {
-			console.warn("[remix-electron]", error);
-			const { stack, message } = toError(error);
+			console.warn("[remix-electron]", error)
+			const { stack, message } = toError(error)
 			return new Response(`<pre>${stack || message}</pre>`, {
 				status: 500,
 				headers: { "content-type": "text/html" },
-			});
+			})
 		}
-	});
+	})
 
 	if (
 		(mode ?? getDefaultMode()) !== "production" &&
@@ -95,28 +95,28 @@ export async function initRemix({
 	) {
 		void (async () => {
 			for await (const _event of watch(buildPath)) {
-				purgeRequireCache(buildPath);
+				purgeRequireCache(buildPath)
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-				serverBuild = require(buildPath);
-				await broadcastDevReady(serverBuild);
+				serverBuild = require(buildPath)
+				await broadcastDevReady(serverBuild)
 			}
-		})();
+		})()
 	}
 
 	// the remix web socket reads the websocket host from the browser url,
 	// so this _has_ to be localhost
-	return "http://localhost/";
+	return "http://localhost/"
 }
 
 function purgeRequireCache(prefix: string) {
 	for (const key in require.cache) {
 		if (key.startsWith(prefix)) {
 			// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-			delete require.cache[key];
+			delete require.cache[key]
 		}
 	}
 }
 
 function toError(value: unknown) {
-	return value instanceof Error ? value : new Error(String(value));
+	return value instanceof Error ? value : new Error(String(value))
 }
