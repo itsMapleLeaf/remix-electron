@@ -2,6 +2,7 @@
 	"name": "remix-electron-test-app",
 	"version": "0.0.0",
 	"private": true,
+	"license": "MIT",
 	"main": "desktop/index.js",
 	"scripts": {
 		"dev": "remix dev --manual --command \"nodemon .\"",
