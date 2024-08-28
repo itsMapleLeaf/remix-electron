@@ -17,6 +17,9 @@
 		"workspaces/tests": {},
 		"workspaces/test-app": {
 			"ignoreDependencies": ["isbot", "nodemon"]
+		},
+		"workspaces/test-app-esm": {
+			"ignoreDependencies": ["isbot", "nodemon"]
 		}
 	}
 }

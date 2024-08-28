@@ -147,6 +147,43 @@ importers:
         specifier: ^5.3.3
         version: 5.5.4
 
+  workspaces/test-app-esm:
+    dependencies:
+      '@remix-run/node':
+        specifier: ^2.5.1
+        version: 2.5.1(typescript@5.3.3)
+      '@remix-run/react':
+        specifier: ^2.5.1
+        version: 2.5.1(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+      remix-electron:
+        specifier: ^2.0.1
+        version: link:../remix-electron
+    devDependencies:
+      '@remix-run/dev':
+        specifier: ^2.5.1
+        version: 2.5.1(@remix-run/serve@2.5.1)(@types/node@20.11.14)(typescript@5.3.3)
+      '@types/react':
+        specifier: ^18.2.48
+        version: 18.2.48
+      '@types/react-dom':
+        specifier: ^18.2.18
+        version: 18.2.18
+      electron:
+        specifier: ^28.2.1
+        version: 28.2.1
+      nodemon:
+        specifier: ^3.0.3
+        version: 3.0.3
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
   workspaces/tests:
     devDependencies:
       '@playwright/test':

@@ -24,26 +24,26 @@ Add a file at `desktop/index.js` to run the electron app. The `initRemix` functi
 
 ```ts
 // desktop/index.js
-const { initRemix } = require("remix-electron")
-const { app, BrowserWindow } = require("electron")
-const { join } = require("node:path")
+const { initRemix } = require("remix-electron");
+const { app, BrowserWindow } = require("electron");
+const { join } = require("node:path");
 
 /** @type {BrowserWindow | undefined} */
-let win
+let win;
 
 app.on("ready", async () => {
 	try {
 		const url = await initRemix({
-			serverBuild: join(__dirname, "../build/index.js"),
-		})
+			serverBuild: join(process.cwd(), "build/index.js"),
+		});
 
-		win = new BrowserWindow({ show: false })
-		await win.loadURL(url)
-		win.show()
+		win = new BrowserWindow({ show: false });
+		await win.loadURL(url);
+		win.show();
 	} catch (error) {
-		console.error(error)
+		console.error(error);
 	}
-})
+});
 ```
 
 Build the app with `npm run build`, then run `npx electron desktop/index.js` to start the app! 🚀
@@ -56,18 +56,18 @@ To circumvent this, create a `electron.server.ts` file, which re-exports from el
 
 ```ts
 // app/electron.server.ts
-import electron from "electron"
-export default electron
+import electron from "electron";
+export default electron;
 ```
 
 ```ts
 // app/routes/_index.tsx
-import electron from "~/electron.server"
+import electron from "~/electron.server";
 
 export function loader() {
 	return {
 		userDataPath: electron.app.getPath("userData"),
-	}
+	};
 }
 ```
 
@@ -82,7 +82,7 @@ function createWindow() {
 		webPreferences: {
 			nodeIntegration: true,
 		},
-	})
+	});
 }
 ```
 
@@ -94,13 +94,15 @@ Initializes remix-electron. Returns a promise with a url to load in the browser 
 
 Options:
 
-- `serverBuild`: The path to your server build (e.g. `path.join(__dirname, 'build')`), or the server build itself (e.g. required from `@remix-run/dev/server-build`). Updates on refresh are only supported when passing a path string.
+- `serverBuild`: The path to your server build (e.g. `path.join(process.cwd(), 'build')`), or the server build itself (e.g. required from `@remix-run/dev/server-build`). Updates on refresh are only supported when passing a path string.
 
 - `mode`: The mode the app is running in. Can be `"development"` or `"production"`. Defaults to `"production"` when packaged, otherwise uses `process.env.NODE_ENV`.
 
-- `publicFolder`: The folder where static assets are served from, including your browser build. Defaults to `"public"`. Non-relative paths are resolved relative to `app.getAppPath()`.
+- `publicFolder`: The folder where static assets are served from, including your browser build. Defaults to `"public"`. Non-absolute paths are resolved relative to `process.cwd()`.
 
-- `getLoadContext`: Use this to inject some value into all of your remix loaders, e.g. an API client. The loaders receive it as `context`
+- `getLoadContext`: Use this to inject some value into all of your remix loaders, e.g. an API client. The loaders receive it as `context`.
+
+- `esm`: Set this to `true` to use remix-electron in an ESM application.
 
 <details>
 <summary>Load context TS example</summary>
@@ -108,17 +110,17 @@ Options:
 **app/context.ts**
 
 ```ts
-import type * as remix from "@remix-run/node"
+import type * as remix from "@remix-run/node";
 
 // your context type
 export type LoadContext = {
-	secret: string
-}
+	secret: string;
+};
 
 // a custom data function args type to use for loaders/actions
 export type DataFunctionArgs = Omit<remix.DataFunctionArgs, "context"> & {
-	context: LoadContext
-}
+	context: LoadContext;
+};
 ```
 
 **desktop/main.js**
@@ -131,13 +133,13 @@ const url = await initRemix({
 	getLoadContext: () => ({
 		secret: "123",
 	}),
-})
+});
 ```
 
 In a route file:
 
 ```ts
-import type { DataFunctionArgs, LoadContext } from "~/context"
+import type { DataFunctionArgs, LoadContext } from "~/context";
 
 export async function loader({ context }: DataFunctionArgs) {
 	// do something with context

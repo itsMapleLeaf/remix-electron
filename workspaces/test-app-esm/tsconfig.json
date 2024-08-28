@@ -1,0 +1,11 @@
+{
+	"compilerOptions": {
+		"verbatimModuleSyntax": false,
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"paths": {
+			"~/*": ["./app/*"]
+		}
+	},
+	"extends": "../../tsconfig.base.json"
+}
