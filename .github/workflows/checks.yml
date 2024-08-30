@@ -57,7 +57,6 @@ jobs:
         run: pnpm run ${{ matrix.script }}
 
   format:
-    if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -72,3 +71,5 @@ jobs:
       - name: Commit changes
         if: ${{ always() }}
         uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "format"
