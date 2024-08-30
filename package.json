@@ -2,13 +2,12 @@
 	"name": "remix-electron-monorepo",
 	"license": "MIT",
 	"type": "module",
-	"packageManager": "pnpm@9.7.1+sha512.faf344af2d6ca65c4c5c8c2224ea77a81a5e8859cbc4e06b1511ddce2f0151512431dd19e6aff31f2c6a8f5f2aced9bd2273e1fed7dd4de1868984059d2c4247",
+	"packageManager": "pnpm@9.9.0+sha512.60c18acd138bff695d339be6ad13f7e936eea6745660d4cc4a776d5247c540d0edee1a563695c183a66eb917ef88f2b4feb1fc25f32a7adcadc7aaf3438e99c1",
 	"scripts": {
 		"preinstall": "npx only-allow pnpm",
 		"build": "pnpm run -r --filter ./workspaces/remix-electron build",
 		"lint": "biome lint .",
-		"format": "biome check . --apply",
-		"format-unsafe": "biome check . --apply-unsafe",
+		"format": "prettier --write --list-different .",
 		"typecheck": "pnpm -r exec tsc --noEmit",
 		"knip": "knip",
 		"checks": "npm-run-all --continue-on-error build lint typecheck knip test",
@@ -17,11 +16,12 @@
 		"release": "pnpm test && pnpm run release-only",
 		"release-only": "pnpm --filter ./workspaces/remix-electron exec release-it"
 	},
-	"dependencies": {},
 	"devDependencies": {
-		"@biomejs/biome": "1.5.3",
+		"@biomejs/biome": "^1.8.3",
 		"knip": "^4.2.3",
 		"npm-run-all": "^4.1.5",
+		"prettier": "^3.3.3",
+		"prettier-plugin-jsdoc": "^1.3.0",
 		"release-it": "^17.0.3",
 		"typescript": "^5.3.3"
 	}

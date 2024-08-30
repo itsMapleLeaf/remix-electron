@@ -19,8 +19,8 @@
 		"target": "esnext",
 		"verbatimModuleSyntax": false, // TODO: enable this when moving to ESM
 		"paths": {
-			"~/*": ["./app/*"],
-		},
+			"~/*": ["./app/*"]
+		}
 	},
-	"exclude": ["build", "public/build", ".cache"],
+	"exclude": ["build", "public/build", ".cache"]
 }

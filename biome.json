@@ -13,14 +13,12 @@
 			}
 		}
 	},
+	"formatter": {
+		"enabled": false
+	},
 	"vcs": {
 		"enabled": true,
 		"clientKind": "git",
 		"useIgnoreFile": true
-	},
-	"javascript": {
-		"formatter": {
-			"semicolons": "asNeeded"
-		}
 	}
 }

@@ -11,7 +11,12 @@
 		"start": "electron ."
 	},
 	"build": {
-		"files": ["build", "desktop", "public", "remix.config.js"]
+		"files": [
+			"build",
+			"desktop",
+			"public",
+			"remix.config.js"
+		]
 	},
 	"dependencies": {
 		"@remix-run/node": "^2.5.1",
