@@ -3,8 +3,7 @@ name: checks
 on:
   push:
     branches: [main]
-  pull_request:
-    types: [opened, synchronize, reopened]
+  pull_request_target:
     branches: [main]
   workflow_dispatch:
 
@@ -62,10 +61,15 @@ jobs:
       contents: write
     steps:
       - name: Checkout
+        if: ${{ github.event_name != 'pull_request_target' }}
         uses: actions/checkout@v4
+
+      - name: Checkout (pull_request_target)
+        uses: actions/checkout@v4
+        if: ${{ github.event_name == 'pull_request_target' }}
         with:
           ref: ${{ github.head_ref }}
-          repository: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
 
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
@@ -77,5 +81,4 @@ jobs:
         if: ${{ always() }}
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "format"
           push_options: "--force-with-lease"
