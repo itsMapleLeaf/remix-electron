@@ -8,8 +8,7 @@ import {
 } from "@playwright/test"
 import { execa } from "execa"
 import { launchElectron } from "./launchElectron.js"
-
-export const appFolder = new URL("../../test-app", import.meta.url)
+import { appFolder } from "./paths.js"
 
 let app!: ElectronApplication
 let window!: Page

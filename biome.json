@@ -7,8 +7,10 @@
 		"enabled": true,
 		"rules": {
 			"recommended": true,
-			"nursery": {
-				"noUnusedImports": "error",
+			"correctness": {
+				"noUnusedImports": "error"
+			},
+			"style": {
 				"useImportType": "error"
 			}
 		}
