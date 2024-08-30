@@ -44,12 +44,12 @@ export async function initRemix({
 
 	const buildPath =
 		typeof serverBuildOption === "string"
-			? require.resolve(serverBuildOption)
+			? import.meta.resolve(serverBuildOption)
 			: undefined
 
 	let serverBuild =
 		typeof serverBuildOption === "string"
-			? /** @type {ServerBuild} */ require(serverBuildOption)
+			? /** @type {ServerBuild} */ await import(serverBuildOption)
 			: serverBuildOption
 
 	await app.whenReady()
@@ -97,7 +97,7 @@ export async function initRemix({
 			for await (const _event of watch(buildPath)) {
 				purgeRequireCache(buildPath)
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-				serverBuild = require(buildPath)
+				serverBuild = await import(buildPath)
 				await broadcastDevReady(serverBuild)
 			}
 		})()
