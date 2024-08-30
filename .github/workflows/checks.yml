@@ -58,9 +58,13 @@ jobs:
 
   format:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
