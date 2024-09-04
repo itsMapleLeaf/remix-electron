@@ -61,7 +61,7 @@ export async function initRemix({
 		typeof buildPath === "string"
 			? /** @type {ServerBuild} */ await import(
 					esm ? `${buildPath}?${Date.now()}` : buildPath
-			  )
+				)
 			: serverBuildOption
 
 	await app.whenReady()
