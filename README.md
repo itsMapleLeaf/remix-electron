@@ -34,7 +34,7 @@ let win
 app.on("ready", async () => {
 	try {
 		const url = await initRemix({
-			serverBuild: join(__dirname, "../build/index.js"),
+			serverBuild: join(process.cwd(), "build/index.js"),
 		})
 
 		win = new BrowserWindow({ show: false })
@@ -94,13 +94,15 @@ Initializes remix-electron. Returns a promise with a url to load in the browser 
 
 Options:
 
-- `serverBuild`: The path to your server build (e.g. `path.join(__dirname, 'build')`), or the server build itself (e.g. required from `@remix-run/dev/server-build`). Updates on refresh are only supported when passing a path string.
+- `serverBuild`: The path to your server build (e.g. `path.join(process.cwd(), 'build')`), or the server build itself (e.g. required from `@remix-run/dev/server-build`). Updates on refresh are only supported when passing a path string.
 
 - `mode`: The mode the app is running in. Can be `"development"` or `"production"`. Defaults to `"production"` when packaged, otherwise uses `process.env.NODE_ENV`.
 
-- `publicFolder`: The folder where static assets are served from, including your browser build. Defaults to `"public"`. Non-relative paths are resolved relative to `app.getAppPath()`.
+- `publicFolder`: The folder where static assets are served from, including your browser build. Defaults to `"public"`. Non-absolute paths are resolved relative to `process.cwd()`.
 
-- `getLoadContext`: Use this to inject some value into all of your remix loaders, e.g. an API client. The loaders receive it as `context`
+- `getLoadContext`: Use this to inject some value into all of your remix loaders, e.g. an API client. The loaders receive it as `context`.
+
+- `esm`: Set this to `true` to use remix-electron in an ESM application.
 
 <details>
 <summary>Load context TS example</summary>

@@ -4,7 +4,7 @@ import * as webFetch from "@remix-run/web-fetch"
 // if we override everything else, we get errors caused by the mismatch of built-in types and remix types
 global.File = webFetch.File
 
-import { watch } from "node:fs/promises"
+import { constants, access, watch } from "node:fs/promises"
 import type { AppLoadContext, ServerBuild } from "@remix-run/node"
 import { broadcastDevReady, createRequestHandler } from "@remix-run/node"
 import { app, protocol } from "electron"
@@ -25,6 +25,7 @@ interface InitRemixOptions {
 	mode?: string
 	publicFolder?: string
 	getLoadContext?: GetLoadContextFunction
+	esm?: boolean
 }
 
 /**
@@ -38,18 +39,29 @@ export async function initRemix({
 	mode,
 	publicFolder: publicFolderOption = "public",
 	getLoadContext,
+	esm = typeof require === "undefined",
 }: InitRemixOptions): Promise<string> {
-	const appRoot = app.getAppPath()
-	const publicFolder = asAbsolutePath(publicFolderOption, appRoot)
+	const publicFolder = asAbsolutePath(publicFolderOption, process.cwd())
+
+	if (
+		!(await access(publicFolder, constants.R_OK).then(
+			() => true,
+			() => false,
+		))
+	) {
+		throw new Error(
+			`Public folder ${publicFolder} does not exist. Make sure that the initRemix \`publicFolder\` option is configured correctly.`,
+		)
+	}
 
 	const buildPath =
-		typeof serverBuildOption === "string"
-			? require.resolve(serverBuildOption)
-			: undefined
+		typeof serverBuildOption === "string" ? serverBuildOption : undefined
 
 	let serverBuild =
-		typeof serverBuildOption === "string"
-			? /** @type {ServerBuild} */ require(serverBuildOption)
+		typeof buildPath === "string"
+			? /** @type {ServerBuild} */ await import(
+					esm ? `${buildPath}?${Date.now()}` : buildPath
+				)
 			: serverBuildOption
 
 	await app.whenReady()
@@ -95,9 +107,13 @@ export async function initRemix({
 	) {
 		void (async () => {
 			for await (const _event of watch(buildPath)) {
-				purgeRequireCache(buildPath)
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-				serverBuild = require(buildPath)
+				if (esm) {
+					serverBuild = await import(`${buildPath}?${Date.now()}`)
+				} else {
+					purgeRequireCache(buildPath)
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+					serverBuild = require(buildPath)
+				}
 				await broadcastDevReady(serverBuild)
 			}
 		})()

@@ -1,0 +1,6 @@
+{
+	"$schema": "https://json.schemastore.org/nodemon.json",
+	"exec": "electron --trace-warnings .",
+	"watch": ["desktop"],
+	"ignore": ["build", "public/build"]
+}
